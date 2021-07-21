@@ -11,15 +11,9 @@ type object_type =
   | Revision
   | Snapshot
 
-type dec_digit =
-  | D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9
+type object_id = char array (* this always has a length of 40 digit *)
 
-type hex_digit =
-  | DA | DB | DC | DD | DE | DF | D_dec of dec_digit
-
-type object_id = hex_digit array (* this always has a length of 40 digit *)
-
-type line_number = dec_digit list
+type line_number = char list
 
 type identifier_core = scheme_version * object_type * object_id
 

@@ -9,8 +9,7 @@ let of_content content =
    * of the file. *)
   let content = Format.sprintf "blob %d\x00%s" (String.length content) content in
   let digest = Digestif.SHA1.digest_string content |> Digestif.SHA1.to_hex in
-  let get = String.get digest in
-  let object_id = Array.init 40 (fun i -> Utils.hex_digit_of_char (get i)) in
+  let object_id = Array.init 40 (String.get digest) in
   ((1, Content, object_id) , [])
 
 let of_directory _d =
