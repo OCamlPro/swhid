@@ -40,14 +40,15 @@ let object_type fmt object_type =
 let scheme_version fmt version =
   Format.fprintf fmt "%d" version
 
-let rec context_qualifier fmt = function
+
+let identifier_core fmt (v, t, id) =
+  Format.fprintf fmt "swh:%a:%a:%a" scheme_version v object_type t object_id id
+
+let context_qualifier fmt = function
   | Anchor identifier -> Format.fprintf fmt "anchor=%a" identifier_core identifier
   | Origin url -> Format.fprintf fmt "origin=%a" url_escaped url
   | Path url -> Format.fprintf fmt "path=%a" url_escaped url
   | Visit identifier -> Format.fprintf fmt "visit=%a" identifier_core identifier
-
-and identifier_core fmt (v, t, id) =
-  Format.fprintf fmt "swh:%a:%a:%a" scheme_version v object_type t object_id id
 
 let line_number fmt line_number =
   List.iter (fun digit -> Format.fprintf fmt "%s" (string_of_dec_digit digit)) line_number
