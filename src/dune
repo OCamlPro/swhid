@@ -1,0 +1,15 @@
+(executable
+ (name swhids)
+ (modules swhids)
+ (libraries swhids))
+
+(library
+ (name swhids)
+ (modules lang lexer menhir_parser parser pp utils)
+ (private_modules menhir_parser))
+
+(ocamllex
+ (modules lexer))
+
+(menhir
+ (modules menhir_parser))
