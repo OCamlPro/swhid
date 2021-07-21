@@ -5,8 +5,9 @@
 
 (library
  (name swhids)
- (modules lang lexer menhir_parser parser pp utils)
- (private_modules menhir_parser))
+ (modules compute lang lexer menhir_parser parser pp utils)
+ (private_modules menhir_parser)
+ (libraries digestif))
 
 (ocamllex
  (modules lexer))
