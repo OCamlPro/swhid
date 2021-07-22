@@ -7,19 +7,17 @@ let of_content content =
    * obtained by juxtaposing the ASCII string "blob" (without quotes), a space, the
    * length of the content as decimal digits, a NULL byte, and the actual content
    * of the file. *)
-  let content = Format.sprintf "blob %d\x00%s" (String.length content) content in
+  let content =
+    Format.sprintf "blob %d\x00%s" (String.length content) content
+  in
   let digest = Digestif.SHA1.digest_string content |> Digestif.SHA1.to_hex in
   let object_id = Array.init 40 (String.get digest) in
-  ((1, Content, object_id) , [])
+  ((1, Content, object_id), [])
 
-let of_directory _d =
-  ((1, Directory, [||]) , [])
+let of_directory _d = ((1, Directory, [||]), [])
 
-let of_release _r =
-  ((1, Release, [||]) , [])
+let of_release _r = ((1, Release, [||]), [])
 
-let of_revision _r =
-  ((1, Revision, [||]) , [])
+let of_revision _r = ((1, Revision, [||]), [])
 
-let of_snapshot _s =
-  ((1, Snapshot, [||]) , [])
+let of_snapshot _s = ((1, Snapshot, [||]), [])

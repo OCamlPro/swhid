@@ -25,7 +25,7 @@ type context_qualifier =
 
 type qualifier =
   | Context of context_qualifier
-  | Fragment of (line_number * (line_number option))
+  | Fragment of (line_number * line_number option)
 
 type qualifiers = qualifier list
 
