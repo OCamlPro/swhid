@@ -1,3 +1,9 @@
 (test
  (name test)
+ (modules test)
+ (libraries swhids))
+
+(test
+ (name test_parser)
+ (modules test_parser)
  (libraries swhids))

@@ -19,7 +19,6 @@ let object_type fmt object_type =
 let scheme_version fmt version =
   Format.fprintf fmt "%d" version
 
-
 let identifier_core fmt (v, t, id) =
   Format.fprintf fmt "swh:%a:%a:%a" scheme_version v object_type t object_id id
 
