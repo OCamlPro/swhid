@@ -19,6 +19,6 @@ let () =
     Buffer.contents buff
   in
 
-  let swhid = Swhids.Compute.of_content content in
+  let swhid = Swhids.Compute.content_identifier content in
 
   Format.printf "swhid: `%a`@." Swhids.Pp.identifier swhid

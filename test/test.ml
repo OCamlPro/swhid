@@ -6,7 +6,7 @@ let () =
   in
   Array.iter
     (fun (content, expected) ->
-      let result = Swhids.Compute.of_content content in
+      let result = Swhids.Compute.content_identifier content in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected in
       if not ok then
