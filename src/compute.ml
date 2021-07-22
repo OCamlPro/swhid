@@ -27,11 +27,11 @@ let git_object_header fmt (git_type, len) =
       (Format.sprintf "invalid git object type `%s` (Compute.git_object_header)"
          git_type )
 
+let escape_newlines snippet =
+  String.concat "\n " (String.split_on_char '\n' snippet)
+
 let format_git_object_from_headers fmt (git_type, headers, message) =
   let entries = Buffer.create 512 in
-
-  (* TODO *)
-  let escape_newlines v = v in
 
   let buff_fmt = Format.formatter_of_buffer entries in
 
@@ -52,6 +52,25 @@ let format_git_object_from_headers fmt (git_type, headers, message) =
   Format.fprintf fmt "%a%s" git_object_header
     (git_type, String.length entries)
     entries
+
+let format_author fmt = function
+  | None -> ()
+  | Some author -> Format.fprintf fmt "%s" author
+
+let normalize_timestamp _date_offset = Some ("TODO", "TODO", "TODO")
+
+let format_date fmt _date = Format.fprintf fmt "TODO"
+
+let format_offset fmt (_offset, _negative_utc) = Format.fprintf fmt "TODO"
+
+let format_author_data fmt (author, date_offset) =
+  Format.fprintf fmt "%a" format_author author;
+  let date_offset = normalize_timestamp date_offset in
+  match date_offset with
+  | None -> ()
+  | Some (timestamp, offset, negative_utc) ->
+    Format.fprintf fmt " %a %a" format_date timestamp format_offset
+      (offset, negative_utc)
 
 let content_identifier content =
   (* Quoting SWH documentation:
@@ -77,7 +96,6 @@ let release_identifier target target_type name author date message =
     Utils.error
       (Format.sprintf "target must be of length 40 but `%s` has a length of %d"
          target target_len );
-  let format_author_data _author _date = "TODO" in
   let git_object =
     let headers =
       [| ("object", target)
@@ -89,7 +107,9 @@ let release_identifier target target_type name author date message =
       match author with
       | None -> headers
       | Some _release_author ->
-        Array.append headers [| ("tagger", format_author_data author date) |]
+        Array.append headers
+          [| ("tagger", Format.asprintf "%a" format_author_data (author, date))
+          |]
     in
     Format.asprintf "%a" format_git_object_from_headers ("tag", headers, message)
   in
