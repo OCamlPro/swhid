@@ -13,7 +13,7 @@ type object_type =
 
 type object_id = char array (* this always has a length of 40 digit *)
 
-type line_number = char list
+type line_number = int
 
 type identifier_core = scheme_version * object_type * object_id
 
@@ -30,3 +30,11 @@ type qualifier =
 type qualifiers = qualifier list
 
 type identifier = identifier_core * qualifiers
+
+let object_id_of_string = function
+  | "snp" -> Some Snapshot
+  | "rel" -> Some Release
+  | "rev" -> Some Revision
+  | "dir" -> Some Directory
+  | "cnt" -> Some Content
+  | _ -> None
