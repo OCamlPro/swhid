@@ -28,7 +28,7 @@ let context_qualifier fmt = function
   | Visit identifier -> Format.fprintf fmt "visit=%a" identifier_core identifier
 
 let line_number fmt line_number =
-  List.iter (fun c -> Format.fprintf fmt "%c" c) line_number
+  Format.fprintf fmt "%d" line_number
 
 let fragment_qualifier fmt (fst_line, snd_line) =
   Format.fprintf fmt "lines=%a" line_number fst_line;

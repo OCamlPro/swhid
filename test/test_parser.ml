@@ -11,14 +11,14 @@ let () =
   in
   Array.iter
     (fun input ->
-      let result =
-        Swhids.Parser.from_string input
-        |> Format.asprintf "%a" Swhids.Pp.identifier
-      in
-      let ok = input = result in
-      if not ok then
-        Format.eprintf
-          "error: expected `%s` when parsing and printing `%s` but got `%s`@."
-          input input result;
-      assert ok )
+        let result =
+          Swhids.Parser.from_string input
+          |> Format.asprintf "%a" Swhids.Pp.identifier
+        in
+        let ok = input = result in
+        if not ok then
+          Format.eprintf
+            "error: expected `%s` when parsing and printing `%s` but got `%s`@."
+            input input result;
+        assert ok )
     test_cases
