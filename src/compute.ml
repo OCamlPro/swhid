@@ -57,11 +57,33 @@ let format_author fmt = function
   | None -> ()
   | Some author -> Format.fprintf fmt "%s" author
 
-let normalize_timestamp _date_offset = Some ("TODO", "TODO", "TODO")
+let normalize_timestamp = function
+  | None -> None
+  | Some time_representation ->
+    let seconds, microseconds, offset, negative_utc = time_representation in
+    Some ((seconds, microseconds), offset, negative_utc)
 
-let format_date fmt _date = Format.fprintf fmt "TODO"
+let format_date fmt (seconds, microseconds) =
+  match microseconds with
+  | 0 -> Format.fprintf fmt "%d" seconds
+  | microseconds ->
+    (* TODO: this should be the equivalent of:
+     * float_value = "%d.%06d" % (seconds, microseconds)
+     * return float_value.rstrip("0").encode()
+     * *)
+    Format.fprintf fmt "%d.%06d" seconds microseconds
 
-let format_offset fmt (_offset, _negative_utc) = Format.fprintf fmt "TODO"
+let format_offset fmt (offset, negative_utc) =
+  let sign =
+    if offset < 0 || (offset = 0 && negative_utc) then
+      "-"
+    else
+      "+"
+  in
+  let offset = Int.abs offset in
+  let hours = offset / 60 in
+  let minutes = offset mod 60 in
+  Format.fprintf fmt "%s%02d%02d" sign hours minutes
 
 let format_author_data fmt (author, date_offset) =
   Format.fprintf fmt "%a" format_author author;
