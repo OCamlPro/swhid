@@ -27,8 +27,7 @@ let context_qualifier fmt = function
   | Path url -> Format.fprintf fmt "path=%a" url_escaped url
   | Visit identifier -> Format.fprintf fmt "visit=%a" identifier_core identifier
 
-let line_number fmt line_number =
-  Format.fprintf fmt "%d" line_number
+let line_number fmt line_number = Format.fprintf fmt "%d" line_number
 
 let fragment_qualifier fmt (fst_line, snd_line) =
   Format.fprintf fmt "lines=%a" line_number fst_line;

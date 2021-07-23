@@ -1,14 +1,5 @@
 open Lang
 
-let target_type_to_git = function
-  | Content -> "blob"
-  | Directory -> "tree"
-  | Release -> "tag"
-  | Revision -> "commit"
-  | Snapshot -> "refs"
-
-let array_from_hexdigest digest = Array.init 40 (String.get digest)
-
 let hexdigest_from_git_object git_object =
   Digestif.SHA1.to_hex @@ Digestif.SHA1.digest_string git_object
 
@@ -105,7 +96,11 @@ let content_identifier content =
     Format.asprintf "%a%s" git_object_header (object_type, len) content
   in
   let hexdigest = hexdigest_from_git_object git_object in
-  let object_id = array_from_hexdigest hexdigest in
+  let object_id =
+    match object_id_from_string hexdigest with
+    | None -> Utils.error "invalid hexdigest (content_identifier)"
+    | Some object_id -> object_id
+  in
   ((1, Content, object_id), [])
 
 let directory_identifier _d = ((1, Directory, [||]), [])
@@ -134,7 +129,11 @@ let release_identifier target target_type name author date message =
     Format.asprintf "%a" format_git_object_from_headers ("tag", headers, message)
   in
   let hexdigest = hexdigest_from_git_object git_object in
-  let object_id = array_from_hexdigest hexdigest in
+  let object_id =
+    match object_id_from_string hexdigest with
+    | None -> Utils.error "invalid hexdigest (content_identifier)"
+    | Some object_id -> object_id
+  in
   ((1, Release, object_id), [])
 
 let revision_identifier directory parents author author_date committer
@@ -142,10 +141,6 @@ let revision_identifier directory parents author author_date committer
   (* the directory identifier is the ascii representation of its hexadecimal encoding *)
   let pp_tree fmt _tree = Format.fprintf fmt "TODO" in
   let pp_parents fmt _parents = Format.fprintf fmt "TODO" in
-  let pp_author fmt (_author, _author_date) = Format.fprintf fmt "TODO" in
-  let pp_committer fmt (_committer, _committer_date) =
-    Format.fprintf fmt "TODO"
-  in
   let pp_extra_headers fmt _extra_headers = Format.fprintf fmt "TODO" in
 
   (* if the message is None, the manifest ends with the last header ; else, the message is appended to the headers after an empty line. *)
@@ -156,14 +151,18 @@ let revision_identifier directory parents author author_date committer
 
   let commit_manifest =
     Format.asprintf {|%a@.%a@.%a@.%a@.%a@.%a|} pp_tree directory pp_parents
-      parents pp_author (author, author_date) pp_committer
+      parents format_author_data (author, author_date) format_author_data
       (committer, committer_date)
       pp_extra_headers extra_headers pp_message message
   in
 
   (* the checksum of the full manifest is computed using the ‘commit’ git object type *)
   let hexdigest = hexdigest_from_git_object commit_manifest in
-  let object_id = array_from_hexdigest hexdigest in
+  let object_id =
+    match object_id_from_string hexdigest with
+    | None -> Utils.error "invalid hexdigest (content_identifier)"
+    | Some object_id -> object_id
+  in
 
   (*
 

@@ -21,24 +21,19 @@ open Lang
     if swh <> "swh" then
       failwith "Prefix incorrect"
 
-    else (
+    else
       let obj_id = String.lowercase_ascii hash in
 
-      String.iter (fun c ->
-        match c with
-        | 'a'..'f' | '0'..'9' -> ()
-        | _ -> failwith "Object_ID is invalid"
-      ) hash;
+      let obj_id = match Lang.object_id_from_string obj_id with
+      | Some obj_id -> obj_id
+      | None -> failwith "invalid object id"
+      in
 
-      if String.length obj_id = 40 then
-        let obj_array = Array.init 40 (String.get obj_id) in
-        match Lang.object_id_of_string obj_t with
-        | Some obj ->
-          (scheme_v, obj, obj_array)
-        | None ->
-          failwith "Object_type invalid"
-      else
-        failwith "Object_ID has wrong length")
+      match Lang.object_type_of_string obj_t with
+      | Some obj ->
+        (scheme_v, obj, obj_id)
+      | None ->
+        failwith "Object_type invalid"
   }
 
 let fragment_qualifier :=
