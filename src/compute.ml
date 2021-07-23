@@ -42,7 +42,7 @@ let format_git_object_from_headers fmt (git_type, headers, message) =
   begin
     match message with
     | None -> ()
-    | Some message -> Format.fprintf buff_fmt "@.%s" message
+    | Some message -> Format.fprintf buff_fmt "%s" message
   end;
 
   Format.pp_print_flush buff_fmt ();
@@ -53,9 +53,7 @@ let format_git_object_from_headers fmt (git_type, headers, message) =
     (git_type, String.length entries)
     entries
 
-let format_author fmt = function
-  | None -> ()
-  | Some author -> Format.fprintf fmt "%s" author
+let format_author fmt author = Format.fprintf fmt "%s" author
 
 let normalize_timestamp = function
   | None -> None
@@ -125,10 +123,10 @@ let release_identifier target target_type name author date message =
        ; ("tag", name)
       |]
     in
-    let _headers =
+    let headers =
       match author with
       | None -> headers
-      | Some _release_author ->
+      | Some author ->
         Array.append headers
           [| ("tagger", Format.asprintf "%a" format_author_data (author, date))
           |]
@@ -136,7 +134,8 @@ let release_identifier target target_type name author date message =
     Format.asprintf "%a" format_git_object_from_headers ("tag", headers, message)
   in
   let hexdigest = hexdigest_from_git_object git_object in
-  ((1, Release, hexdigest), [])
+  let object_id = array_from_hexdigest hexdigest in
+  ((1, Release, object_id), [])
 
 let revision_identifier directory parents author author_date committer
     committer_date extra_headers message =

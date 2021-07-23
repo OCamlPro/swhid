@@ -1,6 +1,6 @@
 (test
- (name test)
- (modules test)
+ (name test_compute)
+ (modules test_compute)
  (libraries swhids))
 
 (test
