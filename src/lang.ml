@@ -31,10 +31,34 @@ type qualifiers = qualifier list
 
 type identifier = identifier_core * qualifiers
 
-let object_id_of_string = function
+let object_type_of_string = function
   | "snp" -> Some Snapshot
   | "rel" -> Some Release
   | "rev" -> Some Revision
   | "dir" -> Some Directory
   | "cnt" -> Some Content
-  | _ -> None
+  | _s -> None
+
+let target_type_to_git = function
+  | Content -> "blob"
+  | Directory -> "tree"
+  | Release -> "tag"
+  | Revision -> "commit"
+  | Snapshot -> "refs"
+
+let object_id_from_string s =
+  let expected_size = 40 in
+  if String.length s = expected_size then
+    try
+      String.iter
+        (function
+          | 'a' .. 'f'
+          | '0' .. '9' ->
+            ()
+          | _invalid_char -> raise Exit )
+        s;
+      Some (Array.init expected_size (String.get s))
+    with
+    | Exit -> None
+  else
+    None
