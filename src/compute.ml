@@ -105,12 +105,10 @@ let content_identifier content =
 
 let directory_identifier _d = ((1, Directory, [||]), [])
 
+let target_invalid target = String.length target <> 40
+
 let release_identifier target target_type name author date message =
-  let target_len = String.length target in
-  if target_len <> 40 then
-    Utils.error
-      (Format.sprintf "target must be of length 40 but `%s` has a length of %d"
-         target target_len );
+  if target_invalid target then Utils.error "target must be of length 40";
   let git_object =
     let headers =
       [| ("object", target)
@@ -138,42 +136,64 @@ let release_identifier target target_type name author date message =
 
 let revision_identifier directory parents author author_date committer
     committer_date extra_headers message =
-  (* the directory identifier is the ascii representation of its hexadecimal encoding *)
-  let pp_tree fmt _tree = Format.fprintf fmt "TODO" in
-  let pp_parents fmt _parents = Format.fprintf fmt "TODO" in
-  let pp_extra_headers fmt _extra_headers = Format.fprintf fmt "TODO" in
+  if List.exists target_invalid (directory :: parents) then
+    Utils.error "target (directory and parents) must be of length 40";
 
-  (* if the message is None, the manifest ends with the last header ; else, the message is appended to the headers after an empty line. *)
-  let pp_message fmt = function
-    | None -> ()
-    | Some message -> Format.fprintf fmt "@.%s" message
+  (* TODO: this is probably false :-) *)
+  let rec pp_parents fmt = function
+    | [] -> ()
+    | parent :: parents ->
+      Format.fprintf fmt "%s" parent;
+      pp_parents fmt parents
   in
 
-  let commit_manifest =
-    Format.asprintf {|%a@.%a@.%a@.%a@.%a@.%a|} pp_tree directory pp_parents
-      parents format_author_data (author, author_date) format_author_data
-      (committer, committer_date)
-      pp_extra_headers extra_headers pp_message message
+  let git_object =
+    let headers = [| ("tree", directory) |] in
+    let headers =
+      match parents with
+      | [] -> headers
+      | parents ->
+        Array.append headers
+          [| ("parent", Format.asprintf "%a" pp_parents parents) |]
+    in
+    let headers =
+      match author with
+      | None -> headers
+      | Some author ->
+        Array.append headers
+          [| ( "author"
+             , Format.asprintf "%a" format_author_data (author, author_date) )
+          |]
+    in
+    let headers =
+      match committer with
+      | None -> headers
+      | Some committer ->
+        Array.append headers
+          [| ( "committer"
+             , Format.asprintf "%a" format_author_data
+                 (committer, committer_date) )
+          |]
+    in
+    let headers = Array.append headers extra_headers in
+
+    let message =
+      match message with
+      | None -> None
+      | Some msg -> Some (Format.sprintf "@.%s" msg)
+    in
+
+    Format.asprintf "%a" format_git_object_from_headers
+      ("commit", headers, message)
   in
 
-  (* the checksum of the full manifest is computed using the ‘commit’ git object type *)
-  let hexdigest = hexdigest_from_git_object commit_manifest in
+  let hexdigest = hexdigest_from_git_object git_object in
   let object_id =
     match object_id_from_string hexdigest with
     | None -> Utils.error "invalid hexdigest (content_identifier)"
     | Some object_id -> object_id
   in
 
-  (*
-
-Author and committer are formatted with the format_author() function. Dates are formatted with the format_offset() function.
-
-Extra headers are an ordered list of [key, value] pairs. Keys are strings and get encoded to utf-8 for identifier computation. Values are either byte strings, unicode strings (that get encoded to utf-8), or integers (that get encoded to their utf-8 decimal representation).
-
-Multiline extra header values are escaped by indenting the continuation lines with one ascii space.
-
-
-*)
   ((1, Revision, object_id), [])
 
 let snapshot_identifier _s = ((1, Snapshot, [||]), [])
