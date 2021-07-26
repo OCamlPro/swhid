@@ -57,3 +57,39 @@ wdLOnvj91G4wxYqrvThthbE=
           expected_identifier result;
       assert ok )
     test_cases
+
+(* test revision_identifier *)
+let () =
+  let test_cases =
+    [| ( "swh:1:rev:bc0195aad0daa2ad5b0d76cce22b167bc3435590"
+       , "85a74718d377195e1efd0843ba4f3260bad4fe07"
+       , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
+       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, 0, -420, false)
+       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, 0, -420, false)
+       , Some "Linux 4.2-rc2\n" )
+    |]
+  in
+  Array.iter
+    (fun ( expected_identifier
+         , directory
+         , parents
+         , author
+         , author_date
+         , committer
+         , committer_date
+         , message ) ->
+      let result =
+        Swhids.Compute.revision_identifier directory parents author author_date
+          committer committer_date [||] message
+      in
+      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let ok = result = expected_identifier in
+      if not ok then
+        Format.eprintf
+          "error: expected_identifier `%s` from revision but got identifier \
+           `%s`@."
+          expected_identifier result;
+      assert ok )
+    test_cases
