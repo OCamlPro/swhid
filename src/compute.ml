@@ -83,6 +83,8 @@ let format_author_data fmt (author, date_offset) =
     Format.fprintf fmt " %a %a" format_date timestamp format_offset
       (offset, negative_utc)
 
+let target_invalid target = String.length target <> 40
+
 let content_identifier content =
   (* Quoting SWH documentation:
    * for contents, the intrinsic identifier is the sha1_git hash returned by
@@ -103,9 +105,67 @@ let content_identifier content =
   in
   ((1, Content, object_id), [])
 
-let directory_identifier _d = ((1, Directory, [||]), [])
+let id_to_bytes id =
+  let buff = Buffer.create 512 in
+  String.iteri
+    (fun i c ->
+      if i mod 2 = 0 then
+        let c2 = String.get id (i + 1) in
+        let s = Format.sprintf "%c%c" c c2 in
+        let n = int_of_string (Format.sprintf "0x%s" s) in
+        Buffer.add_char buff (Char.chr n) )
+    id;
+  Buffer.contents buff
 
-let target_invalid target = String.length target <> 40
+let directory_identifier entries =
+  List.iter
+    (fun (_typ, _perms, _name, target) ->
+      if target_invalid target then Utils.error "target must be of length 40" )
+    entries;
+  let entries =
+    List.sort
+      (fun (typ1, _perms, name1, _target1) (typ2, _perms2, name2, _target2) ->
+        let name1 =
+          name1
+          ^
+          if typ1 = "dir" then
+            "/"
+          else
+            ""
+        in
+        let name2 =
+          name2
+          ^
+          if typ2 = "dir" then
+            "/"
+          else
+            ""
+        in
+        String.compare name1 name2 )
+      entries
+  in
+  let object_type = target_type_to_git Directory in
+  let content =
+    Format.asprintf "%a"
+      (Format.pp_print_list
+         ~pp_sep:(fun _fmt () -> ())
+         (fun fmt (_typ, perms, name, target) ->
+           Format.fprintf fmt "%o %s%c%s" perms name '\x00' (id_to_bytes target)
+           ) )
+      entries
+  in
+
+  let len = String.length content in
+  let git_object =
+    Format.asprintf "%a%s" git_object_header (object_type, len) content
+  in
+  let hexdigest = hexdigest_from_git_object git_object in
+  let object_id =
+    match object_id_from_string hexdigest with
+    | None -> Utils.error "invalid hexdigest (directory_identifier)"
+    | Some object_id -> object_id
+  in
+  ((1, Directory, object_id), [])
 
 let release_identifier target target_type name author date message =
   if target_invalid target then Utils.error "target must be of length 40";
