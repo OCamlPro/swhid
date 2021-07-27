@@ -94,6 +94,7 @@ let () =
       assert ok )
     test_cases
 
+(* test directory identifier *)
 let () =
   let test_cases =
     [| (* empty directory *)
@@ -140,6 +141,46 @@ let () =
       if not ok then
         Format.eprintf
           "error: expected_identifier `%s` from directory but got identifier \
+           `%s`@."
+          expected_identifier result;
+      assert ok )
+    test_cases
+
+(* test snapshot identifier *)
+let () =
+  let test_cases =
+    [| (* empty snapshot *)
+       ("swh:1:snp:1a8893e6a86f444e8be8e7bda6cb34fb1735a00e", [])
+     ; (* dangling branch *)
+       ("swh:1:snp:c84502e821eb21ed84e9fd3ec40973abc8b32353", [ ("HEAD", None) ])
+     ; (* unresolved *)
+       ( "swh:1:snp:84b4548ea486e4b0a7933fa541ff1503a0afe1e0"
+       , [ ("foo", Some ("bar", "alias")) ] )
+     ; (* all types*)
+       ( "swh:1:snp:6e65b86363953b780d92b0a928f3e8fcdd10db36"
+       , [ ( "directory"
+           , Some ("1bd0e65f7d2ff14ae994de17a1e7fe65111dcad8", "directory") )
+         ; ( "content"
+           , Some ("fe95a46679d128ff167b7c55df5d02356c5a1ae1", "content") )
+         ; ("alias", Some ("revision", "alias"))
+         ; ( "revision"
+           , Some ("aafb16d69fd30ff58afdd69036a26047f3aebdc6", "revision") )
+         ; ( "release"
+           , Some ("7045404f3d1c54e6473c71bbb716529fbad4be24", "release") )
+         ; ( "snapshot"
+           , Some ("1a8893e6a86f444e8be8e7bda6cb34fb1735a00e", "snapshot") )
+         ; ("dangling", None)
+         ] )
+    |]
+  in
+  Array.iter
+    (fun (expected_identifier, branches) ->
+      let result = Swhids.Compute.snapshot_identifier branches in
+      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let ok = result = expected_identifier in
+      if not ok then
+        Format.eprintf
+          "error: expected_identifier `%s` from snapshot but got identifier \
            `%s`@."
           expected_identifier result;
       assert ok )

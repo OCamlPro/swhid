@@ -256,4 +256,44 @@ let revision_identifier directory parents author author_date committer
 
   ((1, Revision, object_id), [])
 
-let snapshot_identifier _s = ((1, Snapshot, [||]), [])
+let snapshot_identifier branches =
+  let branches =
+    List.sort
+      (fun (name1, _target) (name2, _target) -> String.compare name1 name2)
+      branches
+  in
+  let buff = Buffer.create 512 in
+  let fmt = Format.formatter_of_buffer buff in
+  List.iter
+    (fun (branch_name, target) ->
+      let target, target_type, target_id_len =
+        match target with
+        | None -> ("", "dangling", 0)
+        | Some (target, target_type) -> (
+          match target_type with
+          | "content"
+          | "directory"
+          | "revision"
+          | "release"
+          | "snapshot" ->
+            (id_to_bytes target, target_type, 20)
+          | "alias" -> (target, "alias", String.length target)
+          | _type -> assert false )
+      in
+      Format.fprintf fmt "%s %s%c%d:%s" target_type branch_name '\x00'
+        target_id_len target )
+    branches;
+  Format.pp_print_flush fmt ();
+  let content = Buffer.contents buff in
+  let len = String.length content in
+  let git_object =
+    Format.asprintf "%a%s" git_object_header ("snapshot", len) content
+  in
+  let hexdigest = hexdigest_from_git_object git_object in
+  let object_id =
+    match object_id_from_string hexdigest with
+    | None -> Utils.error "invalid hexdigest (snapshot_identifier)"
+    | Some object_id -> object_id
+  in
+
+  ((1, Snapshot, object_id), [])
