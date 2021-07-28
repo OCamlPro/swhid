@@ -19,3 +19,4 @@ For more, have a look at the [example] folder or at the [documentation].
 
 [documentation]: https://ocamlpro.github.io/swhids/
 [OCaml]: https://ocaml.org
+[Software Heritage]: https://www.softwareheritage.org/
