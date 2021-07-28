@@ -9,7 +9,9 @@
  (name swhids)
  (modules compute lang lexer menhir_parser parser pp utils)
  (private_modules menhir_parser)
- (libraries digestif))
+ (libraries digestif)
+ (instrumentation
+  (backend bisect_ppx)))
 
 (ocamllex
  (modules lexer))
