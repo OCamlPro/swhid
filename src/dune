@@ -1,6 +1,8 @@
 (executable
  (name swhids)
  (modules swhids)
+ (instrumentation
+  (backend bisect_ppx))
  (libraries swhids))
 
 (library
