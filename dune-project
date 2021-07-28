@@ -23,6 +23,8 @@
    (>= 4.0.5))
   (dune
    (>= 2.8))
+  (digestif
+   (>= 1.0.0))
   (menhir
    (>= 2.1))
   (bisect_ppx
