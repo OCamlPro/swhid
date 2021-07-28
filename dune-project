@@ -15,8 +15,18 @@
 
 (package
  (name swhids)
- (synopsis "TODO")
- (description "TODO")
+ (synopsis "OCaml library to work with Software Heritage identifiers")
+ (description
+  "swhids is an OCaml library to work with Software Heritage identifiers")
  (depends
   (ocaml
-   (>= 4.0.5))))
+   (>= 4.0.5))
+  (dune
+   (>= 2.8))
+  (menhir
+   (>= 2.1))
+  (bisect_ppx
+   (and
+    :with-test
+    (>= 2.6)
+    :dev))))
