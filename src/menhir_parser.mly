@@ -19,7 +19,7 @@ let identifier_core :=
     | swh = STR; COLUM; scheme_v = INT; COLUM; obj_t = STR; COLUM; hash = STR;
         {
             if swh <> "swh" then
-              raise (Parser_error "Prefix incorrect")
+              raise (Parser_error "Scheme incorrect")
 
             else
               let obj_id = String.lowercase_ascii hash in
@@ -27,7 +27,7 @@ let identifier_core :=
               let obj_id =
                 match Lang.object_id_from_string obj_id with
                 | Some obj_id -> obj_id
-                | None -> raise (Parser_error "invalid object id")
+                | None -> raise (Parser_error "Invalid object id")
               in
 
             match Lang.object_type_of_string obj_t with
@@ -61,7 +61,7 @@ let context_qualifier :=
     | ctx_path = STR; EQUAL; pathabs = STR ;
       {
         if String.equal ctx_path "path" then
-          (* Here insert RFC 3987 IRI [url_or_path] variable compliance *)
+          (* Here insert RFC 3987 IRI [ctx_path] variable compliance *)
           Path pathabs
         else
           raise (Parser_error "Context_qualifier absolute path wrong")
@@ -70,7 +70,7 @@ let context_qualifier :=
     | ctx_origin = STR; EQUAL; url = URL ;
       {
         if String.equal ctx_origin "origin" then
-         (* Here insert RFC 3987 absolute  path [url_or_path] variable compliance *)
+          (* Here insert RFC 3987 absolute  path [ctx_origin] variable compliance *)
           Origin url
         else
           raise (Parser_error "Context_qualifier origin url")
@@ -93,4 +93,4 @@ let qualifiers :=
     |  ~ = list(preceded(SEMICOL,qualifier)); <>
 
 let identifier :=
-          | ~ = identifier_core; ~ = qualifiers; EOF; { identifier_core, qualifiers }
+    | ~ = identifier_core; ~ = qualifiers; EOF; { identifier_core, qualifiers }
