@@ -1051,7 +1051,7 @@ let
 
   | <span data-count="0">8</span> -&gt;
 # 20 "src/lexer.mll"
-            ( raise (Failure ("Unexpected char: " ^ Lexing.lexem<span data-count="0">e</span> lexbuf)) )
+            ( raise (Lang.Lexer_error ("Unexpected char: " ^ Lexing.lexem<span data-count="0">e</span> lexbuf)) )
 # 338 "src/lexer.ml"
 
   | <span data-count="0">_</span>_ocaml_lex_state -&gt; lexbuf.Lexing.refill_buff lexbuf;
