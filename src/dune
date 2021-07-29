@@ -7,9 +7,9 @@
 
 (library
  (name swhids)
- (modules compute lang lexer menhir_parser parser pp utils)
+ (modules compute download json lang lexer menhir_parser parser pp utils)
  (private_modules menhir_parser)
- (libraries digestif)
+ (libraries digestif ezcurl jsonm)
  (instrumentation
   (backend bisect_ppx)))
 
