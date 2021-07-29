@@ -14,15 +14,13 @@
           <span class="dirname">src/</span>parser.ml
         </a>
       </h1>
-      <h2>26.67%</h2>
+      <h2>58.82%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="top:21.43%"></span>
-      <span class="unvisited" style="top:28.57%"></span>
-      <span class="unvisited" style="bottom:42.86%"></span>
-      <span class="unvisited" style="bottom:21.43%"></span>
-      <span class="unvisited" style="bottom:14.29%"></span>
-      <span class="unvisited" style="bottom:7.14%"></span>
+      <span class="unvisited" style="bottom:40.00%"></span>
+      <span class="unvisited" style="bottom:20.00%"></span>
+      <span class="unvisited" style="bottom:13.33%"></span>
+      <span class="unvisited" style="bottom:6.67%"></span>
       <span class="unvisited" style="bottom:0.00%"></span>
     </div>
     <div id="report">
@@ -30,18 +28,19 @@
         <pre>
 <a id="L1"></a><span > </span>
 <a id="L2"></a><span class="visited"> </span>
-<a id="L3"></a><span class="unvisited"> </span>
-<a id="L4"></a><span class="unvisited"> </span>
-<a id="L5"></a><span > </span>
-<a id="L6"></a><span class="visited"> </span>
-<a id="L7"></a><span > </span>
-<a id="L8"></a><span class="unvisited"> </span>
-<a id="L9"></a><span > </span>
+<a id="L3"></a><span class="visited"> </span>
+<a id="L4"></a><span class="visited"> </span>
+<a id="L5"></a><span class="visited"> </span>
+<a id="L6"></a><span > </span>
+<a id="L7"></a><span class="visited"> </span>
+<a id="L8"></a><span > </span>
+<a id="L9"></a><span class="unvisited"> </span>
 <a id="L10"></a><span > </span>
-<a id="L11"></a><span class="unvisited"> </span>
+<a id="L11"></a><span > </span>
 <a id="L12"></a><span class="unvisited"> </span>
 <a id="L13"></a><span class="unvisited"> </span>
 <a id="L14"></a><span class="unvisited"> </span>
+<a id="L15"></a><span class="unvisited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -60,13 +59,15 @@
 <a href="#L12">12</a>
 <a href="#L13">13</a>
 <a href="#L14">14</a>
+<a href="#L15">15</a>
 </pre>
 <pre><code class="ocaml">let parse buf =
-  <span data-count="7">t</span>ry Ok (Menhir_parser.identifie<span data-count="7">r</span> Lexer.token buf) with
-  | <span data-count="0">L</span>ang.Parser_error s -&gt; Error (Format.sprint<span data-count="0">f</span> "parser error: %s" s)
-  | <span data-count="0">L</span>ang.Lexer_error s -&gt; Error (Format.sprint<span data-count="0">f</span> "lexer error: %s" s)
+  <span data-count="28">t</span>ry Ok (Menhir_parser.identifie<span data-count="8">r</span> Lexer.token buf) with
+  | <span data-count="9">L</span>ang.Parser_error s -&gt; Error (Format.sprint<span data-count="9">f</span> "parser error: %s" s)
+  | <span data-count="9">M</span>enhir_parser.Error -&gt; Error (Format.sprint<span data-count="9">f</span> "parser error: Syntax error")
+  | <span data-count="2">L</span>ang.Lexer_error s -&gt; Error (Format.sprint<span data-count="2">f</span> "lexer error: %s" s)
 
-let from_string s = <span data-count="7">p</span>arse (Lexing.from_strin<span data-count="7">g</span> s)
+let from_string s = <span data-count="28">p</span>arse (Lexing.from_strin<span data-count="28">g</span> s)
 
 let from_channel c = <span data-count="0">p</span>arse (Lexing.from_channe<span data-count="0">l</span> c)
 

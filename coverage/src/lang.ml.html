@@ -14,15 +14,13 @@
           <span class="dirname">src/</span>lang.ml
         </a>
       </h1>
-      <h2>72.73%</h2>
+      <h2>81.82%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="bottom:41.18%"></span>
       <span class="unvisited" style="bottom:33.82%"></span>
       <span class="unvisited" style="bottom:30.88%"></span>
       <span class="unvisited" style="bottom:14.71%"></span>
       <span class="unvisited" style="bottom:8.82%"></span>
-      <span class="unvisited" style="bottom:5.88%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
@@ -66,7 +64,7 @@
 <a id="L37"></a><span class="visited"> </span>
 <a id="L38"></a><span class="visited"> </span>
 <a id="L39"></a><span class="visited"> </span>
-<a id="L40"></a><span class="unvisited"> </span>
+<a id="L40"></a><span class="visited"> </span>
 <a id="L41"></a><span > </span>
 <a id="L42"></a><span > </span>
 <a id="L43"></a><span class="visited"> </span>
@@ -90,7 +88,7 @@
 <a id="L61"></a><span > </span>
 <a id="L62"></a><span class="unvisited"> </span>
 <a id="L63"></a><span > </span>
-<a id="L64"></a><span class="unvisited"> </span>
+<a id="L64"></a><span class="visited"> </span>
 <a id="L65"></a><span > </span>
 <a id="L66"></a><span > </span>
 <a id="L67"></a><span > </span>
@@ -202,12 +200,12 @@ type qualifiers = qualifier list
 type identifier = identifier_core * qualifiers
 
 let object_type_of_string = function
-  | <span data-count="2">"</span>snp" -&gt; Some Snapshot
+  | <span data-count="8">"</span>snp" -&gt; Some Snapshot
   | <span data-count="1">"</span>rel" -&gt; Some Release
-  | <span data-count="2">"</span>rev" -&gt; Some Revision
+  | <span data-count="7">"</span>rev" -&gt; Some Revision
   | <span data-count="1">"</span>dir" -&gt; Some Directory
-  | <span data-count="3">"</span>cnt" -&gt; Some Content
-  | <span data-count="0">_</span>s -&gt; None
+  | <span data-count="10">"</span>cnt" -&gt; Some Content
+  | <span data-count="1">_</span>s -&gt; None
 
 let target_type_to_git = function
   | <span data-count="2">C</span>ontent -&gt; "blob"
@@ -217,21 +215,21 @@ let target_type_to_git = function
   | <span data-count="0">S</span>napshot -&gt; "refs"
 
 let object_id_from_string s =
-  <span data-count="19">l</span>et expected_size = 40 in
-  if String.lengt<span data-count="19">h</span> s = expected_size then
-    <span data-count="19">t</span>ry
+  <span data-count="40">l</span>et expected_size = 40 in
+  if String.lengt<span data-count="40">h</span> s = expected_size then
+    <span data-count="38">t</span>ry
       String.iter
         (function
-          | <span data-count="298">'</span>a' .. 'f'
-          | <span data-count="462">'</span>0' .. '9' -&gt;
+          | <span data-count="598">'</span>a' .. 'f'
+          | <span data-count="922">'</span>0' .. '9' -&gt;
             ()
           | <span data-count="0">_</span>invalid_char -&gt; raise Exit )
         s;
-      <span data-count="19">S</span>ome (Array.ini<span data-count="19">t</span> expected_size (String.ge<span data-count="19">t</span> s))
+      <span data-count="38">S</span>ome (Array.ini<span data-count="38">t</span> expected_size (String.ge<span data-count="38">t</span> s))
     with
     | <span data-count="0">E</span>xit -&gt; None
   else
-    <span data-count="0">N</span>one
+    <span data-count="2">N</span>one
 
 exception Parser_error of string
 
