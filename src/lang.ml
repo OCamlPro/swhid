@@ -62,3 +62,7 @@ let object_id_from_string s =
     | Exit -> None
   else
     None
+
+exception Parser_error of string
+
+exception Lexer_error of string
