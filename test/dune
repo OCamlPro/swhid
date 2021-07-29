@@ -7,3 +7,8 @@
  (name test_parser)
  (modules test_parser)
  (libraries swhids))
+
+(test
+ (name test_download)
+ (modules test_download)
+ (libraries swhids))
