@@ -17,4 +17,4 @@ rule token = parse
         | str as id {STR id}
         | url as id {URL id}
         | eof { EOF }
-        | _ { raise (Failure ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
+        | _ { raise (Lang.Lexer_error ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
