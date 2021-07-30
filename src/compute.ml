@@ -1,12 +1,12 @@
 open Lang
 
 (** Compute the software heritage identifier for a given content *)
-let content_identifier content =
+let content_identifier content : Lang.identifier option =
   let git_object = Git.object_from_contents Content content in
   Git.object_to_swhid git_object [] Lang.content
 
 (** Compute the software heritage identifier for a given directory *)
-let directory_identifier entries =
+let directory_identifier entries : Lang.identifier option =
   List.iter
     (fun (_typ, _perms, _name, target) ->
       if Git.target_invalid target then
@@ -39,7 +39,8 @@ let directory_identifier entries =
   Git.object_to_swhid git_object [] Lang.directory
 
 (** Compute the software heritage identifier for a given release *)
-let release_identifier target target_type name author date message =
+let release_identifier ~target target_type ~name ~author ~date ~message :
+    Lang.identifier option =
   if Git.target_invalid target then
     raise @@ Invalid_argument "target must be of length 40";
   let headers =
@@ -62,8 +63,8 @@ let release_identifier target target_type name author date message =
   Git.object_to_swhid git_object [] Lang.release
 
 (** Compute the software heritage identifier for a given revision *)
-let revision_identifier directory parents author author_date committer
-    committer_date extra_headers message =
+let revision_identifier directory parents ~author ~author_date ~committer
+    ~committer_date extra_headers message : Lang.identifier option =
   if List.exists Git.target_invalid (directory :: parents) then
     raise
     @@ Invalid_argument "target (directory and parents) must be of length 40";
@@ -119,7 +120,7 @@ let revision_identifier directory parents author author_date committer
   Git.object_to_swhid git_object [] Lang.revision
 
 (** Compute the software heritage identifier for a given snapshot *)
-let snapshot_identifier branches =
+let snapshot_identifier branches : Lang.identifier option =
   let branches =
     List.sort
       (fun (name1, _target) (name2, _target) -> String.compare name1 name2)
