@@ -12,6 +12,7 @@ depends: [
   "dune" {>= "2.8" & >= "2.8"}
   "digestif" {>= "1.0.0"}
   "jsonm" {>= "1.0.1"}
+  "ezcurl" {>= "0.1"}
   "menhir" {>= "2.1"}
   "bisect_ppx" {with-test & >= "2.6" & dev}
   "odoc" {with-doc}
