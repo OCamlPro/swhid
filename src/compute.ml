@@ -43,73 +43,78 @@ let release_identifier ~target target_type ~name ~author ~date ~message :
     Lang.identifier option =
   if Git.target_invalid target then
     raise @@ Invalid_argument "target must be of length 40";
-  let headers =
-    [| ("object", target)
-     ; ("type", Git.target_type_to_git target_type)
-     ; ("tag", name)
-    |]
-  in
-  let headers =
+
+  let buff = Buffer.create 512 in
+  let fmt = Format.formatter_of_buffer buff in
+
+  Format.fprintf fmt "object %s@.type %s@.tag %s@." target
+    (Git.target_type_to_git target_type)
+    (Git.escape_newlines name);
+
+  begin
     match author with
-    | None -> headers
+    | None -> ()
     | Some author ->
-      Array.append headers
-        [| ("tagger", Format.asprintf "%a" Git.format_author_data (author, date))
-        |]
-  in
-  let git_object =
-    Format.asprintf "%a" Git.object_from_headers ("tag", headers, message)
-  in
+      Format.fprintf fmt "tagger %a@." Git.format_author_data
+        (Git.escape_newlines author, date)
+  end;
+
+  begin
+    match message with
+    | None -> ()
+    | Some message -> Format.fprintf fmt "@.%s" message
+  end;
+
+  Format.pp_print_flush fmt ();
+
+  let content = Buffer.contents buff in
+
+  let git_object = Git.object_from_contents Release content in
+
   Git.object_to_swhid git_object [] Lang.release
 
 (** Compute the software heritage identifier for a given revision *)
 let revision_identifier directory parents ~author ~author_date ~committer
-    ~committer_date extra_headers message : Lang.identifier option =
+    ~committer_date _extra_headers message : Lang.identifier option =
   if List.exists Git.target_invalid (directory :: parents) then
     raise
     @@ Invalid_argument "target (directory and parents) must be of length 40";
 
-  (* TODO: this is probably false :-) *)
-  let rec pp_parents fmt = function
-    | [] -> ()
-    | parent :: parents ->
-      Format.fprintf fmt "%s" parent;
-      pp_parents fmt parents
-  in
+  let buff = Buffer.create 512 in
+  let fmt = Format.formatter_of_buffer buff in
 
-  let headers = [| ("tree", directory) |] in
-  let headers =
-    match parents with
-    | [] -> headers
-    | parents ->
-      Array.append headers
-        [| ("parent", Format.asprintf "%a" pp_parents parents) |]
-  in
-  let headers =
+  Format.fprintf fmt "tree %s@." directory;
+
+  List.iter (fun parent -> Format.fprintf fmt "parent %s@." parent) parents;
+
+  begin
     match author with
-    | None -> headers
+    | None -> ()
     | Some author ->
-      Array.append headers
-        [| ( "author"
-           , Format.asprintf "%a" Git.format_author_data (author, author_date)
-           )
-        |]
-  in
-  let headers =
-    match committer with
-    | None -> headers
-    | Some committer ->
-      Array.append headers
-        [| ( "committer"
-           , Format.asprintf "%a" Git.format_author_data
-               (committer, committer_date) )
-        |]
-  in
-  let headers = Array.append headers extra_headers in
+      Format.fprintf fmt "author %a@." Git.format_author_data
+        (Git.escape_newlines author, author_date)
+  end;
 
-  let git_object =
-    Format.asprintf "%a" Git.object_from_headers ("commit", headers, message)
-  in
+  begin
+    match committer with
+    | None -> ()
+    | Some committer ->
+      Format.fprintf fmt "committer %a@." Git.format_author_data
+        (Git.escape_newlines committer, committer_date)
+  end;
+
+  (* TODO: extra headers *)
+  begin
+    match message with
+    | None -> ()
+    | Some message -> Format.fprintf fmt "@.%s" message
+  end;
+
+  Format.pp_print_flush fmt ();
+
+  let content = Buffer.contents buff in
+
+  let git_object = Git.object_from_contents Revision content in
 
   Git.object_to_swhid git_object [] Lang.revision
 
