@@ -63,6 +63,16 @@ let object_id_from_string s =
   else
     None
 
+let content id qualifiers = ((1, Content, id), qualifiers)
+
+let directory id qualifiers = ((1, Directory, id), qualifiers)
+
+let snapshot id qualifiers = ((1, Snapshot, id), qualifiers)
+
+let revision id qualifiers = ((1, Revision, id), qualifiers)
+
+let release id qualifiers = ((1, Release, id), qualifiers)
+
 exception Parser_error of string
 
 exception Lexer_error of string

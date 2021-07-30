@@ -8,6 +8,11 @@ let () =
   Array.iter
     (fun (content, expected_identifier) ->
       let result = Swhids.Compute.content_identifier content in
+      let result =
+        match result with
+        | None -> assert false
+        | Some result -> result
+      in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
@@ -47,6 +52,11 @@ wdLOnvj91G4wxYqrvThthbE=
         Swhids.Compute.release_identifier target target_type name author date
           message
       in
+      let result =
+        match result with
+        | None -> assert false
+        | Some result -> result
+      in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
@@ -83,6 +93,11 @@ let () =
       let result =
         Swhids.Compute.revision_identifier directory parents author author_date
           committer committer_date [||] message
+      in
+      let result =
+        match result with
+        | None -> assert false
+        | Some result -> result
       in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
@@ -136,6 +151,11 @@ let () =
   Array.iter
     (fun (expected_identifier, entries) ->
       let result = Swhids.Compute.directory_identifier entries in
+      let result =
+        match result with
+        | None -> assert false
+        | Some result -> result
+      in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
@@ -176,6 +196,11 @@ let () =
   Array.iter
     (fun (expected_identifier, branches) ->
       let result = Swhids.Compute.snapshot_identifier branches in
+      let result =
+        match result with
+        | None -> assert false
+        | Some result -> result
+      in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
