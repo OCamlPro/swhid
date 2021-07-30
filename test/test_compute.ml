@@ -25,6 +25,12 @@ let () =
 
 (* test release_identifier *)
 let () =
+  let counter =
+    let count = ref (-1) in
+    fun () ->
+      incr count;
+      !count
+  in
   let test_cases =
     [| ( "741b2252a5e14d6c60a913c77a6099abe73a854a"
        , Swhids.Lang.Revision
@@ -43,6 +49,56 @@ wdLOnvj91G4wxYqrvThthbE=
 -----END PGP SIGNATURE-----
 |}
        , "swh:1:rel:2b10839e32c4c476e9d94492756bb1a3e1ec4aa8" )
+       (* No author *)
+     ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
+       , Swhids.Lang.Revision
+       , "v2.6.12"
+       , None
+       , Some (1130457753, 0, -420, false)
+       , Some
+           {|
+This is the final 2.6.12 release
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQBCsykyF3YsRnbiHLsRAvPNAJ482tCZwuxp/bJRz7Q98MHlN83TpACdHr37
+o6X/3T+vm8K3bf3driRr34c=
+=sBHn
+-----END PGP SIGNATURE-----
+|}
+       , "swh:1:rel:26791a8bcf0e6d33f43aef7682bdb555236d56de" )
+       (* No message *)
+     ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
+       , Swhids.Lang.Revision
+       , "v2.6.12"
+       , Some "Linus Torvalds <torvalds@g5.osdl.org>"
+       , Some (1130457753, 0, -420, false)
+       , None
+       , "swh:1:rel:b6f4f446715f7d9543ef54e41b62982f0db40045" )
+       (* Empty message *)
+     ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
+       , Swhids.Lang.Revision
+       , "v2.6.12"
+       , Some "Linus Torvalds <torvalds@g5.osdl.org>"
+       , Some (1130457753, 0, -420, false)
+       , Some ""
+       , "swh:1:rel:71a0aea72444d396575dc25ac37fec87ee3c6492" )
+       (* Negative utc *)
+     ; ( "54e9abca4c77421e2921f5f156c9fe4a9f7441c7"
+       , Swhids.Lang.Revision
+       , "20081029"
+       , Some "Otavio Salvador <otavio@debian.org>"
+       , Some (1225281976, 0, 0, true)
+       , Some "tagging version 20081029\n\nr56558\n"
+       , "swh:1:rel:97c8d2573a001f88e72d75f596cf86b12b82fd01" )
+       (* newline in author *)
+     ; ( "c06aa3d93b78a2865c4935170030f8c2d7396fd3"
+       , Swhids.Lang.Revision
+       , "0.3.2"
+       , Some "Eugene Janusov\n<esycat@gmail.com>"
+       , Some (1377480558, 0, 600, false)
+       , Some "Release of v0.3.2."
+       , "swh:1:rel:5c98f559d034162de22d3ebeb95433e6f8885231" )
     |]
   in
 
@@ -57,14 +113,15 @@ wdLOnvj91G4wxYqrvThthbE=
         | None -> assert false
         | Some result -> result
       in
+      let count = counter () in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         (* TODO: be able to print a revision *)
         Format.eprintf
-          "error: expected_identifier `%s` from revision but got identifier \
-           `%s`@."
-          expected_identifier result;
+          "Test number: %d@.error: expected_identifier `%s` from release but \
+           got identifier `%s`.@."
+          count expected_identifier result;
       assert ok )
     test_cases
 
