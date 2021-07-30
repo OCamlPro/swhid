@@ -1,14 +1,7 @@
-(executable
- (name swhids)
- (modules swhids)
- (instrumentation
-  (backend bisect_ppx))
- (libraries swhids))
-
 (library
  (name swhids)
- (modules compute download json lang lexer menhir_parser parser pp utils)
- (private_modules menhir_parser)
+ (modules compute download git json lang lexer menhir_parser parser pp)
+ (private_modules git json lexer menhir_parser)
  (libraries digestif ezcurl jsonm)
  (instrumentation
   (backend bisect_ppx)))
