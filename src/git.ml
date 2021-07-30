@@ -59,7 +59,7 @@ let object_from_headers fmt (git_type, headers, message) =
   begin
     match message with
     | None -> ()
-    | Some message -> Format.fprintf buff_fmt "%s" message
+    | Some message -> Format.fprintf buff_fmt "@.%s" message
   end;
 
   Format.pp_print_flush buff_fmt ();
