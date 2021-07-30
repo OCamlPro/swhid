@@ -1,5 +1,25 @@
-let object_to_hexdigest git_object =
-  Digestif.SHA1.to_hex @@ Digestif.SHA1.digest_string git_object
+let target_type_to_git =
+  let open Lang in
+  function
+  | Content -> "blob"
+  | Directory -> "tree"
+  | Release -> "tag"
+  | Revision -> "commit"
+  | Snapshot -> "refs"
+
+let id_to_bytes id =
+  String.init
+    (String.length id / 2)
+    (fun i ->
+      let c1 = String.get id (2 * i) in
+      let c2 = String.get id ((2 * i) + 1) in
+      Char.chr @@ int_of_string @@ Format.sprintf "0x%c%c" c1 c2 )
+
+let object_to_swhid obj qualifiers mk_id =
+  let hexdigest = Digestif.SHA1.to_hex @@ Digestif.SHA1.digest_string obj in
+  Option.map
+    (fun obj -> mk_id obj qualifiers)
+    (Lang.object_id_from_string hexdigest)
 
 let object_header fmt (git_type, len) =
   match git_type with
@@ -17,10 +37,17 @@ let object_header fmt (git_type, len) =
          (Format.sprintf "invalid git object type `%s` (Git.object_header)"
             git_type )
 
+let object_from_contents_strtarget target_type contents =
+  let len = String.length contents in
+  Format.asprintf "%a%s" object_header (target_type, len) contents
+
+let object_from_contents target_type contents =
+  object_from_contents_strtarget (target_type_to_git target_type) contents
+
 let escape_newlines snippet =
   String.concat "\n " (String.split_on_char '\n' snippet)
 
-let format_git_object_from_headers fmt (git_type, headers, message) =
+let object_from_headers fmt (git_type, headers, message) =
   let entries = Buffer.create 512 in
 
   let buff_fmt = Format.formatter_of_buffer entries in

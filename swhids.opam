@@ -8,9 +8,10 @@ license: "ISC"
 homepage: "https://github.com/ocamlpro/swhids"
 bug-reports: "https://github.com/ocamlpro/swhids/issues"
 depends: [
-  "ocaml" {>= "4.0.5"}
+  "ocaml" {>= "4.0.8"}
   "dune" {>= "2.8" & >= "2.8"}
   "digestif" {>= "1.0.0"}
+  "jsonm" {>= "1.0.1"}
   "menhir" {>= "2.1"}
   "bisect_ppx" {with-test & >= "2.6" & dev}
   "odoc" {with-doc}

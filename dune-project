@@ -20,11 +20,13 @@
   "swhids is an OCaml library to work with Software Heritage identifiers")
  (depends
   (ocaml
-   (>= 4.0.5))
+   (>= 4.0.8))
   (dune
    (>= 2.8))
   (digestif
    (>= 1.0.0))
+  (jsonm
+   (>= 1.0.1))
   (menhir
    (>= 2.1))
   (bisect_ppx
