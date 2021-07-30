@@ -27,6 +27,8 @@
    (>= 1.0.0))
   (jsonm
    (>= 1.0.1))
+  (ezcurl
+   (>= 0.1))
   (menhir
    (>= 2.1))
   (bisect_ppx
