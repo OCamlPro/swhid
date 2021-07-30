@@ -38,8 +38,7 @@ let () =
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
        , Some (1130457753, 0, -420, false)
        , Some
-           {|
-Linux 2.6.14 release
+           {|Linux 2.6.14 release
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.1 (GNU/Linux)
 
@@ -56,8 +55,7 @@ wdLOnvj91G4wxYqrvThthbE=
        , None
        , Some (1130457753, 0, -420, false)
        , Some
-           {|
-This is the final 2.6.12 release
+           {|This is the final 2.6.12 release
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.4 (GNU/Linux)
 
@@ -105,8 +103,8 @@ o6X/3T+vm8K3bf3driRr34c=
   Array.iter
     (fun (target, target_type, name, author, date, message, expected_identifier) ->
       let result =
-        Swhids.Compute.release_identifier target target_type name author date
-          message
+        Swhids.Compute.release_identifier ~target target_type ~name ~author
+          ~date ~message
       in
       let result =
         match result with
@@ -148,8 +146,8 @@ let () =
          , committer_date
          , message ) ->
       let result =
-        Swhids.Compute.revision_identifier directory parents author author_date
-          committer committer_date [||] message
+        Swhids.Compute.revision_identifier directory parents ~author
+          ~author_date ~committer ~committer_date [||] message
       in
       let result =
         match result with

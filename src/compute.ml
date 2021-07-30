@@ -107,12 +107,6 @@ let revision_identifier directory parents ~author ~author_date ~committer
   in
   let headers = Array.append headers extra_headers in
 
-  let message =
-    match message with
-    | None -> None
-    | Some msg -> Some (Format.sprintf "@.%s" msg)
-  in
-
   let git_object =
     Format.asprintf "%a" Git.object_from_headers ("commit", headers, message)
   in
