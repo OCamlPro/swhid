@@ -47,29 +47,6 @@ let object_from_contents target_type contents =
 let escape_newlines snippet =
   String.concat "\n " (String.split_on_char '\n' snippet)
 
-let object_from_headers fmt (git_type, headers, message) =
-  let entries = Buffer.create 512 in
-
-  let buff_fmt = Format.formatter_of_buffer entries in
-
-  Array.iter
-    (fun (k, v) -> Format.fprintf buff_fmt "%s %s@." k (escape_newlines v))
-    headers;
-
-  begin
-    match message with
-    | None -> ()
-    | Some message -> Format.fprintf buff_fmt "@.%s" message
-  end;
-
-  Format.pp_print_flush buff_fmt ();
-
-  let entries = Buffer.contents entries in
-
-  Format.fprintf fmt "%a%s" object_header
-    (git_type, String.length entries)
-    entries
-
 let format_author fmt author = Format.fprintf fmt "%s" author
 
 let normalize_timestamp = function
