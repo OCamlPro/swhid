@@ -15,6 +15,8 @@ let on_response url f =
       Error (Format.sprintf "error while parsing JSON response")
     | Ok response -> f response )
 
+(** For a given content identifier, compute an URL from which the content can we
+    downloaded *)
 let content ?hash_type hash =
   let url =
     match hash_type with
@@ -27,6 +29,8 @@ let content ?hash_type hash =
       | Some data_url -> Ok data_url
       | None -> field_not_found field )
 
+(** For a given directory identifier, compute an URL from which the directory
+    can we downloaded *)
 let directory hash =
   let url = url (Format.sprintf "/vault/directory/%s/" hash) in
   on_response url (fun response ->
@@ -35,6 +39,8 @@ let directory hash =
       | Some fetch_url -> Ok fetch_url
       | None -> field_not_found field )
 
+(** For a given revision identifier, compute an URL from which the revision can
+    we downloaded *)
 let revision hash =
   let url = url (Format.sprintf "/revision/%s/" hash) in
   on_response url (fun response ->
@@ -43,6 +49,8 @@ let revision hash =
       | None -> field_not_found field
       | Some dir -> directory dir )
 
+(** For a given release identifier, compute an URL from which the release can we
+    downloaded *)
 let rec release hash =
   let url = url (Format.sprintf "/release/%s/" hash) in
 
@@ -64,6 +72,8 @@ let rec release hash =
             Error (Format.sprintf "unknown target type: `%s`" target_type)
         end ) )
 
+(** For any object identifier, compute an URL from which object can we
+    downloaded *)
 let any ((_scheme, object_type, object_id), _qualifiers) =
   let open Lang in
   match object_type with

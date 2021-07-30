@@ -39,13 +39,6 @@ let object_type_of_string = function
   | "cnt" -> Some Content
   | _s -> None
 
-let target_type_to_git = function
-  | Content -> "blob"
-  | Directory -> "tree"
-  | Release -> "tag"
-  | Revision -> "commit"
-  | Snapshot -> "refs"
-
 let object_id_from_string s =
   let expected_size = 40 in
   if String.length s = expected_size then
