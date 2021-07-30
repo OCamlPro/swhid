@@ -1,5 +1,5 @@
 (library
- (name swhids)
+ (public_name swhids)
  (modules compute download git json lang lexer menhir_parser parser pp)
  (private_modules git json lexer menhir_parser)
  (libraries digestif ezcurl jsonm)

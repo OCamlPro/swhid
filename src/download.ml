@@ -1,6 +1,8 @@
-let instance = "https://archive.softwareheritage.org"
+(** The base URL of the software heritage instance used, defaults to
+    `https://archive.softwareheritage.org` *)
+let instance = ref "https://archive.softwareheritage.org"
 
-let url endpoint = Format.sprintf "%s/api/1%s" instance endpoint
+let url endpoint = Format.sprintf "%s/api/1%s" !instance endpoint
 
 let field_not_found f =
   Error (Format.sprintf "field `%s` not found in the JSON response" f)
@@ -74,7 +76,7 @@ let rec release hash =
 
 (** For any object identifier, compute an URL from which object can we
     downloaded *)
-let any ((_scheme, object_type, object_id), _qualifiers) =
+let any (((_scheme, object_type, object_id), _qualifiers) : Lang.identifier) =
   let open Lang in
   match object_type with
   | Content -> content object_id
