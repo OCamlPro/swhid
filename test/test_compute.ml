@@ -125,6 +125,12 @@ o6X/3T+vm8K3bf3driRr34c=
 
 (* test revision_identifier *)
 let () =
+  let counter =
+    let count = ref (-1) in
+    fun () ->
+      incr count;
+      !count
+  in
   let test_cases =
     [| ( "swh:1:rev:bc0195aad0daa2ad5b0d76cce22b167bc3435590"
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
@@ -133,7 +139,132 @@ let () =
        , Some (1436739030, 0, -420, false)
        , Some "Linus Torvalds <torvalds@linux-foundation.org>"
        , Some (1436739030, 0, -420, false)
-       , Some "Linux 4.2-rc2\n" )
+       , Some "Linux 4.2-rc2\n"
+       , [||] )
+       (* None metadata TODO NEED TO ADD METADATA DIC
+        *
+        * ```tartethon
+        * "metadata": {
+            "original_artifact": [
+                {
+                    "archive_type": "tar",
+                    "name": "gcc-5.2.0.tar.bz2",
+                    "sha1_git": "39d281aff934d44b439730057e55b055e206a586",
+                    "sha1": "fe3f5390949d47054b613edc36c557eb1d51c18e",
+                    "sha256": "5f835b04b5f7dd4f4d2dc96190ec1621b8d89f"
+                    "2dc6f638f9f8bc1b1014ba8cad",
+                }
+            ]
+        },
+        * ```
+        *
+        *
+        ; ( "swh:1:rev:bc0195aad0daa2ad5b0d76cce22b167bc3435590"
+        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
+        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
+        , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+        , Some (1436739030, 0, -420, false)
+        , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+        , Some (1436739030, 0, -420, false)
+        , Some "Linux 4.2-rc2\n"
+        , [||] )
+        *)
+       (* synthetic rev *)
+     ; ( "swh:1:rev:b2a7e1260492e344fab3cbf91bc13c91e05426fd"
+       , "d11f00a6a0fea6055341d25584b5a96516c0d2b8"
+       , []
+       , Some "Software Heritage <robot@softwareheritage.org>"
+       , Some (1437047495, 0, 0, false)
+       , Some "Software Heritage <robot@softwareheritage.org>"
+       , Some (1437047495, 0, 0, false)
+       , Some "synthetic revision message\n"
+       , [||] )
+       (* with extra headers TODO EXTRA HEADERS
+        *
+        *   ```tartethon
+        *   "extra_headers": (
+                 (b"svn-repo-uuid", b"046f1af7-66c2-d61b-5410-ce57b7db7bff"),
+                 (b"svn-revision", b"10"),
+             ),
+          ```
+        *
+        ; ( "swh:1:rev:010d34f384fa99d047cdd5e2f41e56e5c2feee45"
+        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
+        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
+        , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+        , Some (1436739030, 0, -420, false)
+        , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+        , Some (1436739030, 0, -420, false)
+        , Some "Linux 4.2-rc2\n"
+        , [||] )
+        *)
+
+       (* with_gpg_sign TODO EXTAR HEADERS
+        *
+        * ```Piethon
+        * "extra_headers": ((b"gpgsig", gpgsig),),
+        * ```
+        *
+        ; ( "swh:1:rev:44cc742a8ca17b9c279be4cc195a93a6ef7a320e"
+               , "b134f9b7dc434f593c0bab696345548b37de0558"
+               , [ "689664ae944b4692724f13b709a4e4de28b54e57"
+                 ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
+                 ]
+               , Some "Jiang Xin <worldhello.net@gmail.com>"
+               , Some (1428538899, 0, 480, false)
+               , Some "Jiang Xin <worldhello.net@gmail.com>"
+               , Some (1428538899, 0, 480, false)
+               , Some
+                   {|Merge branch 'master' of git://github.com/alexhenrie/git-po
+
+        * 'master' of git://github.com/alexhenrie/git-po:
+          l10n: ca.po: update translation
+          |}
+               , [||] )
+        *)
+       (* No message *)
+     ; ( "swh:1:rev:4cfc623c9238fa92c832beed000ce2d003fd8333"
+       , "b134f9b7dc434f593c0bab696345548b37de0558"
+       , [ "689664ae944b4692724f13b709a4e4de28b54e57"
+         ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
+         ]
+       , Some "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 0, 480, false)
+       , Some "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 0, 480, false)
+       , None
+       , [||] )
+       (* Empty message *)
+     ; ( "swh:1:rev:7442cd78bd3b4966921d6a7f7447417b7acb15eb"
+       , "b134f9b7dc434f593c0bab696345548b37de0558"
+       , [ "689664ae944b4692724f13b709a4e4de28b54e57"
+         ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
+         ]
+       , Some "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 0, 480, false)
+       , Some "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 0, 480, false)
+       , Some ""
+       , [||] )
+       (* Only full name TODO extra header
+        *
+        *   ```tartethon
+        *   "extra_headers": (
+                 (b"svn-repo-uuid", b"046f1af7-66c2-d61b-5410-ce57b7db7bff"),
+                 (b"svn-revision", b"10"),
+             ),
+            ```
+        *
+     ; ( "swh:1:rev:010d34f384fa99d047cdd5e2f41e56e5c2feee45"
+       , "85a74718d377195e1efd0843ba4f3260bad4fe07"
+       , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
+       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, 0, -420, false)
+       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, 0, -420, false)
+       , Some "Linux 4.2-rc2\n"
+       , [||] )
+        *)
     |]
   in
   Array.iter
@@ -144,23 +275,25 @@ let () =
          , author_date
          , committer
          , committer_date
-         , message ) ->
+         , message
+         , extra_headers ) ->
       let result =
         Swhids.Compute.revision_identifier directory parents ~author
-          ~author_date ~committer ~committer_date [||] message
+          ~author_date ~committer ~committer_date extra_headers message
       in
       let result =
         match result with
         | None -> assert false
         | Some result -> result
       in
+      let count = counter () in
       let result = Format.asprintf "%a" Swhids.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         Format.eprintf
-          "error: expected_identifier `%s` from revision but got identifier \
-           `%s`@."
-          expected_identifier result;
+          "Test number: %d@.error: expected_identifier `%s` from revision but \
+           got identifier `%s`@."
+          count expected_identifier result;
       assert ok )
     test_cases
 
