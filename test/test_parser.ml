@@ -38,7 +38,12 @@ let () =
      ; ( "sh:1:cnt:ffacc412c4e5ff55cafccd6e58bc58072c17ff6b"
        , "parser error: Scheme incorrect" )
        (* invalid object id "L33T" is too short *)
-     ; ("swh:1:dir:L33T", "parser error: Invalid object id")
+     ; ("swh:1:dir:L33T", "parser error: Invalid object id") (* *)
+     ; ( "swh:1:cnt:ffacc412c4e5fz55cafccd6e58bc58072c17ff6b"
+       , "parser error: Invalid object id" )
+       (* *)
+     ; ( "swh:2:cnt:ffacc412c4e5fa55cafccd6e58bc58072c17ff6b"
+       , "parser error: Invalid scheme versions" )
        (* invalid object id "ffacc412c4e5ff55cafccd6e58bc58072c17ff:" has an unwanted ':' *)
      ; ( "swh:1:cnt:ffacc412c4e5ff55cafccd6e58bc58072c17ff6:"
        , "parser error: Invalid object id" )

@@ -20,7 +20,8 @@ let identifier_core :=
         {
             if swh <> "swh" then
               raise (Parser_error "Scheme incorrect")
-
+            else if scheme_v <> 1 then
+              raise (Parser_error "Invalid scheme versions")
             else
               let obj_id = String.lowercase_ascii hash in
 
