@@ -75,7 +75,7 @@ let release_identifier ~target target_type ~name ~author ~date ~message :
 
 (** Compute the software heritage identifier for a given revision *)
 let revision_identifier directory parents ~author ~author_date ~committer
-    ~committer_date _extra_headers message : Lang.identifier option =
+    ~committer_date extra_headers message : Lang.identifier option =
   if List.exists Git.target_invalid (directory :: parents) then
     raise
     @@ Invalid_argument "target (directory and parents) must be of length 40";
@@ -103,7 +103,10 @@ let revision_identifier directory parents ~author ~author_date ~committer
         (Git.escape_newlines committer, committer_date)
   end;
 
-  (* TODO: extra headers *)
+  Array.iter
+    (fun (k, v) -> Format.fprintf fmt "%s %s@." k (Git.escape_newlines v))
+    extra_headers;
+
   begin
     match message with
     | None -> ()
