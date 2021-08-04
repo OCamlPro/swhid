@@ -14,13 +14,9 @@
           <span class="dirname">src/</span>lang.ml
         </a>
       </h1>
-      <h2>81.82%</h2>
+      <h2>100.00%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="bottom:33.82%"></span>
-      <span class="unvisited" style="bottom:30.88%"></span>
-      <span class="unvisited" style="bottom:14.71%"></span>
-      <span class="unvisited" style="bottom:8.82%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
@@ -69,30 +65,33 @@
 <a id="L42"></a><span > </span>
 <a id="L43"></a><span class="visited"> </span>
 <a id="L44"></a><span class="visited"> </span>
-<a id="L45"></a><span class="unvisited"> </span>
-<a id="L46"></a><span class="visited"> </span>
-<a id="L47"></a><span class="unvisited"> </span>
-<a id="L48"></a><span > </span>
-<a id="L49"></a><span > </span>
-<a id="L50"></a><span class="visited"> </span>
+<a id="L45"></a><span class="visited"> </span>
+<a id="L46"></a><span > </span>
+<a id="L47"></a><span > </span>
+<a id="L48"></a><span class="visited"> </span>
+<a id="L49"></a><span class="visited"> </span>
+<a id="L50"></a><span > </span>
 <a id="L51"></a><span class="visited"> </span>
-<a id="L52"></a><span class="visited"> </span>
-<a id="L53"></a><span > </span>
+<a id="L52"></a><span > </span>
+<a id="L53"></a><span class="visited"> </span>
 <a id="L54"></a><span > </span>
 <a id="L55"></a><span class="visited"> </span>
-<a id="L56"></a><span class="visited"> </span>
-<a id="L57"></a><span > </span>
-<a id="L58"></a><span class="unvisited"> </span>
-<a id="L59"></a><span > </span>
-<a id="L60"></a><span class="visited"> </span>
-<a id="L61"></a><span > </span>
-<a id="L62"></a><span class="unvisited"> </span>
-<a id="L63"></a><span > </span>
-<a id="L64"></a><span class="visited"> </span>
-<a id="L65"></a><span > </span>
+<a id="L56"></a><span > </span>
+<a id="L57"></a><span class="visited"> </span>
+<a id="L58"></a><span > </span>
+<a id="L59"></a><span class="visited"> </span>
+<a id="L60"></a><span > </span>
+<a id="L61"></a><span class="visited"> </span>
+<a id="L62"></a><span > </span>
+<a id="L63"></a><span class="visited"> </span>
+<a id="L64"></a><span > </span>
+<a id="L65"></a><span class="visited"> </span>
 <a id="L66"></a><span > </span>
-<a id="L67"></a><span > </span>
+<a id="L67"></a><span class="visited"> </span>
 <a id="L68"></a><span > </span>
+<a id="L69"></a><span > </span>
+<a id="L70"></a><span > </span>
+<a id="L71"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -165,6 +164,9 @@
 <a href="#L66">66</a>
 <a href="#L67">67</a>
 <a href="#L68">68</a>
+<a href="#L69">69</a>
+<a href="#L70">70</a>
+<a href="#L71">71</a>
 </pre>
 <pre><code class="ocaml">type url_escaped = string
 
@@ -207,29 +209,32 @@ let object_type_of_string = function
   | <span data-count="10">"</span>cnt" -&gt; Some Content
   | <span data-count="1">_</span>s -&gt; None
 
-let target_type_to_git = function
-  | <span data-count="2">C</span>ontent -&gt; "blob"
-  | <span data-count="2">D</span>irectory -&gt; "tree"
-  | <span data-count="0">R</span>elease -&gt; "tag"
-  | <span data-count="1">R</span>evision -&gt; "commit"
-  | <span data-count="0">S</span>napshot -&gt; "refs"
-
 let object_id_from_string s =
-  <span data-count="40">l</span>et expected_size = 40 in
-  if String.lengt<span data-count="40">h</span> s = expected_size then
-    <span data-count="38">t</span>ry
+  <span data-count="52">l</span>et expected_size = 40 in
+  if String.lengt<span data-count="52">h</span> s = expected_size then
+    <span data-count="50">t</span>ry
       String.iter
         (function
-          | <span data-count="598">'</span>a' .. 'f'
-          | <span data-count="922">'</span>0' .. '9' -&gt;
+          | <span data-count="771">'</span>a' .. 'f'
+          | <span data-count="1202">'</span>0' .. '9' -&gt;
             ()
-          | <span data-count="0">_</span>invalid_char -&gt; raise Exit )
+          | <span data-count="1">_</span>invalid_char -&gt; raise Exit )
         s;
-      <span data-count="38">S</span>ome (Array.ini<span data-count="38">t</span> expected_size (String.ge<span data-count="38">t</span> s))
+      <span data-count="49">S</span>ome (Array.ini<span data-count="49">t</span> expected_size (String.ge<span data-count="49">t</span> s))
     with
-    | <span data-count="0">E</span>xit -&gt; None
+    | <span data-count="1">E</span>xit -&gt; None
   else
     <span data-count="2">N</span>one
+
+let content id qualifiers = <span data-count="2">(</span>(1, Content, id), qualifiers)
+
+let directory id qualifiers = <span data-count="2">(</span>(1, Directory, id), qualifiers)
+
+let snapshot id qualifiers = <span data-count="4">(</span>(1, Snapshot, id), qualifiers)
+
+let revision id qualifiers = <span data-count="7">(</span>(1, Revision, id), qualifiers)
+
+let release id qualifiers = <span data-count="6">(</span>(1, Release, id), qualifiers)
 
 exception Parser_error of string
 

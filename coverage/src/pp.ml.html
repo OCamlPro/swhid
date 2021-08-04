@@ -123,22 +123,22 @@
 let string_of_object_type = function
   | <span data-count="6">C</span>ontent -&gt; "cnt"
   | <span data-count="3">D</span>irectory -&gt; "dir"
-  | <span data-count="2">R</span>elease -&gt; "rel"
-  | <span data-count="4">R</span>evision -&gt; "rev"
+  | <span data-count="7">R</span>elease -&gt; "rel"
+  | <span data-count="10">R</span>evision -&gt; "rev"
   | <span data-count="7">S</span>napshot -&gt; "snp"
 
 let url_escaped fmt url = <span data-count="4">F</span>ormat.fprintf fmt "%s" url
 
 let object_id fmt object_id =
-  <span data-count="22">A</span>rray.iter (fun c -&gt; <span data-count="880">F</span>ormat.fprintf fmt "%c" c) object_id
+  <span data-count="33">A</span>rray.iter (fun c -&gt; <span data-count="1320">F</span>ormat.fprintf fmt "%c" c) object_id
 
 let object_type fmt object_type =
-  <span data-count="22">F</span>ormat.fprintf fmt "%s" (string_of_object_typ<span data-count="22">e</span> object_type)
+  <span data-count="33">F</span>ormat.fprintf fmt "%s" (string_of_object_typ<span data-count="33">e</span> object_type)
 
-let scheme_version fmt version = <span data-count="22">F</span>ormat.fprintf fmt "%d" version
+let scheme_version fmt version = <span data-count="33">F</span>ormat.fprintf fmt "%d" version
 
 let identifier_core fmt (v, t, id) =
-  <span data-count="22">F</span>ormat.fprintf fmt "swh:%a:%a:%a" scheme_version v object_type t object_id id
+  <span data-count="33">F</span>ormat.fprintf fmt "swh:%a:%a:%a" scheme_version v object_type t object_id id
 
 let context_qualifier fmt = function
   | <span data-count="2">A</span>nchor identifier -&gt;
@@ -160,10 +160,10 @@ let qualifier fmt = function
   | <span data-count="2">F</span>ragment q -&gt; Format.fprintf fmt "%a" fragment_qualifier q
 
 let qualifiers fmt q =
-  <span data-count="18">L</span>ist.iter (fun q -&gt; <span data-count="10">F</span>ormat.fprintf fmt ";%a" qualifier q) q
+  <span data-count="29">L</span>ist.iter (fun q -&gt; <span data-count="10">F</span>ormat.fprintf fmt ";%a" qualifier q) q
 
 let identifier fmt (i, q) =
-  <span data-count="18">F</span>ormat.fprintf fmt "%a%a" identifier_core i qualifiers q
+  <span data-count="29">F</span>ormat.fprintf fmt "%a%a" identifier_core i qualifiers q
 </code></pre>
       </div>
     </div>

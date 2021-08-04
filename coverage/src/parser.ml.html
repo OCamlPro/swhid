@@ -62,12 +62,12 @@
 <a href="#L15">15</a>
 </pre>
 <pre><code class="ocaml">let parse buf =
-  <span data-count="28">t</span>ry Ok (Menhir_parser.identifie<span data-count="8">r</span> Lexer.token buf) with
-  | <span data-count="9">L</span>ang.Parser_error s -&gt; Error (Format.sprint<span data-count="9">f</span> "parser error: %s" s)
+  <span data-count="30">t</span>ry Ok (Menhir_parser.identifie<span data-count="8">r</span> Lexer.token buf) with
+  | <span data-count="11">L</span>ang.Parser_error s -&gt; Error (Format.sprint<span data-count="11">f</span> "parser error: %s" s)
   | <span data-count="9">M</span>enhir_parser.Error -&gt; Error (Format.sprint<span data-count="9">f</span> "parser error: Syntax error")
   | <span data-count="2">L</span>ang.Lexer_error s -&gt; Error (Format.sprint<span data-count="2">f</span> "lexer error: %s" s)
 
-let from_string s = <span data-count="28">p</span>arse (Lexing.from_strin<span data-count="28">g</span> s)
+let from_string s = <span data-count="30">p</span>arse (Lexing.from_strin<span data-count="30">g</span> s)
 
 let from_channel c = <span data-count="0">p</span>arse (Lexing.from_channe<span data-count="0">l</span> c)
 

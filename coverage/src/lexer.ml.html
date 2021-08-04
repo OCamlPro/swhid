@@ -989,10 +989,10 @@ let __ocaml_lex_tables = {
 }
 
 let rec token lexbuf =
-   <span data-count="363">_</span>_ocaml_lex_token_rec lexbuf 0
+   <span data-count="379">_</span>_ocaml_lex_token_rec lexbuf 0
 and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
-  <span data-count="363">m</span>atch Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
-      | <span data-count="98">0</span> -&gt;
+  <span data-count="379">m</span>atch Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
+      | <span data-count="104">0</span> -&gt;
 # 12 "src/lexer.mll"
               ( COLUM )
 # 283 "src/lexer.ml"
@@ -1012,24 +1012,24 @@ and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
               ( DASH )
 # 298 "src/lexer.ml"
 
-  | <span data-count="38">4</span> -&gt;
+  | <span data-count="40">4</span> -&gt;
 let
 # 16 "src/lexer.mll"
                      id
 # 304 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
 # 16 "src/lexer.mll"
-                        <span data-count="38">(</span>INT (int_of_strin<span data-count="38">g</span> id))
+                        <span data-count="40">(</span>INT (int_of_strin<span data-count="40">g</span> id))
 # 308 "src/lexer.ml"
 
-  | <span data-count="132">5</span> -&gt;
+  | <span data-count="138">5</span> -&gt;
 let
 # 17 "src/lexer.mll"
                  id
 # 314 "src/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
 # 17 "src/lexer.mll"
-                    <span data-count="132">(</span>STR id)
+                    <span data-count="138">(</span>STR id)
 # 318 "src/lexer.ml"
 
   | <span data-count="9">6</span> -&gt;
@@ -1042,7 +1042,7 @@ let
                     <span data-count="9">(</span>URL id)
 # 328 "src/lexer.ml"
 
-  | <span data-count="14">7</span> -&gt;
+  | <span data-count="16">7</span> -&gt;
 # 19 "src/lexer.mll"
               ( EOF )
 # 333 "src/lexer.ml"
