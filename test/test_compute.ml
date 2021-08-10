@@ -222,15 +222,7 @@ dg1KdHOa34shrKDaOVzW
        , Some (1428538899, 0, 480, false)
        , Some ""
        , [||] )
-       (* Only full name TODO extra header
-        *
-        *   ```tartethon
-        *   "extra_headers": (
-              (b"svn-repo-uuid", b"046f1af7-66c2-d61b-5410-ce57b7db7bff"),
-              (b"svn-revision", b"10"),
-          ),
-         ```
-        *)
+       (* Only full name *)
      ; ( "swh:1:rev:010d34f384fa99d047cdd5e2f41e56e5c2feee45"
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
