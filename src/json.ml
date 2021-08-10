@@ -87,3 +87,8 @@ let find_int key v =
   | Some (Float f) -> Some (int_of_float f)
   | Some (String s) -> int_of_string_opt s
   | _ -> None
+
+let find_obj key v =
+  match find key v with
+  | Some (Object o) -> Some o
+  | _ -> None
