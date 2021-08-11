@@ -367,3 +367,44 @@ let () =
           expected_identifier result;
       assert ok )
     test_cases
+
+(* test failures *)
+let () =
+  begin
+    try
+      let _id =
+        Swhids.Compute.directory_identifier [ ("rambo", 3, "rambo", "bine") ]
+      in
+      assert false
+    with
+    | Invalid_argument _ -> ()
+  end;
+
+  begin
+    try
+      let _id =
+        Swhids.Compute.release_identifier ~target:"rust" Swhids.Lang.Release
+          ~name:"" ~author:None ~date:None ~message:None
+      in
+      assert false
+    with
+    | Invalid_argument _ -> ()
+  end;
+
+  begin
+    try
+      let _id =
+        Swhids.Compute.revision_identifier "yo" [ "lo" ] ~author:None
+          ~author_date:None ~committer:None ~committer_date:None [||] None
+      in
+      assert false
+    with
+    | Invalid_argument _ -> ()
+  end;
+  try
+    let _id =
+      Swhids.Compute.snapshot_identifier [ ("do u know", Some ("bar", "àvin")) ]
+    in
+    assert false
+  with
+  | Invalid_argument _ -> ()
