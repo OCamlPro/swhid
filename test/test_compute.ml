@@ -36,7 +36,7 @@ let () =
        , Swhids.Lang.Revision
        , "v2.6.14"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some (1130457753, 0, -420, false)
+       , Some (1130457753, -420, false)
        , Some
            {|Linux 2.6.14 release
 -----BEGIN PGP SIGNATURE-----
@@ -53,7 +53,7 @@ wdLOnvj91G4wxYqrvThthbE=
        , Swhids.Lang.Revision
        , "v2.6.12"
        , None
-       , Some (1130457753, 0, -420, false)
+       , Some (1130457753, -420, false)
        , Some
            {|This is the final 2.6.12 release
 -----BEGIN PGP SIGNATURE-----
@@ -70,7 +70,7 @@ o6X/3T+vm8K3bf3driRr34c=
        , Swhids.Lang.Revision
        , "v2.6.12"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some (1130457753, 0, -420, false)
+       , Some (1130457753, -420, false)
        , None
        , "swh:1:rel:b6f4f446715f7d9543ef54e41b62982f0db40045" )
        (* Empty message *)
@@ -78,7 +78,7 @@ o6X/3T+vm8K3bf3driRr34c=
        , Swhids.Lang.Revision
        , "v2.6.12"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some (1130457753, 0, -420, false)
+       , Some (1130457753, -420, false)
        , Some ""
        , "swh:1:rel:71a0aea72444d396575dc25ac37fec87ee3c6492" )
        (* Negative utc *)
@@ -86,7 +86,7 @@ o6X/3T+vm8K3bf3driRr34c=
        , Swhids.Lang.Revision
        , "20081029"
        , Some "Otavio Salvador <otavio@debian.org>"
-       , Some (1225281976, 0, 0, true)
+       , Some (1225281976, 0, true)
        , Some "tagging version 20081029\n\nr56558\n"
        , "swh:1:rel:97c8d2573a001f88e72d75f596cf86b12b82fd01" )
        (* newline in author *)
@@ -94,7 +94,7 @@ o6X/3T+vm8K3bf3driRr34c=
        , Swhids.Lang.Revision
        , "0.3.2"
        , Some "Eugene Janusov\n<esycat@gmail.com>"
-       , Some (1377480558, 0, 600, false)
+       , Some (1377480558, 600, false)
        , Some "Release of v0.3.2."
        , "swh:1:rel:5c98f559d034162de22d3ebeb95433e6f8885231" )
     |]
@@ -134,30 +134,30 @@ let () =
     [| ( "swh:1:rev:bc0195aad0daa2ad5b0d76cce22b167bc3435590"
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
-       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, 0, -420, false)
-       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, 0, -420, false)
+       , "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, -420, false)
+       , "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, -420, false)
        , Some "Linux 4.2-rc2\n"
        , [||] )
        (* synthetic rev *)
      ; ( "swh:1:rev:b2a7e1260492e344fab3cbf91bc13c91e05426fd"
        , "d11f00a6a0fea6055341d25584b5a96516c0d2b8"
        , []
-       , Some "Software Heritage <robot@softwareheritage.org>"
-       , Some (1437047495, 0, 0, false)
-       , Some "Software Heritage <robot@softwareheritage.org>"
-       , Some (1437047495, 0, 0, false)
+       , "Software Heritage <robot@softwareheritage.org>"
+       , Some (1437047495, 0, false)
+       , "Software Heritage <robot@softwareheritage.org>"
+       , Some (1437047495, 0, false)
        , Some "synthetic revision message\n"
        , [||] )
        (* with extra headers *)
      ; ( "swh:1:rev:010d34f384fa99d047cdd5e2f41e56e5c2feee45"
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
-       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, 0, -420, false)
-       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, 0, -420, false)
+       , "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, -420, false)
+       , "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, -420, false)
        , Some "Linux 4.2-rc2\n"
        , [| ("svn-repo-uuid", "046f1af7-66c2-d61b-5410-ce57b7db7bff")
           ; ("svn-revision", "10")
@@ -168,10 +168,10 @@ let () =
        , [ "689664ae944b4692724f13b709a4e4de28b54e57"
          ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
          ]
-       , Some "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 0, 480, false)
-       , Some "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 0, 480, false)
+       , "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 480, false)
+       , "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 480, false)
        , Some
            {|Merge branch 'master' of git://github.com/alexhenrie/git-po
 
@@ -204,10 +204,10 @@ dg1KdHOa34shrKDaOVzW
        , [ "689664ae944b4692724f13b709a4e4de28b54e57"
          ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
          ]
-       , Some "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 0, 480, false)
-       , Some "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 0, 480, false)
+       , "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 480, false)
+       , "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 480, false)
        , None
        , [||] )
        (* Empty message *)
@@ -216,20 +216,20 @@ dg1KdHOa34shrKDaOVzW
        , [ "689664ae944b4692724f13b709a4e4de28b54e57"
          ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
          ]
-       , Some "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 0, 480, false)
-       , Some "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 0, 480, false)
+       , "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 480, false)
+       , "Jiang Xin <worldhello.net@gmail.com>"
+       , Some (1428538899, 480, false)
        , Some ""
        , [||] )
        (* Only full name *)
      ; ( "swh:1:rev:010d34f384fa99d047cdd5e2f41e56e5c2feee45"
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
-       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, 0, -420, false)
-       , Some "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, 0, -420, false)
+       , "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, -420, false)
+       , "Linus Torvalds <torvalds@linux-foundation.org>"
+       , Some (1436739030, -420, false)
        , Some "Linux 4.2-rc2\n"
        , [| ("svn-repo-uuid", "046f1af7-66c2-d61b-5410-ce57b7db7bff")
           ; ("svn-revision", "10")
@@ -394,8 +394,9 @@ let () =
   begin
     try
       let _id =
-        Swhids.Compute.revision_identifier "yo" [ "lo" ] ~author:None
-          ~author_date:None ~committer:None ~committer_date:None [||] None
+        Swhids.Compute.revision_identifier "yo" [ "lo" ] ~author:"Bach"
+          ~author_date:None ~committer:"Hélène Grimaud" ~committer_date:None
+          [||] None
       in
       assert false
     with

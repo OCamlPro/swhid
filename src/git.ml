@@ -49,21 +49,7 @@ let escape_newlines snippet =
 
 let format_author fmt author = Format.fprintf fmt "%s" author
 
-let normalize_timestamp = function
-  | None -> None
-  | Some time_representation ->
-    let seconds, microseconds, offset, negative_utc = time_representation in
-    Some ((seconds, microseconds), offset, negative_utc)
-
-let format_date fmt (seconds, microseconds) =
-  match microseconds with
-  | 0 -> Format.fprintf fmt "%d" seconds
-  | microseconds ->
-    (* TODO: this should be the equivalent of:
-     * float_value = "%d.%06d" % (seconds, microseconds)
-     * return float_value.rstrip("0").encode()
-     * *)
-    Format.fprintf fmt "%d.%06d" seconds microseconds
+let format_date fmt seconds = Format.fprintf fmt "%d" seconds
 
 let format_offset fmt (offset, negative_utc) =
   let sign =
@@ -79,7 +65,6 @@ let format_offset fmt (offset, negative_utc) =
 
 let format_author_data fmt (author, date_offset) =
   Format.fprintf fmt "%a" format_author author;
-  let date_offset = normalize_timestamp date_offset in
   match date_offset with
   | None -> ()
   | Some (timestamp, offset, negative_utc) ->

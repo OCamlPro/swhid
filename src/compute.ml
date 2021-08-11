@@ -87,21 +87,11 @@ let revision_identifier directory parents ~author ~author_date ~committer
 
   List.iter (fun parent -> Format.fprintf fmt "parent %s@." parent) parents;
 
-  begin
-    match author with
-    | None -> ()
-    | Some author ->
-      Format.fprintf fmt "author %a@." Git.format_author_data
-        (Git.escape_newlines author, author_date)
-  end;
+  Format.fprintf fmt "author %a@." Git.format_author_data
+    (Git.escape_newlines author, author_date);
 
-  begin
-    match committer with
-    | None -> ()
-    | Some committer ->
-      Format.fprintf fmt "committer %a@." Git.format_author_data
-        (Git.escape_newlines committer, committer_date)
-  end;
+  Format.fprintf fmt "committer %a@." Git.format_author_data
+    (Git.escape_newlines committer, committer_date);
 
   Array.iter
     (fun (k, v) -> Format.fprintf fmt "%s %s@." k (Git.escape_newlines v))
