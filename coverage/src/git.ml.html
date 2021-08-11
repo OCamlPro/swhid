@@ -14,17 +14,15 @@
           <span class="dirname">src/</span>git.ml
         </a>
       </h1>
-      <h2>84.91%</h2>
+      <h2>87.50%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="top:8.99%"></span>
-      <span class="unvisited" style="top:31.46%"></span>
-      <span class="unvisited" style="top:32.58%"></span>
-      <span class="unvisited" style="top:38.20%"></span>
-      <span class="unvisited" style="top:41.57%"></span>
-      <span class="unvisited" style="bottom:40.45%"></span>
-      <span class="unvisited" style="bottom:31.46%"></span>
-      <span class="unvisited" style="bottom:5.62%"></span>
+      <span class="unvisited" style="top:10.81%"></span>
+      <span class="unvisited" style="top:37.84%"></span>
+      <span class="unvisited" style="top:39.19%"></span>
+      <span class="unvisited" style="top:45.95%"></span>
+      <span class="unvisited" style="top:50.00%"></span>
+      <span class="unvisited" style="bottom:6.76%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
@@ -80,44 +78,29 @@
 <a id="L49"></a><span > </span>
 <a id="L50"></a><span class="visited"> </span>
 <a id="L51"></a><span > </span>
-<a id="L52"></a><span > </span>
-<a id="L53"></a><span class="unvisited"> </span>
-<a id="L54"></a><span class="visited"> </span>
-<a id="L55"></a><span > </span>
-<a id="L56"></a><span > </span>
-<a id="L57"></a><span > </span>
+<a id="L52"></a><span class="visited"> </span>
+<a id="L53"></a><span > </span>
+<a id="L54"></a><span > </span>
+<a id="L55"></a><span class="visited"> </span>
+<a id="L56"></a><span class="visited"> </span>
+<a id="L57"></a><span class="visited"> </span>
 <a id="L58"></a><span > </span>
 <a id="L59"></a><span class="visited"> </span>
-<a id="L60"></a><span class="visited"> </span>
-<a id="L61"></a><span class="unvisited"> </span>
-<a id="L62"></a><span > </span>
+<a id="L60"></a><span > </span>
+<a id="L61"></a><span > </span>
+<a id="L62"></a><span class="visited"> </span>
 <a id="L63"></a><span > </span>
 <a id="L64"></a><span > </span>
 <a id="L65"></a><span > </span>
 <a id="L66"></a><span > </span>
-<a id="L67"></a><span > </span>
-<a id="L68"></a><span > </span>
-<a id="L69"></a><span class="visited"> </span>
+<a id="L67"></a><span class="visited"> </span>
+<a id="L68"></a><span class="visited"> </span>
+<a id="L69"></a><span class="unvisited"> </span>
 <a id="L70"></a><span class="visited"> </span>
-<a id="L71"></a><span class="visited"> </span>
+<a id="L71"></a><span > </span>
 <a id="L72"></a><span > </span>
-<a id="L73"></a><span class="visited"> </span>
-<a id="L74"></a><span > </span>
-<a id="L75"></a><span > </span>
-<a id="L76"></a><span class="visited"> </span>
-<a id="L77"></a><span > </span>
-<a id="L78"></a><span > </span>
-<a id="L79"></a><span > </span>
-<a id="L80"></a><span > </span>
-<a id="L81"></a><span class="visited"> </span>
-<a id="L82"></a><span class="visited"> </span>
-<a id="L83"></a><span class="visited"> </span>
-<a id="L84"></a><span class="unvisited"> </span>
-<a id="L85"></a><span class="visited"> </span>
-<a id="L86"></a><span > </span>
-<a id="L87"></a><span > </span>
-<a id="L88"></a><span > </span>
-<a id="L89"></a><span class="visited"> </span>
+<a id="L73"></a><span > </span>
+<a id="L74"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -196,21 +179,6 @@
 <a href="#L72">72</a>
 <a href="#L73">73</a>
 <a href="#L74">74</a>
-<a href="#L75">75</a>
-<a href="#L76">76</a>
-<a href="#L77">77</a>
-<a href="#L78">78</a>
-<a href="#L79">79</a>
-<a href="#L80">80</a>
-<a href="#L81">81</a>
-<a href="#L82">82</a>
-<a href="#L83">83</a>
-<a href="#L84">84</a>
-<a href="#L85">85</a>
-<a href="#L86">86</a>
-<a href="#L87">87</a>
-<a href="#L88">88</a>
-<a href="#L89">89</a>
 </pre>
 <pre><code class="ocaml">let target_type_to_git =
   let open Lang in
@@ -263,21 +231,7 @@ let escape_newlines snippet =
 
 let format_author fmt author = <span data-count="19">F</span>ormat.fprintf fmt "%s" author
 
-let normalize_timestamp = function
-  | <span data-count="0">N</span>one -&gt; None
-  | <span data-count="19">S</span>ome time_representation -&gt;
-    let seconds, microseconds, offset, negative_utc = time_representation in
-    Some ((seconds, microseconds), offset, negative_utc)
-
-let format_date fmt (seconds, microseconds) =
-  <span data-count="19">m</span>atch microseconds with
-  | <span data-count="19">0</span> -&gt; Format.fprintf fmt "%d" seconds
-  | <span data-count="0">m</span>icroseconds -&gt;
-    (* TODO: this should be the equivalent of:
-     * float_value = "%d.%06d" % (seconds, microseconds)
-     * return float_value.rstrip("0").encode()
-     * *)
-    Format.fprintf fmt "%d.%06d" seconds microseconds
+let format_date fmt seconds = <span data-count="19">F</span>ormat.fprintf fmt "%d" seconds
 
 let format_offset fmt (offset, negative_utc) =
   <span data-count="19">l</span>et sign =
@@ -293,7 +247,6 @@ let format_offset fmt (offset, negative_utc) =
 
 let format_author_data fmt (author, date_offset) =
   <span data-count="19">F</span>ormat.fprintf fmt "%a" format_author author;
-  <span data-count="19">l</span>et date_offset = normalize_timestamp date_offset in
   <span data-count="19">m</span>atch date_offset with
   | <span data-count="0">N</span>one -&gt; ()
   | <span data-count="19">S</span>ome (timestamp, offset, negative_utc) -&gt;
