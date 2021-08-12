@@ -1,7 +1,3 @@
-type 'a tree =
-  | Leaf of 'a
-  | Node of 'a tree list
-
 (** The base URL of the software heritage instance used, defaults to
     `https://archive.softwareheritage.org` *)
 let instance = ref "https://archive.softwareheritage.org"
@@ -32,58 +28,26 @@ let content ?hash_type hash =
   on_response url (fun response ->
       let field = "data_url" in
       match Json.find_string field response with
-      | Some data_url -> Ok (Leaf data_url)
+      | Some data_url -> Ok data_url
       | None -> field_not_found field )
 
 (** For a given directory identifier, compute an URL from which the directory
     can be downloaded *)
-let rec directory hash =
-  let exception Exit of string in
+let directory hash =
   let url = url (Format.sprintf "/vault/directory/%s/" hash) in
-  on_response url
-    (let open Json in
-    function
-    | Unit
-    | Bool _
-    | Float _
-    | String _
-    | Object _ ->
-      field_not_found "Array dir"
-    | Array l -> (
-      try
-        let l =
-          List.map
-            (function
-              | Unit
-              | Bool _
-              | Float _
-              | String _
-              | Array _ ->
-                raise
-                  (Exit "Sent an Json.Array type in directory download function")
-              | Object _o as o -> (
-                match Json.find_string "type" o with
-                | None -> raise (Exit "No type field found in directory")
-                | Some ty -> (
-                  match Json.find_string "target" o with
-                  | None -> raise (Exit "No target field found in directory")
-                  | Some tar -> (
-                    let res =
-                      match ty with
-                      | "file" -> content tar
-                      | "dir" -> directory tar
-                      | _any ->
-                        raise (Exit "Can't find file or dir type in directory")
-                    in
-                    match res with
-                    | Ok ok -> ok
-                    | Error error -> raise (Exit error) ) ) ) )
-            l
-        in
-
-        Ok (Node l)
-      with
-      | Exit e -> Error e ))
+  match Ezcurl.post ~params:[] ~url () with
+  | Error (code, msg) ->
+    Error (Format.sprintf "curl error: code `%s` (%s)" (Curl.strerror code) msg)
+  | Ok response -> (
+    match Json.json_of_src (`String response.body) with
+    | Error (_loc, _e) ->
+      Error (Format.sprintf "error while parsing JSON response")
+    | Ok _response ->
+      on_response url (fun response ->
+          let field = "fetch_url" in
+          match Json.find_string field response with
+          | Some data_url -> Ok data_url
+          | None -> field_not_found field ) )
 
 (** For a given revision identifier, compute an URL from which the revision can
     be downloaded *)
