@@ -39,22 +39,26 @@ let object_type_of_string = function
   | "cnt" -> Some Content
   | _s -> None
 
+let target_invalid target =
+  String.length target <> 40
+  ||
+  try
+    String.iter
+      (function
+        | 'a' .. 'f'
+        | '0' .. '9' ->
+          ()
+        | _invalid_char -> raise Exit )
+      target;
+    false
+  with
+  | Exit -> true
+
 let object_id_from_string s =
-  let expected_size = 40 in
-  if String.length s = expected_size then
-    try
-      String.iter
-        (function
-          | 'a' .. 'f'
-          | '0' .. '9' ->
-            ()
-          | _invalid_char -> raise Exit )
-        s;
-      Some (Array.init expected_size (String.get s))
-    with
-    | Exit -> None
-  else
+  if target_invalid s then
     None
+  else
+    Some (Array.init 40 (String.get s))
 
 let content id qualifiers = ((1, Content, id), qualifiers)
 
