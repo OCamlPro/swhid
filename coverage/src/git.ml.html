@@ -14,15 +14,15 @@
           <span class="dirname">src/</span>git.ml
         </a>
       </h1>
-      <h2>87.50%</h2>
+      <h2>86.36%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="top:10.81%"></span>
-      <span class="unvisited" style="top:37.84%"></span>
-      <span class="unvisited" style="top:39.19%"></span>
-      <span class="unvisited" style="top:45.95%"></span>
-      <span class="unvisited" style="top:50.00%"></span>
-      <span class="unvisited" style="bottom:6.76%"></span>
+      <span class="unvisited" style="top:11.94%"></span>
+      <span class="unvisited" style="top:41.79%"></span>
+      <span class="unvisited" style="top:43.28%"></span>
+      <span class="unvisited" style="bottom:49.25%"></span>
+      <span class="unvisited" style="bottom:44.78%"></span>
+      <span class="unvisited" style="bottom:2.99%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
@@ -76,31 +76,24 @@
 <a id="L47"></a><span > </span>
 <a id="L48"></a><span class="visited"> </span>
 <a id="L49"></a><span > </span>
-<a id="L50"></a><span class="visited"> </span>
-<a id="L51"></a><span > </span>
+<a id="L50"></a><span > </span>
+<a id="L51"></a><span class="visited"> </span>
 <a id="L52"></a><span class="visited"> </span>
-<a id="L53"></a><span > </span>
+<a id="L53"></a><span class="visited"> </span>
 <a id="L54"></a><span > </span>
 <a id="L55"></a><span class="visited"> </span>
-<a id="L56"></a><span class="visited"> </span>
-<a id="L57"></a><span class="visited"> </span>
-<a id="L58"></a><span > </span>
-<a id="L59"></a><span class="visited"> </span>
+<a id="L56"></a><span > </span>
+<a id="L57"></a><span > </span>
+<a id="L58"></a><span class="visited"> </span>
+<a id="L59"></a><span > </span>
 <a id="L60"></a><span > </span>
 <a id="L61"></a><span > </span>
-<a id="L62"></a><span class="visited"> </span>
-<a id="L63"></a><span > </span>
-<a id="L64"></a><span > </span>
-<a id="L65"></a><span > </span>
-<a id="L66"></a><span > </span>
-<a id="L67"></a><span class="visited"> </span>
-<a id="L68"></a><span class="visited"> </span>
-<a id="L69"></a><span class="unvisited"> </span>
-<a id="L70"></a><span class="visited"> </span>
-<a id="L71"></a><span > </span>
-<a id="L72"></a><span > </span>
-<a id="L73"></a><span > </span>
-<a id="L74"></a><span class="visited"> </span>
+<a id="L62"></a><span > </span>
+<a id="L63"></a><span class="visited"> </span>
+<a id="L64"></a><span class="visited"> </span>
+<a id="L65"></a><span class="unvisited"> </span>
+<a id="L66"></a><span class="visited"> </span>
+<a id="L67"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -172,13 +165,6 @@
 <a href="#L65">65</a>
 <a href="#L66">66</a>
 <a href="#L67">67</a>
-<a href="#L68">68</a>
-<a href="#L69">69</a>
-<a href="#L70">70</a>
-<a href="#L71">71</a>
-<a href="#L72">72</a>
-<a href="#L73">73</a>
-<a href="#L74">74</a>
 </pre>
 <pre><code class="ocaml">let target_type_to_git =
   let open Lang in
@@ -229,10 +215,6 @@ let object_from_contents target_type contents =
 let escape_newlines snippet =
   <span data-count="30">S</span>tring.concat "\n " (String.split_on_cha<span data-count="30">r</span> '\n' snippet)
 
-let format_author fmt author = <span data-count="19">F</span>ormat.fprintf fmt "%s" author
-
-let format_date fmt seconds = <span data-count="19">F</span>ormat.fprintf fmt "%d" seconds
-
 let format_offset fmt (offset, negative_utc) =
   <span data-count="19">l</span>et sign =
     if offset &lt; <span data-count="9">0</span> || (offset = 0 &amp;&amp; <span data-count="3">n</span>egative_utc<span data-count="1">)</span> then
@@ -246,14 +228,11 @@ let format_offset fmt (offset, negative_utc) =
   Format.fprintf fmt "%s%02d%02d" sign hours minutes
 
 let format_author_data fmt (author, date_offset) =
-  <span data-count="19">F</span>ormat.fprintf fmt "%a" format_author author;
+  <span data-count="19">F</span>ormat.fprintf fmt "%s" author;
   <span data-count="19">m</span>atch date_offset with
   | <span data-count="0">N</span>one -&gt; ()
   | <span data-count="19">S</span>ome (timestamp, offset, negative_utc) -&gt;
-    Format.fprintf fmt " %a %a" format_date timestamp format_offset
-      (offset, negative_utc)
-
-let target_invalid target = <span data-count="42">S</span>tring.lengt<span data-count="42">h</span> target &lt;&gt; 40
+    Format.fprintf fmt " %d %a" timestamp format_offset (offset, negative_utc)
 </code></pre>
       </div>
     </div>
