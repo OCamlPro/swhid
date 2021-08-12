@@ -47,10 +47,6 @@ let object_from_contents target_type contents =
 let escape_newlines snippet =
   String.concat "\n " (String.split_on_char '\n' snippet)
 
-let format_author fmt author = Format.fprintf fmt "%s" author
-
-let format_date fmt seconds = Format.fprintf fmt "%d" seconds
-
 let format_offset fmt (offset, negative_utc) =
   let sign =
     if offset < 0 || (offset = 0 && negative_utc) then
@@ -64,11 +60,8 @@ let format_offset fmt (offset, negative_utc) =
   Format.fprintf fmt "%s%02d%02d" sign hours minutes
 
 let format_author_data fmt (author, date_offset) =
-  Format.fprintf fmt "%a" format_author author;
+  Format.fprintf fmt "%s" author;
   match date_offset with
   | None -> ()
   | Some (timestamp, offset, negative_utc) ->
-    Format.fprintf fmt " %a %a" format_date timestamp format_offset
-      (offset, negative_utc)
-
-let target_invalid target = String.length target <> 40
+    Format.fprintf fmt " %d %a" timestamp format_offset (offset, negative_utc)

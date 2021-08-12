@@ -38,15 +38,13 @@ let () =
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
        , Some (1130457753, -420, false)
        , Some
-           {|Linux 2.6.14 release
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.1 (GNU/Linux)
-
-iD8DBQBDYWq6F3YsRnbiHLsRAmaeAJ9RCez0y8rOBbhSv344h86l/VVcugCeIhO1
-wdLOnvj91G4wxYqrvThthbE=
-=7VeT
------END PGP SIGNATURE-----
-|}
+           "Linux 2.6.14 release\n\
+            -----BEGIN PGP SIGNATURE-----\n\
+            Version: GnuPG v1.4.1 (GNU/Linux)\n\n\
+            iD8DBQBDYWq6F3YsRnbiHLsRAmaeAJ9RCez0y8rOBbhSv344h86l/VVcugCeIhO1\n\
+            wdLOnvj91G4wxYqrvThthbE=\n\
+            =7VeT\n\
+            -----END PGP SIGNATURE-----\n"
        , "swh:1:rel:2b10839e32c4c476e9d94492756bb1a3e1ec4aa8" )
        (* No author *)
      ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
@@ -55,15 +53,13 @@ wdLOnvj91G4wxYqrvThthbE=
        , None
        , Some (1130457753, -420, false)
        , Some
-           {|This is the final 2.6.12 release
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
-
-iD8DBQBCsykyF3YsRnbiHLsRAvPNAJ482tCZwuxp/bJRz7Q98MHlN83TpACdHr37
-o6X/3T+vm8K3bf3driRr34c=
-=sBHn
------END PGP SIGNATURE-----
-|}
+           "This is the final 2.6.12 release\n\
+            -----BEGIN PGP SIGNATURE-----\n\
+            Version: GnuPG v1.2.4 (GNU/Linux)\n\n\
+            iD8DBQBCsykyF3YsRnbiHLsRAvPNAJ482tCZwuxp/bJRz7Q98MHlN83TpACdHr37\n\
+            o6X/3T+vm8K3bf3driRr34c=\n\
+            =sBHn\n\
+            -----END PGP SIGNATURE-----\n"
        , "swh:1:rel:26791a8bcf0e6d33f43aef7682bdb555236d56de" )
        (* No message *)
      ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
@@ -173,30 +169,26 @@ let () =
        , "Jiang Xin <worldhello.net@gmail.com>"
        , Some (1428538899, 480, false)
        , Some
-           {|Merge branch 'master' of git://github.com/alexhenrie/git-po
-
-* 'master' of git://github.com/alexhenrie/git-po:
-  l10n: ca.po: update translation
-|}
+           "Merge branch 'master' of git://github.com/alexhenrie/git-po\n\n\
+            * 'master' of git://github.com/alexhenrie/git-po:\n\
+           \  l10n: ca.po: update translation\n"
        , [| ( "gpgsig"
-            , {|-----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.13 (Darwin)
-
-iQIcBAABAgAGBQJVJcYsAAoJEBiY3kIkQRNJVAUQAJ8/XQIfMqqC5oYeEFfHOPYZ
-L7qy46bXHVBa9Qd8zAJ2Dou3IbI2ZoF6/Et89K/UggOycMlt5FKV/9toWyuZv4Po
-L682wonoxX99qvVTHo6+wtnmYO7+G0f82h+qHMErxjP+I6gzRNBvRr+SfY7VlGdK
-wikMKOMWC5smrScSHITnOq1Ews5pe3N7qDYMzK0XVZmgDoaem4RSWMJs4My/qVLN
-e0CqYWq2A22GX7sXl6pjneJYQvcAXUX+CAzp24QnPSb+Q22Guj91TcxLFcHCTDdn
-qgqMsEyMiisoglwrCbO+D+1xq9mjN9tNFWP66SQ48mrrHYTBV5sz9eJyDfroJaLP
-CWgbDTgq6GzRMehHT3hXfYS5NNatjnhkNISXR7pnVP/obIi/vpWh5ll6Gd8q26z+
-a/O41UzOaLTeNI365MWT4/cnXohVLRG7iVJbAbCxoQmEgsYMRc/pBAzWJtLfcB2G
-jdTswYL6+MUdL8sB9pZ82D+BP/YAdHe69CyTu1lk9RT2pYtI/kkfjHubXBCYEJSG
-+VGllBbYG6idQJpyrOYNRJyrDi9yvDJ2W+S0iQrlZrxzGBVGTB/y65S8C+2WTBcE
-lf1Qb5GDsQrZWgD+jtWTywOYHtCBwyCKSAXxSARMbNPeak9WPlcW/Jmu+fUcMe2x
-dg1KdHOa34shrKDaOVzW
-=od6m
------END PGP SIGNATURE-----|}
-            )
+            , "-----BEGIN PGP SIGNATURE-----\n\
+               Version: GnuPG v1.4.13 (Darwin)\n\n\
+               iQIcBAABAgAGBQJVJcYsAAoJEBiY3kIkQRNJVAUQAJ8/XQIfMqqC5oYeEFfHOPYZ\n\
+               L7qy46bXHVBa9Qd8zAJ2Dou3IbI2ZoF6/Et89K/UggOycMlt5FKV/9toWyuZv4Po\n\
+               L682wonoxX99qvVTHo6+wtnmYO7+G0f82h+qHMErxjP+I6gzRNBvRr+SfY7VlGdK\n\
+               wikMKOMWC5smrScSHITnOq1Ews5pe3N7qDYMzK0XVZmgDoaem4RSWMJs4My/qVLN\n\
+               e0CqYWq2A22GX7sXl6pjneJYQvcAXUX+CAzp24QnPSb+Q22Guj91TcxLFcHCTDdn\n\
+               qgqMsEyMiisoglwrCbO+D+1xq9mjN9tNFWP66SQ48mrrHYTBV5sz9eJyDfroJaLP\n\
+               CWgbDTgq6GzRMehHT3hXfYS5NNatjnhkNISXR7pnVP/obIi/vpWh5ll6Gd8q26z+\n\
+               a/O41UzOaLTeNI365MWT4/cnXohVLRG7iVJbAbCxoQmEgsYMRc/pBAzWJtLfcB2G\n\
+               jdTswYL6+MUdL8sB9pZ82D+BP/YAdHe69CyTu1lk9RT2pYtI/kkfjHubXBCYEJSG\n\
+               +VGllBbYG6idQJpyrOYNRJyrDi9yvDJ2W+S0iQrlZrxzGBVGTB/y65S8C+2WTBcE\n\
+               lf1Qb5GDsQrZWgD+jtWTywOYHtCBwyCKSAXxSARMbNPeak9WPlcW/Jmu+fUcMe2x\n\
+               dg1KdHOa34shrKDaOVzW\n\
+               =od6m\n\
+               -----END PGP SIGNATURE-----" )
          |] )
        (* No message *)
      ; ( "swh:1:rev:4cfc623c9238fa92c832beed000ce2d003fd8333"
