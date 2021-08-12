@@ -14,16 +14,10 @@
           <span class="dirname">src/</span>json.ml
         </a>
       </h1>
-      <h2>38.33%</h2>
+      <h2>51.67%</h2>
     </div>
     <div id="navbar">
       <span class="unvisited" style="top:17.02%"></span>
-      <span class="unvisited" style="top:25.53%"></span>
-      <span class="unvisited" style="top:26.60%"></span>
-      <span class="unvisited" style="top:27.66%"></span>
-      <span class="unvisited" style="top:32.98%"></span>
-      <span class="unvisited" style="top:34.04%"></span>
-      <span class="unvisited" style="top:35.11%"></span>
       <span class="unvisited" style="top:44.68%"></span>
       <span class="unvisited" style="top:50.00%"></span>
       <span class="unvisited" style="bottom:48.94%"></span>
@@ -77,16 +71,16 @@
 <a id="L21"></a><span > </span>
 <a id="L22"></a><span class="visited"> </span>
 <a id="L23"></a><span class="visited"> </span>
-<a id="L24"></a><span class="unvisited"> </span>
-<a id="L25"></a><span class="unvisited"> </span>
-<a id="L26"></a><span class="unvisited"> </span>
+<a id="L24"></a><span class="visited"> </span>
+<a id="L25"></a><span class="visited"> </span>
+<a id="L26"></a><span class="visited"> </span>
 <a id="L27"></a><span class="visited"> </span>
 <a id="L28"></a><span class="visited"> </span>
 <a id="L29"></a><span > </span>
 <a id="L30"></a><span > </span>
-<a id="L31"></a><span class="unvisited"> </span>
-<a id="L32"></a><span class="unvisited"> </span>
-<a id="L33"></a><span class="unvisited"> </span>
+<a id="L31"></a><span class="visited"> </span>
+<a id="L32"></a><span class="visited"> </span>
+<a id="L33"></a><span class="visited"> </span>
 <a id="L34"></a><span > </span>
 <a id="L35"></a><span class="visited"> </span>
 <a id="L36"></a><span class="visited"> </span>
@@ -259,35 +253,35 @@ exception Escape of ((int * int) * (int * int)) * Jsonm.error
 
 let json_of_src ?encoding (src : [ `Channel of in_channel | `String of string ])
     =
-  <span data-count="1">l</span>et dec d =
-    <span data-count="25">m</span>atch Jsonm.decode d with
-    | <span data-count="25">`</span>Lexeme l -&gt; l
+  <span data-count="5">l</span>et dec d =
+    <span data-count="137">m</span>atch Jsonm.decode d with
+    | <span data-count="137">`</span>Lexeme l -&gt; l
     | <span data-count="0">`</span>Error e -&gt; raise (Escape (Jsonm.decoded_rang<span data-count="0">e</span> d, e))
     | `End
     | `Await -&gt;
       assert false
   in
   let rec value v k d =
-    <span data-count="12">m</span>atch v with
-    | <span data-count="2">`</span>Os -&gt; obj [] k d
-    | <span data-count="0">`</span>As -&gt; arr [] k d
-    | <span data-count="0">`</span>Null -&gt; k Unit d
-    | <span data-count="0">`</span>Bool b -&gt; k (Bool b) d
-    | <span data-count="9">`</span>String s -&gt; k (String s) d
-    | <span data-count="1">`</span>Float f -&gt; k (Float f) d
+    <span data-count="65">m</span>atch v with
+    | <span data-count="11">`</span>Os -&gt; obj [] k d
+    | <span data-count="2">`</span>As -&gt; arr [] k d
+    | <span data-count="2">`</span>Null -&gt; k Unit d
+    | <span data-count="3">`</span>Bool b -&gt; k (Bool b) d
+    | <span data-count="44">`</span>String s -&gt; k (String s) d
+    | <span data-count="3">`</span>Float f -&gt; k (Float f) d
     | _ -&gt; assert false
   and arr vs k d =
-    <span data-count="0">m</span>atch dec d with
-    | <span data-count="0">`</span>Ae -&gt; k (Array (List.re<span data-count="0">v</span> vs)) d
-    | <span data-count="0">v</span> -&gt; value v (fun v -&gt; <span data-count="0">a</span>rr (v :: vs) k) d
+    <span data-count="3">m</span>atch dec d with
+    | <span data-count="2">`</span>Ae -&gt; k (Array (List.re<span data-count="2">v</span> vs)) d
+    | <span data-count="1">v</span> -&gt; value v (fun v -&gt; <span data-count="1">a</span>rr (v :: vs) k) d
   and obj ms k d =
-    <span data-count="13">m</span>atch dec d with
-    | <span data-count="2">`</span>Oe -&gt; k (Object (List.re<span data-count="2">v</span> ms)) d
-    | <span data-count="11">`</span>Name n -&gt; value (de<span data-count="11">c</span> d) (fun v -&gt; <span data-count="11">o</span>bj ((n, v) :: ms) k) d
+    <span data-count="70">m</span>atch dec d with
+    | <span data-count="11">`</span>Oe -&gt; k (Object (List.re<span data-count="11">v</span> ms)) d
+    | <span data-count="59">`</span>Name n -&gt; value (de<span data-count="59">c</span> d) (fun v -&gt; <span data-count="59">o</span>bj ((n, v) :: ms) k) d
     | _ -&gt; assert false
   in
   let d = Jsonm.decoder ?encoding src in
-  <span data-count="1">t</span>ry Ok (valu<span data-count="1">e</span> (de<span data-count="1">c</span> d) (fun v _ -&gt; <span data-count="1">v</span>) d) with
+  <span data-count="5">t</span>ry Ok (valu<span data-count="5">e</span> (de<span data-count="5">c</span> d) (fun v _ -&gt; <span data-count="5">v</span>) d) with
   | <span data-count="0">E</span>scape (r, e) -&gt; Error (r, e)
 
 exception Found of json
@@ -309,12 +303,12 @@ let rec find key = function
     with
     | <span data-count="0">F</span>ound v -&gt; Some v
   end
-  | <span data-count="1">O</span>bject l -&gt; (
+  | <span data-count="5">O</span>bject l -&gt; (
     try
-      List.iter (fun (k, v) -&gt; <span data-count="4">i</span>f k = key then <span data-count="1">r</span>aise (Found v)) l;
+      List.iter (fun (k, v) -&gt; <span data-count="19">i</span>f k = key then <span data-count="5">r</span>aise (Found v)) l;
       <span data-count="0">N</span>one
     with
-    | <span data-count="1">F</span>ound v -&gt; Some v )
+    | <span data-count="5">F</span>ound v -&gt; Some v )
 
 let find_bool key v =
   <span data-count="0">m</span>atch find key v with
@@ -327,8 +321,8 @@ let find_float key v =
   | <span data-count="0">_</span> -&gt; None
 
 let find_string key v =
-  <span data-count="1">m</span>atch find key v with
-  | <span data-count="1">S</span>ome (String f) -&gt; Some f
+  <span data-count="5">m</span>atch find key v with
+  | <span data-count="5">S</span>ome (String f) -&gt; Some f
   | <span data-count="0">_</span> -&gt; None
 
 let find_int key v =
