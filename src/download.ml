@@ -2,6 +2,8 @@
     `https://archive.softwareheritage.org` *)
 let instance = ref "https://archive.softwareheritage.org"
 
+(**/**)
+
 let url endpoint = Format.sprintf "%s/api/1%s" !instance endpoint
 
 let field_not_found f =
@@ -17,9 +19,11 @@ let on_response url f =
       Error (Format.sprintf "error while parsing JSON response")
     | Ok response -> f response )
 
+(**/**)
+
 (** For a given content identifier, compute an URL from which the content can be
     downloaded *)
-let content ?hash_type hash =
+let content ?hash_type (hash : Lang.object_id) =
   let url =
     match hash_type with
     | None -> url (Format.sprintf "/content/%s/" hash)
@@ -33,7 +37,7 @@ let content ?hash_type hash =
 
 (** For a given directory identifier, compute an URL from which the directory
     can be downloaded *)
-let directory hash =
+let directory (hash : Lang.object_id) =
   let url = url (Format.sprintf "/vault/directory/%s/" hash) in
   match Ezcurl.post ~params:[] ~url () with
   | Error (code, msg) ->
@@ -51,7 +55,7 @@ let directory hash =
 
 (** For a given revision identifier, compute an URL from which the revision can
     be downloaded *)
-let revision hash =
+let revision (hash : Lang.object_id) =
   let url = url (Format.sprintf "/revision/%s/" hash) in
   on_response url (fun response ->
       let field = "directory" in
@@ -61,7 +65,7 @@ let revision hash =
 
 (** For a given release identifier, compute an URL from which the release can be
     downloaded *)
-let rec release hash =
+let rec release (hash : Lang.object_id) =
   let url = url (Format.sprintf "/release/%s/" hash) in
 
   on_response url (fun response ->
@@ -82,40 +86,41 @@ let rec release hash =
             Error (Format.sprintf "unknown target type: `%s`" target_type)
         end ) )
 
-let go_through_objs = function
-  | Json.Object o ->
-    let rec aux target_type target jsonl =
-      match (target_type, target) with
-      | Some target_type, Some target -> begin
-        match target_type with
-        | "revision" -> Some (revision, target)
-        | "release" -> Some (release, target)
-        | "content" -> Some (content ~hash_type:"sha1", target)
-        | "directory" -> Some (directory, target)
-        | _ -> None
-      end
-      | _ -> (
-        match jsonl with
-        | [] -> None
-        | ("target_type", Json.String value) :: r -> aux (Some value) target r
-        | ("target", Json.String value) :: r -> aux target_type (Some value) r
-        | (_, _) :: r -> aux target_type target r )
-    in
-    aux None None o
-  | _ -> None
+let snapshot =
+  let go_through_objs = function
+    | Json.Object o ->
+      let rec aux target_type target jsonl =
+        match (target_type, target) with
+        | Some target_type, Some target -> begin
+          match target_type with
+          | "revision" -> Some (revision, target)
+          | "release" -> Some (release, target)
+          | "content" -> Some (content ~hash_type:"sha1", target)
+          | "directory" -> Some (directory, target)
+          | _ -> None
+        end
+        | _ -> (
+          match jsonl with
+          | [] -> None
+          | ("target_type", Json.String value) :: r -> aux (Some value) target r
+          | ("target", Json.String value) :: r -> aux target_type (Some value) r
+          | (_, _) :: r -> aux target_type target r )
+      in
+      aux None None o
+    | _ -> None
+  in
+  fun (hash : Lang.object_id) ->
+    let url = url (Format.sprintf "/snapshot/%s/" hash) in
 
-let snapshot hash =
-  let url = url (Format.sprintf "/snapshot/%s/" hash) in
-
-  on_response url (fun response ->
-      let field = "branches" in
-      match Json.find_obj field response with
-      | None -> field_not_found field
-      | Some branch ->
-        let requests =
-          List.filter_map (fun f -> go_through_objs @@ snd f) branch
-        in
-        Ok (List.map (fun (f, x) -> f x) requests) )
+    on_response url (fun response ->
+        let field = "branches" in
+        match Json.find_obj field response with
+        | None -> field_not_found field
+        | Some branch ->
+          let requests =
+            List.filter_map (fun f -> go_through_objs @@ snd f) branch
+          in
+          Ok (List.map (fun (f, x) -> f x) requests) )
 
 (** For any object identifier, compute an URL from which object can be
     downloaded *)
