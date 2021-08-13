@@ -5,13 +5,13 @@ type path_absolute_escaped = string
 type scheme_version = int
 
 type object_type =
-  | Content
+  | Content of string (* hash *)
   | Directory
   | Release
   | Revision
   | Snapshot
 
-type object_id = char array (* this always has a length of 40 digit *)
+type object_id = string (* this always has a length of 40 digit *)
 
 type line_number = int
 
@@ -36,7 +36,7 @@ let object_type_of_string = function
   | "rel" -> Some Release
   | "rev" -> Some Revision
   | "dir" -> Some Directory
-  | "cnt" -> Some Content
+  | "cnt" -> Some (Content "sha1")
   | _s -> None
 
 let target_invalid target =
@@ -58,9 +58,10 @@ let object_id_from_string s =
   if target_invalid s then
     None
   else
-    Some (Array.init 40 (String.get s))
+    Some s
 
-let content id qualifiers = ((1, Content, id), qualifiers)
+let content ?(hash_type = "sha1") id qualifiers =
+  ((1, Content hash_type, id), qualifiers)
 
 let directory id qualifiers = ((1, Directory, id), qualifiers)
 
@@ -69,6 +70,16 @@ let snapshot id qualifiers = ((1, Snapshot, id), qualifiers)
 let revision id qualifiers = ((1, Revision, id), qualifiers)
 
 let release id qualifiers = ((1, Release, id), qualifiers)
+
+let get_object_id
+    (((_scheme_version, _object_type, object_id), _qualifiers) : identifier) :
+    string =
+  object_id
+
+let get_object_type
+    (((_scheme_version, object_type, _object_type), _qualifiers) : identifier) :
+    object_type =
+  object_type
 
 exception Parser_error of string
 

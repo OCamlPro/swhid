@@ -1,7 +1,7 @@
 let target_type_to_git =
   let open Lang in
   function
-  | Content -> "blob"
+  | Content _hash_type -> "blob"
   | Directory -> "tree"
   | Release -> "tag"
   | Revision -> "commit"

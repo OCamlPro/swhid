@@ -2,7 +2,7 @@ open Lang
 
 (** Compute the software heritage identifier for a given content *)
 let content_identifier content : Lang.identifier option =
-  let git_object = Git.object_from_contents Content content in
+  let git_object = Git.object_from_contents (Content "sha1_git") content in
   Git.object_to_swhid git_object [] Lang.content
 
 (** Compute the software heritage identifier for a given directory *)
