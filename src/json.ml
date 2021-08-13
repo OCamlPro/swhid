@@ -44,10 +44,11 @@ let json_of_src ?encoding (src : [ `Channel of in_channel | `String of string ])
 exception Found of json
 
 let rec find key = function
-  | Unit -> None
-  | Bool _b -> None
-  | Float _f -> None
-  | String _s -> None
+  | Unit
+  | Bool _
+  | Float _
+  | String _ ->
+    None
   | Array l -> begin
     try
       List.iter
@@ -67,25 +68,9 @@ let rec find key = function
     with
     | Found v -> Some v )
 
-let find_bool key v =
-  match find key v with
-  | Some (Bool b) -> Some b
-  | _ -> None
-
-let find_float key v =
-  match find key v with
-  | Some (Float f) -> Some f
-  | _ -> None
-
 let find_string key v =
   match find key v with
   | Some (String f) -> Some f
-  | _ -> None
-
-let find_int key v =
-  match find key v with
-  | Some (Float f) -> Some (int_of_float f)
-  | Some (String s) -> int_of_string_opt s
   | _ -> None
 
 let find_obj key v =

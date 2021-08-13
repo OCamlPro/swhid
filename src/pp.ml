@@ -1,7 +1,7 @@
 open Lang
 
 let string_of_object_type = function
-  | Content -> "cnt"
+  | Content _hash_type -> "cnt"
   | Directory -> "dir"
   | Release -> "rel"
   | Revision -> "rev"
@@ -9,8 +9,7 @@ let string_of_object_type = function
 
 let url_escaped fmt url = Format.fprintf fmt "%s" url
 
-let object_id fmt object_id =
-  Array.iter (fun c -> Format.fprintf fmt "%c" c) object_id
+let object_id fmt object_id = Format.fprintf fmt "%s" object_id
 
 let object_type fmt object_type =
   Format.fprintf fmt "%s" (string_of_object_type object_type)
