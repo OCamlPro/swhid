@@ -339,7 +339,7 @@
 
 (** Compute the software heritage identifier for a given content *)
 let content_identifier content : Lang.identifier option =
-  <span data-count="2">l</span>et git_object = Git.object_from_contents Content content in
+  <span data-count="2">l</span>et git_object = Git.object_from_contents (Content "sha1_git") content in
   <span data-count="2">G</span>it.object_to_swhid git_object [] Lang.content
 
 (** Compute the software heritage identifier for a given directory *)

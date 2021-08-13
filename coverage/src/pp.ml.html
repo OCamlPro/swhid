@@ -32,41 +32,40 @@
 <a id="L9"></a><span > </span>
 <a id="L10"></a><span class="visited"> </span>
 <a id="L11"></a><span > </span>
-<a id="L12"></a><span > </span>
-<a id="L13"></a><span class="visited"> </span>
+<a id="L12"></a><span class="visited"> </span>
+<a id="L13"></a><span > </span>
 <a id="L14"></a><span > </span>
-<a id="L15"></a><span > </span>
-<a id="L16"></a><span class="visited"> </span>
-<a id="L17"></a><span > </span>
-<a id="L18"></a><span class="visited"> </span>
+<a id="L15"></a><span class="visited"> </span>
+<a id="L16"></a><span > </span>
+<a id="L17"></a><span class="visited"> </span>
+<a id="L18"></a><span > </span>
 <a id="L19"></a><span > </span>
-<a id="L20"></a><span > </span>
-<a id="L21"></a><span class="visited"> </span>
+<a id="L20"></a><span class="visited"> </span>
+<a id="L21"></a><span > </span>
 <a id="L22"></a><span > </span>
-<a id="L23"></a><span > </span>
-<a id="L24"></a><span class="visited"> </span>
-<a id="L25"></a><span > </span>
+<a id="L23"></a><span class="visited"> </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span class="visited"> </span>
 <a id="L26"></a><span class="visited"> </span>
 <a id="L27"></a><span class="visited"> </span>
-<a id="L28"></a><span class="visited"> </span>
-<a id="L29"></a><span > </span>
-<a id="L30"></a><span class="visited"> </span>
+<a id="L28"></a><span > </span>
+<a id="L29"></a><span class="visited"> </span>
+<a id="L30"></a><span > </span>
 <a id="L31"></a><span > </span>
-<a id="L32"></a><span > </span>
+<a id="L32"></a><span class="visited"> </span>
 <a id="L33"></a><span class="visited"> </span>
 <a id="L34"></a><span class="visited"> </span>
 <a id="L35"></a><span class="visited"> </span>
-<a id="L36"></a><span class="visited"> </span>
+<a id="L36"></a><span > </span>
 <a id="L37"></a><span > </span>
-<a id="L38"></a><span > </span>
+<a id="L38"></a><span class="visited"> </span>
 <a id="L39"></a><span class="visited"> </span>
-<a id="L40"></a><span class="visited"> </span>
+<a id="L40"></a><span > </span>
 <a id="L41"></a><span > </span>
-<a id="L42"></a><span > </span>
-<a id="L43"></a><span class="visited"> </span>
+<a id="L42"></a><span class="visited"> </span>
+<a id="L43"></a><span > </span>
 <a id="L44"></a><span > </span>
-<a id="L45"></a><span > </span>
-<a id="L46"></a><span class="visited"> </span>
+<a id="L45"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -116,12 +115,11 @@
 <a href="#L43">43</a>
 <a href="#L44">44</a>
 <a href="#L45">45</a>
-<a href="#L46">46</a>
 </pre>
 <pre><code class="ocaml">open Lang
 
 let string_of_object_type = function
-  | <span data-count="6">C</span>ontent -&gt; "cnt"
+  | <span data-count="6">C</span>ontent _hash_type -&gt; "cnt"
   | <span data-count="3">D</span>irectory -&gt; "dir"
   | <span data-count="7">R</span>elease -&gt; "rel"
   | <span data-count="10">R</span>evision -&gt; "rev"
@@ -129,8 +127,7 @@ let string_of_object_type = function
 
 let url_escaped fmt url = <span data-count="4">F</span>ormat.fprintf fmt "%s" url
 
-let object_id fmt object_id =
-  <span data-count="33">A</span>rray.iter (fun c -&gt; <span data-count="1320">F</span>ormat.fprintf fmt "%c" c) object_id
+let object_id fmt object_id = <span data-count="33">F</span>ormat.fprintf fmt "%s" object_id
 
 let object_type fmt object_type =
   <span data-count="33">F</span>ormat.fprintf fmt "%s" (string_of_object_typ<span data-count="33">e</span> object_type)

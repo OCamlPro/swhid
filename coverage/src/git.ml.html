@@ -169,7 +169,7 @@
 <pre><code class="ocaml">let target_type_to_git =
   let open Lang in
   function
-  | <span data-count="2">C</span>ontent -&gt; "blob"
+  | <span data-count="2">C</span>ontent _hash_type -&gt; "blob"
   | <span data-count="2">D</span>irectory -&gt; "tree"
   | <span data-count="6">R</span>elease -&gt; "tag"
   | <span data-count="13">R</span>evision -&gt; "commit"

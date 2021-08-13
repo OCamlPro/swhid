@@ -84,18 +84,29 @@
 <a id="L61"></a><span class="visited"> </span>
 <a id="L62"></a><span > </span>
 <a id="L63"></a><span class="visited"> </span>
-<a id="L64"></a><span > </span>
-<a id="L65"></a><span class="visited"> </span>
-<a id="L66"></a><span > </span>
-<a id="L67"></a><span class="visited"> </span>
-<a id="L68"></a><span > </span>
-<a id="L69"></a><span class="visited"> </span>
-<a id="L70"></a><span > </span>
-<a id="L71"></a><span class="visited"> </span>
-<a id="L72"></a><span > </span>
+<a id="L64"></a><span class="visited"> </span>
+<a id="L65"></a><span > </span>
+<a id="L66"></a><span class="visited"> </span>
+<a id="L67"></a><span > </span>
+<a id="L68"></a><span class="visited"> </span>
+<a id="L69"></a><span > </span>
+<a id="L70"></a><span class="visited"> </span>
+<a id="L71"></a><span > </span>
+<a id="L72"></a><span class="visited"> </span>
 <a id="L73"></a><span > </span>
 <a id="L74"></a><span > </span>
 <a id="L75"></a><span > </span>
+<a id="L76"></a><span > </span>
+<a id="L77"></a><span class="visited"> </span>
+<a id="L78"></a><span > </span>
+<a id="L79"></a><span > </span>
+<a id="L80"></a><span > </span>
+<a id="L81"></a><span > </span>
+<a id="L82"></a><span class="visited"> </span>
+<a id="L83"></a><span > </span>
+<a id="L84"></a><span > </span>
+<a id="L85"></a><span > </span>
+<a id="L86"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -175,6 +186,17 @@
 <a href="#L73">73</a>
 <a href="#L74">74</a>
 <a href="#L75">75</a>
+<a href="#L76">76</a>
+<a href="#L77">77</a>
+<a href="#L78">78</a>
+<a href="#L79">79</a>
+<a href="#L80">80</a>
+<a href="#L81">81</a>
+<a href="#L82">82</a>
+<a href="#L83">83</a>
+<a href="#L84">84</a>
+<a href="#L85">85</a>
+<a href="#L86">86</a>
 </pre>
 <pre><code class="ocaml">type url_escaped = string
 
@@ -183,13 +205,13 @@ type path_absolute_escaped = string
 type scheme_version = int
 
 type object_type =
-  | Content
+  | Content of string (* hash *)
   | Directory
   | Release
   | Revision
   | Snapshot
 
-type object_id = char array (* this always has a length of 40 digit *)
+type object_id = string (* this always has a length of 40 digit *)
 
 type line_number = int
 
@@ -214,7 +236,7 @@ let object_type_of_string = function
   | <span data-count="1">"</span>rel" -&gt; Some Release
   | <span data-count="7">"</span>rev" -&gt; Some Revision
   | <span data-count="1">"</span>dir" -&gt; Some Directory
-  | <span data-count="10">"</span>cnt" -&gt; Some Content
+  | <span data-count="10">"</span>cnt" -&gt; Some (Content "sha1")
   | <span data-count="1">_</span>s -&gt; None
 
 let target_invalid target =
@@ -236,17 +258,28 @@ let object_id_from_string s =
   <span data-count="52">i</span>f target_invalid s then
     <span data-count="3">N</span>one
   else
-    <span data-count="49">S</span>ome (Array.ini<span data-count="49">t</span> 40 (String.ge<span data-count="49">t</span> s))
+    <span data-count="49">S</span>ome s
 
-let content id qualifiers = <span data-count="2">(</span>(1, Content, id), qualifiers)
+let content ?(hash_type = <span data-count="2">"</span>sha1") id qualifiers =
+  <span data-count="3">(</span>(1, Content hash_type, id), qualifiers)
 
 let directory id qualifiers = <span data-count="2">(</span>(1, Directory, id), qualifiers)
 
-let snapshot id qualifiers = <span data-count="4">(</span>(1, Snapshot, id), qualifiers)
+let snapshot id qualifiers = <span data-count="5">(</span>(1, Snapshot, id), qualifiers)
 
 let revision id qualifiers = <span data-count="7">(</span>(1, Revision, id), qualifiers)
 
-let release id qualifiers = <span data-count="6">(</span>(1, Release, id), qualifiers)
+let release id qualifiers = <span data-count="7">(</span>(1, Release, id), qualifiers)
+
+let get_object_id
+    (((_scheme_version, _object_type, object_id), _qualifiers) : identifier) :
+    string =
+  <span data-count="3">o</span>bject_id
+
+let get_object_type
+    (((_scheme_version, object_type, _object_type), _qualifiers) : identifier) :
+    object_type =
+  <span data-count="3">o</span>bject_type
 
 exception Parser_error of string
 
