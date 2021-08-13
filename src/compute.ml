@@ -1,38 +1,58 @@
+(** This module provides various functions to compute the swhid of a given
+    object. Supported objects are [content], [directory], [release], [revision]
+    and [snapshot]. The origins and visits objects are not supported. *)
+
 open Lang
 
-(** Compute the software heritage identifier for a given content *)
+(** [content_identifier s] computes the swhid for the [s] content. [s] is the
+    raw content of a file as a [string].
+
+    E.g. [content_identifier "_build\n"] is the swhid of this library's
+    [.gitignore] file. *)
 let content_identifier content : Lang.identifier option =
   let git_object = Git.object_from_contents (Content "sha1_git") content in
   Git.object_to_swhid git_object [] Lang.content
 
-(** Compute the software heritage identifier for a given directory *)
+(** [directory_identifier entries] compute the swhid for the [entries]
+    directory. [entries] is a list of [Lang.directory_entry] where each element
+    points to another object (usually a file content or a sub-directory).
+
+    E.g.
+    [directory_identifier \[ { typ = "file"
+                                 ; permissions = 33188
+                                 ; name = "README"
+                                 ; target = "37ec8ea2110c0b7a32fbb0e872f6e7debbf95e21"
+                                 }\]]
+    is the swhid of a directory which has a single file [README] with
+    permissions 33188 and whose core identifier from [content_identifier] is
+    [37ec8ea2110c0b7a32fbb0e872f6e7debbf95e21]. *)
 let directory_identifier entries : Lang.identifier option =
   List.iter
-    (fun (_typ, _perms, _name, target) ->
-      if Lang.target_invalid target then
+    (fun entry ->
+      if Lang.target_invalid entry.target then
         raise @@ Invalid_argument "target must be of length 40" )
     entries;
   let entries =
     List.sort
-      (fun (typ1, _perms, name1, _target1) (typ2, _perms2, name2, _target2) ->
+      (fun entry1 entry2 ->
         String.compare
-          ( if typ1 = "dir" then
-            name1 ^ "/"
+          ( if entry1.typ = "dir" then
+            entry1.name ^ "/"
           else
-            name1 )
-          ( if typ2 = "dir" then
-            name2 ^ "/"
+            entry1.name )
+          ( if entry2.typ = "dir" then
+            entry2.name ^ "/"
           else
-            name2 ) )
+            entry2.name ) )
       entries
   in
   let content =
     Format.asprintf "%a"
       (Format.pp_print_list
          ~pp_sep:(fun _fmt () -> ())
-         (fun fmt (_typ, perms, name, target) ->
-           Format.fprintf fmt "%o %s%c%s" perms name '\x00'
-             (Git.id_to_bytes target) ) )
+         (fun fmt entry ->
+           Format.fprintf fmt "%o %s%c%s" entry.permissions entry.name '\x00'
+             (Git.id_to_bytes entry.target) ) )
       entries
   in
   let git_object = Git.object_from_contents Directory content in
