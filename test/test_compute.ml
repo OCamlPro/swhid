@@ -261,39 +261,96 @@ let () =
 (* test directory identifier *)
 let () =
   let test_cases =
+    let open Swhids.Lang in
     [| (* empty directory *)
        ("swh:1:dir:4b825dc642cb6eb9a060e54bf8d69288fbee4904", [])
      ; (* swh example *)
        ( "swh:1:dir:d7ed3d2c31d608823be58b1cbe57605310615231"
-       , [ ("file", 33188, "README", "37ec8ea2110c0b7a32fbb0e872f6e7debbf95e21")
-         ; ( "file"
-           , 33188
-           , "Rakefile"
-           , "3bb0e8592a41ae3185ee32266c860714980dbed7" )
-         ; ("dir", 16384, "app", "61e6e867f5d7ba3b40540869bc050b0c4fed9e95")
-         ; ( "file"
-           , 33188
-           , "1.megabyte"
-           , "7c2b2fbdd57d6765cdc9d84c2d7d333f11be7fb3" )
-         ; ("dir", 16384, "config", "591dfe784a2e9ccc63aaba1cb68a765734310d98")
-         ; ("dir", 16384, "public", "9588bf4522c2b4648bfd1c61d175d1f88c1ad4a5")
-         ; ( "file"
-           , 33188
-           , "development.sqlite3"
-           , "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391" )
-         ; ("dir", 16384, "doc", "154705c6aa1c8ead8c99c7915373e3c44012057f")
-         ; ("dir", 16384, "db", "85f157bdc39356b7bc7de9d0099b4ced8b3b382c")
-         ; ("dir", 16384, "log", "5e3d3941c51cce73352dff89c805a304ba96fffe")
-         ; ("dir", 16384, "script", "1b278423caf176da3f3533592012502aa10f566c")
-         ; ("dir", 16384, "test", "035f0437c080bfd8711670b3e8677e686c69c763")
-         ; ("dir", 16384, "vendor", "7c0dc9ad978c1af3f9a4ce061e50f5918bd27138")
-         ; ( "rev"
-           , 57344
-           , "will_paginate"
-           , "3d531e169db92a16a9a8974f0ae6edf52e52659e" )
-         ; ("dir", 16384, "order", "62cdb7020ff920e5aa642c3d4066950dd1f01f4d")
-         ; ("file", 16384, "order.", "0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33")
-         ; ("file", 16384, "order0", "bbe960a25ea311d21d40669e93df2003ba9b90a2")
+       , [ { typ = "file"
+           ; permissions = 33188
+           ; name = "README"
+           ; target = "37ec8ea2110c0b7a32fbb0e872f6e7debbf95e21"
+           }
+         ; { typ = "file"
+           ; permissions = 33188
+           ; name = "Rakefile"
+           ; target = "3bb0e8592a41ae3185ee32266c860714980dbed7"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "app"
+           ; target = "61e6e867f5d7ba3b40540869bc050b0c4fed9e95"
+           }
+         ; { typ = "file"
+           ; permissions = 33188
+           ; name = "1.megabyte"
+           ; target = "7c2b2fbdd57d6765cdc9d84c2d7d333f11be7fb3"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "config"
+           ; target = "591dfe784a2e9ccc63aaba1cb68a765734310d98"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "public"
+           ; target = "9588bf4522c2b4648bfd1c61d175d1f88c1ad4a5"
+           }
+         ; { typ = "file"
+           ; permissions = 33188
+           ; name = "development.sqlite3"
+           ; target = "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "doc"
+           ; target = "154705c6aa1c8ead8c99c7915373e3c44012057f"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "db"
+           ; target = "85f157bdc39356b7bc7de9d0099b4ced8b3b382c"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "log"
+           ; target = "5e3d3941c51cce73352dff89c805a304ba96fffe"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "script"
+           ; target = "1b278423caf176da3f3533592012502aa10f566c"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "test"
+           ; target = "035f0437c080bfd8711670b3e8677e686c69c763"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "vendor"
+           ; target = "7c0dc9ad978c1af3f9a4ce061e50f5918bd27138"
+           }
+         ; { typ = "rev"
+           ; permissions = 57344
+           ; name = "will_paginate"
+           ; target = "3d531e169db92a16a9a8974f0ae6edf52e52659e"
+           }
+         ; { typ = "dir"
+           ; permissions = 16384
+           ; name = "order"
+           ; target = "62cdb7020ff920e5aa642c3d4066950dd1f01f4d"
+           }
+         ; { typ = "file"
+           ; permissions = 16384
+           ; name = "order."
+           ; target = "0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33"
+           }
+         ; { typ = "file"
+           ; permissions = 16384
+           ; name = "order0"
+           ; target = "bbe960a25ea311d21d40669e93df2003ba9b90a2"
+           }
          ] )
     |]
   in
@@ -365,7 +422,9 @@ let () =
   begin
     try
       let _id =
-        Swhids.Compute.directory_identifier [ ("rambo", 3, "rambo", "bine") ]
+        Swhids.Compute.directory_identifier
+          [ { typ = "rambo"; permissions = 3; name = "rambo"; target = "bine" }
+          ]
       in
       assert false
     with

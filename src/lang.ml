@@ -84,3 +84,10 @@ let get_object_type
 exception Parser_error of string
 
 exception Lexer_error of string
+
+type directory_entry =
+  { typ : string
+  ; permissions : int
+  ; name : string
+  ; target : string
+  }
