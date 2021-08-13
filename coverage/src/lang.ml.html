@@ -49,71 +49,65 @@
 <a id="L26"></a><span > </span>
 <a id="L27"></a><span > </span>
 <a id="L28"></a><span > </span>
-<a id="L29"></a><span > </span>
-<a id="L30"></a><span > </span>
-<a id="L31"></a><span > </span>
-<a id="L32"></a><span > </span>
-<a id="L33"></a><span > </span>
-<a id="L34"></a><span > </span>
-<a id="L35"></a><span class="visited"> </span>
-<a id="L36"></a><span class="visited"> </span>
+<a id="L29"></a><span class="visited"> </span>
+<a id="L30"></a><span class="visited"> </span>
+<a id="L31"></a><span class="visited"> </span>
+<a id="L32"></a><span class="visited"> </span>
+<a id="L33"></a><span class="visited"> </span>
+<a id="L34"></a><span class="visited"> </span>
+<a id="L35"></a><span > </span>
+<a id="L36"></a><span > </span>
 <a id="L37"></a><span class="visited"> </span>
-<a id="L38"></a><span class="visited"> </span>
-<a id="L39"></a><span class="visited"> </span>
-<a id="L40"></a><span class="visited"> </span>
+<a id="L38"></a><span > </span>
+<a id="L39"></a><span > </span>
+<a id="L40"></a><span > </span>
 <a id="L41"></a><span > </span>
-<a id="L42"></a><span > </span>
+<a id="L42"></a><span class="visited"> </span>
 <a id="L43"></a><span class="visited"> </span>
 <a id="L44"></a><span > </span>
-<a id="L45"></a><span > </span>
+<a id="L45"></a><span class="visited"> </span>
 <a id="L46"></a><span > </span>
-<a id="L47"></a><span > </span>
-<a id="L48"></a><span class="visited"> </span>
+<a id="L47"></a><span class="visited"> </span>
+<a id="L48"></a><span > </span>
 <a id="L49"></a><span class="visited"> </span>
 <a id="L50"></a><span > </span>
-<a id="L51"></a><span class="visited"> </span>
-<a id="L52"></a><span > </span>
+<a id="L51"></a><span > </span>
+<a id="L52"></a><span class="visited"> </span>
 <a id="L53"></a><span class="visited"> </span>
 <a id="L54"></a><span > </span>
 <a id="L55"></a><span class="visited"> </span>
 <a id="L56"></a><span > </span>
-<a id="L57"></a><span > </span>
+<a id="L57"></a><span class="visited"> </span>
 <a id="L58"></a><span class="visited"> </span>
-<a id="L59"></a><span class="visited"> </span>
-<a id="L60"></a><span > </span>
-<a id="L61"></a><span class="visited"> </span>
-<a id="L62"></a><span > </span>
-<a id="L63"></a><span class="visited"> </span>
+<a id="L59"></a><span > </span>
+<a id="L60"></a><span class="visited"> </span>
+<a id="L61"></a><span > </span>
+<a id="L62"></a><span class="visited"> </span>
+<a id="L63"></a><span > </span>
 <a id="L64"></a><span class="visited"> </span>
 <a id="L65"></a><span > </span>
 <a id="L66"></a><span class="visited"> </span>
 <a id="L67"></a><span > </span>
-<a id="L68"></a><span class="visited"> </span>
+<a id="L68"></a><span > </span>
 <a id="L69"></a><span > </span>
-<a id="L70"></a><span class="visited"> </span>
-<a id="L71"></a><span > </span>
-<a id="L72"></a><span class="visited"> </span>
+<a id="L70"></a><span > </span>
+<a id="L71"></a><span class="visited"> </span>
+<a id="L72"></a><span > </span>
 <a id="L73"></a><span > </span>
 <a id="L74"></a><span > </span>
 <a id="L75"></a><span > </span>
-<a id="L76"></a><span > </span>
-<a id="L77"></a><span class="visited"> </span>
+<a id="L76"></a><span class="visited"> </span>
+<a id="L77"></a><span > </span>
 <a id="L78"></a><span > </span>
 <a id="L79"></a><span > </span>
 <a id="L80"></a><span > </span>
 <a id="L81"></a><span > </span>
-<a id="L82"></a><span class="visited"> </span>
+<a id="L82"></a><span > </span>
 <a id="L83"></a><span > </span>
 <a id="L84"></a><span > </span>
 <a id="L85"></a><span > </span>
 <a id="L86"></a><span > </span>
 <a id="L87"></a><span > </span>
-<a id="L88"></a><span > </span>
-<a id="L89"></a><span > </span>
-<a id="L90"></a><span > </span>
-<a id="L91"></a><span > </span>
-<a id="L92"></a><span > </span>
-<a id="L93"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -205,41 +199,29 @@
 <a href="#L85">85</a>
 <a href="#L86">86</a>
 <a href="#L87">87</a>
-<a href="#L88">88</a>
-<a href="#L89">89</a>
-<a href="#L90">90</a>
-<a href="#L91">91</a>
-<a href="#L92">92</a>
-<a href="#L93">93</a>
 </pre>
-<pre><code class="ocaml">type url_escaped = string
-
-type path_absolute_escaped = string
-
-type scheme_version = int
-
-type object_type =
+<pre><code class="ocaml">type object_type =
   | Content of string (* hash *)
   | Directory
   | Release
   | Revision
   | Snapshot
 
-type object_id = string (* this always has a length of 40 digit *)
+(** this always has a length of 40 digit *)
+type object_id = string
 
-type line_number = int
-
-type identifier_core = scheme_version * object_type * object_id
+(** scheme_version, object_id and object_id*)
+type identifier_core = int * object_type * object_id
 
 type context_qualifier =
   | Anchor of identifier_core
-  | Origin of url_escaped
-  | Path of path_absolute_escaped
+  | Origin of string
+  | Path of string
   | Visit of identifier_core
 
 type qualifier =
-  | Context of context_qualifier
-  | Fragment of (line_number * line_number option)
+  | Context of context_qualifier  (** either a context *)
+  | Fragment of (int * int option)  (** or a fragment (a line number or two) *)
 
 type qualifiers = qualifier list
 
@@ -253,7 +235,7 @@ let object_type_of_string = function
   | <span data-count="10">"</span>cnt" -&gt; Some (Content "sha1")
   | <span data-count="1">_</span>s -&gt; None
 
-let target_invalid target =
+let object_id_invalid (target : object_id) =
   <span data-count="94">S</span>tring.lengt<span data-count="94">h</span> target &lt;&gt; 4<span data-count="5">0</span>
   ||
   try
@@ -268,26 +250,26 @@ let target_invalid target =
   with
   | <span data-count="1">E</span>xit -&gt; tru<span data-count="1">e</span>
 
-let object_id_from_string s =
-  <span data-count="52">i</span>f target_invalid s then
+let object_id_from_string (s : string) : object_id option =
+  <span data-count="52">i</span>f object_id_invalid s then
     <span data-count="3">N</span>one
   else
     <span data-count="49">S</span>ome s
 
-let content ?(hash_type = <span data-count="2">"</span>sha1") id qualifiers =
+let content ?(hash_type = <span data-count="2">"</span>sha1") id qualifiers : identifier =
   <span data-count="3">(</span>(1, Content hash_type, id), qualifiers)
 
-let directory id qualifiers = <span data-count="2">(</span>(1, Directory, id), qualifiers)
+let directory id qualifiers : identifier = <span data-count="2">(</span>(1, Directory, id), qualifiers)
 
-let snapshot id qualifiers = <span data-count="5">(</span>(1, Snapshot, id), qualifiers)
+let snapshot id qualifiers : identifier = <span data-count="5">(</span>(1, Snapshot, id), qualifiers)
 
-let revision id qualifiers = <span data-count="7">(</span>(1, Revision, id), qualifiers)
+let revision id qualifiers : identifier = <span data-count="7">(</span>(1, Revision, id), qualifiers)
 
-let release id qualifiers = <span data-count="7">(</span>(1, Release, id), qualifiers)
+let release id qualifiers : identifier = <span data-count="7">(</span>(1, Release, id), qualifiers)
 
 let get_object_id
     (((_scheme_version, _object_type, object_id), _qualifiers) : identifier) :
-    string =
+    object_id =
   <span data-count="3">o</span>bject_id
 
 let get_object_type
@@ -303,7 +285,7 @@ type directory_entry =
   { typ : string
   ; permissions : int
   ; name : string
-  ; target : string
+  ; target : object_id
   }
 </code></pre>
       </div>

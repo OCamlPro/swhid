@@ -24,48 +24,40 @@
 <a id="L1"></a><span > </span>
 <a id="L2"></a><span > </span>
 <a id="L3"></a><span > </span>
-<a id="L4"></a><span class="visited"> </span>
+<a id="L4"></a><span > </span>
 <a id="L5"></a><span class="visited"> </span>
 <a id="L6"></a><span class="visited"> </span>
 <a id="L7"></a><span class="visited"> </span>
 <a id="L8"></a><span class="visited"> </span>
-<a id="L9"></a><span > </span>
-<a id="L10"></a><span class="visited"> </span>
+<a id="L9"></a><span class="visited"> </span>
+<a id="L10"></a><span > </span>
 <a id="L11"></a><span > </span>
 <a id="L12"></a><span class="visited"> </span>
 <a id="L13"></a><span > </span>
 <a id="L14"></a><span > </span>
 <a id="L15"></a><span class="visited"> </span>
 <a id="L16"></a><span > </span>
-<a id="L17"></a><span class="visited"> </span>
-<a id="L18"></a><span > </span>
+<a id="L17"></a><span > </span>
+<a id="L18"></a><span class="visited"> </span>
 <a id="L19"></a><span > </span>
 <a id="L20"></a><span class="visited"> </span>
-<a id="L21"></a><span > </span>
-<a id="L22"></a><span > </span>
-<a id="L23"></a><span class="visited"> </span>
+<a id="L21"></a><span class="visited"> </span>
+<a id="L22"></a><span class="visited"> </span>
+<a id="L23"></a><span > </span>
 <a id="L24"></a><span > </span>
 <a id="L25"></a><span class="visited"> </span>
 <a id="L26"></a><span class="visited"> </span>
-<a id="L27"></a><span class="visited"> </span>
-<a id="L28"></a><span > </span>
+<a id="L27"></a><span > </span>
+<a id="L28"></a><span class="visited"> </span>
 <a id="L29"></a><span class="visited"> </span>
-<a id="L30"></a><span > </span>
+<a id="L30"></a><span class="visited"> </span>
 <a id="L31"></a><span > </span>
-<a id="L32"></a><span class="visited"> </span>
-<a id="L33"></a><span class="visited"> </span>
+<a id="L32"></a><span > </span>
+<a id="L33"></a><span > </span>
 <a id="L34"></a><span class="visited"> </span>
-<a id="L35"></a><span class="visited"> </span>
+<a id="L35"></a><span > </span>
 <a id="L36"></a><span > </span>
-<a id="L37"></a><span > </span>
-<a id="L38"></a><span class="visited"> </span>
-<a id="L39"></a><span class="visited"> </span>
-<a id="L40"></a><span > </span>
-<a id="L41"></a><span > </span>
-<a id="L42"></a><span class="visited"> </span>
-<a id="L43"></a><span > </span>
-<a id="L44"></a><span > </span>
-<a id="L45"></a><span class="visited"> </span>
+<a id="L37"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -107,59 +99,43 @@
 <a href="#L35">35</a>
 <a href="#L36">36</a>
 <a href="#L37">37</a>
-<a href="#L38">38</a>
-<a href="#L39">39</a>
-<a href="#L40">40</a>
-<a href="#L41">41</a>
-<a href="#L42">42</a>
-<a href="#L43">43</a>
-<a href="#L44">44</a>
-<a href="#L45">45</a>
 </pre>
 <pre><code class="ocaml">open Lang
 
-let string_of_object_type = function
-  | <span data-count="6">C</span>ontent _hash_type -&gt; "cnt"
-  | <span data-count="3">D</span>irectory -&gt; "dir"
-  | <span data-count="7">R</span>elease -&gt; "rel"
-  | <span data-count="10">R</span>evision -&gt; "rev"
-  | <span data-count="7">S</span>napshot -&gt; "snp"
+let object_type =
+  let string_of_object_type = function
+    | <span data-count="6">C</span>ontent _hash_type -&gt; "cnt"
+    | <span data-count="3">D</span>irectory -&gt; "dir"
+    | <span data-count="7">R</span>elease -&gt; "rel"
+    | <span data-count="10">R</span>evision -&gt; "rev"
+    | <span data-count="7">S</span>napshot -&gt; "snp"
+  in
+  fun fmt object_type -&gt;
+    <span data-count="33">F</span>ormat.fprintf fmt "%s" (string_of_object_typ<span data-count="33">e</span> object_type)
 
-let url_escaped fmt url = <span data-count="4">F</span>ormat.fprintf fmt "%s" url
-
-let object_id fmt object_id = <span data-count="33">F</span>ormat.fprintf fmt "%s" object_id
-
-let object_type fmt object_type =
-  <span data-count="33">F</span>ormat.fprintf fmt "%s" (string_of_object_typ<span data-count="33">e</span> object_type)
-
-let scheme_version fmt version = <span data-count="33">F</span>ormat.fprintf fmt "%d" version
-
-let identifier_core fmt (v, t, id) =
-  <span data-count="33">F</span>ormat.fprintf fmt "swh:%a:%a:%a" scheme_version v object_type t object_id id
+let identifier_core fmt ((v, t, id) : identifier_core) =
+  <span data-count="33">F</span>ormat.fprintf fmt "swh:%d:%a:%s" v object_type t id
 
 let context_qualifier fmt = function
   | <span data-count="2">A</span>nchor identifier -&gt;
     Format.fprintf fmt "anchor=%a" identifier_core identifier
-  | <span data-count="2">O</span>rigin url -&gt; Format.fprintf fmt "origin=%a" url_escaped url
-  | <span data-count="2">P</span>ath url -&gt; Format.fprintf fmt "path=%a" url_escaped url
+  | <span data-count="2">O</span>rigin url -&gt; Format.fprintf fmt "origin=%s" url
+  | <span data-count="2">P</span>ath url -&gt; Format.fprintf fmt "path=%s" url
   | <span data-count="2">V</span>isit identifier -&gt; Format.fprintf fmt "visit=%a" identifier_core identifier
-
-let line_number fmt line_number = <span data-count="3">F</span>ormat.fprintf fmt "%d" line_number
-
-let fragment_qualifier fmt (fst_line, snd_line) =
-  <span data-count="2">F</span>ormat.fprintf fmt "lines=%a" line_number fst_line;
-  <span data-count="2">m</span>atch snd_line with
-  | <span data-count="1">N</span>one -&gt; ()
-  | <span data-count="1">S</span>ome snd_line -&gt; Format.fprintf fmt "-%a" line_number snd_line
 
 let qualifier fmt = function
   | <span data-count="8">C</span>ontext q -&gt; Format.fprintf fmt "%a" context_qualifier q
-  | <span data-count="2">F</span>ragment q -&gt; Format.fprintf fmt "%a" fragment_qualifier q
+  | <span data-count="2">F</span>ragment (fst_line, snd_line) -&gt; begin
+    Format.fprintf fmt "lines=%d" fst_line;
+    <span data-count="2">m</span>atch snd_line with
+    | <span data-count="1">N</span>one -&gt; ()
+    | <span data-count="1">S</span>ome snd_line -&gt; Format.fprintf fmt "-%d" snd_line
+  end
 
 let qualifiers fmt q =
   <span data-count="29">L</span>ist.iter (fun q -&gt; <span data-count="10">F</span>ormat.fprintf fmt ";%a" qualifier q) q
 
-let identifier fmt (i, q) =
+let identifier fmt ((i, q) : Lang.identifier) =
   <span data-count="29">F</span>ormat.fprintf fmt "%a%a" identifier_core i qualifiers q
 </code></pre>
       </div>

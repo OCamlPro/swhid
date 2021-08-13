@@ -406,7 +406,7 @@ let content_identifier content : Lang.identifier option =
 let directory_identifier entries : Lang.identifier option =
   <span data-count="3">L</span>ist.iter
     (fun entry -&gt;
-      <span data-count="18">i</span>f Lang.target_invalid entry.target then
+      <span data-count="18">i</span>f Lang.object_id_invalid entry.target then
         <span data-count="1">r</span>aise @@ Invalid_argument "target must be of length 40" )
     entries;
   <span data-count="2">l</span>et entries =
@@ -438,7 +438,7 @@ let directory_identifier entries : Lang.identifier option =
 (** Compute the software heritage identifier for a given release *)
 let release_identifier ~target target_type ~name ~author ~date ~message :
     Lang.identifier option =
-  <span data-count="7">i</span>f Lang.target_invalid target then
+  <span data-count="7">i</span>f Lang.object_id_invalid target then
     <span data-count="1">r</span>ais<span data-count="0">e</span> @@ Invalid_argument "target must be of length 40";
 
   <span data-count="6">l</span>et buff = Buffer.create 512 in
@@ -474,7 +474,7 @@ let release_identifier ~target target_type ~name ~author ~date ~message :
 (** Compute the software heritage identifier for a given revision *)
 let revision_identifier directory parents ~author ~author_date ~committer
     ~committer_date extra_headers message : Lang.identifier option =
-  <span data-count="8">i</span>f List.exists Lang.target_invalid (directory :: parents) then
+  <span data-count="8">i</span>f List.exists Lang.object_id_invalid (directory :: parents) then
     <span data-count="1">r</span>ais<span data-count="0">e</span>
     @@ Invalid_argument "target (directory and parents) must be of length 40";
 
