@@ -1,9 +1,3 @@
-type url_escaped = string
-
-type path_absolute_escaped = string
-
-type scheme_version = int
-
 type object_type =
   | Content of string (* hash *)
   | Directory
@@ -11,21 +5,21 @@ type object_type =
   | Revision
   | Snapshot
 
-type object_id = string (* this always has a length of 40 digit *)
+(** this always has a length of 40 digit *)
+type object_id = string
 
-type line_number = int
-
-type identifier_core = scheme_version * object_type * object_id
+(** scheme_version, object_id and object_id*)
+type identifier_core = int * object_type * object_id
 
 type context_qualifier =
   | Anchor of identifier_core
-  | Origin of url_escaped
-  | Path of path_absolute_escaped
+  | Origin of string
+  | Path of string
   | Visit of identifier_core
 
 type qualifier =
-  | Context of context_qualifier
-  | Fragment of (line_number * line_number option)
+  | Context of context_qualifier  (** either a context *)
+  | Fragment of (int * int option)  (** or a fragment (a line number or two) *)
 
 type qualifiers = qualifier list
 
@@ -39,7 +33,7 @@ let object_type_of_string = function
   | "cnt" -> Some (Content "sha1")
   | _s -> None
 
-let target_invalid target =
+let object_id_invalid (target : object_id) =
   String.length target <> 40
   ||
   try
@@ -54,26 +48,26 @@ let target_invalid target =
   with
   | Exit -> true
 
-let object_id_from_string s =
-  if target_invalid s then
+let object_id_from_string (s : string) : object_id option =
+  if object_id_invalid s then
     None
   else
     Some s
 
-let content ?(hash_type = "sha1") id qualifiers =
+let content ?(hash_type = "sha1") id qualifiers : identifier =
   ((1, Content hash_type, id), qualifiers)
 
-let directory id qualifiers = ((1, Directory, id), qualifiers)
+let directory id qualifiers : identifier = ((1, Directory, id), qualifiers)
 
-let snapshot id qualifiers = ((1, Snapshot, id), qualifiers)
+let snapshot id qualifiers : identifier = ((1, Snapshot, id), qualifiers)
 
-let revision id qualifiers = ((1, Revision, id), qualifiers)
+let revision id qualifiers : identifier = ((1, Revision, id), qualifiers)
 
-let release id qualifiers = ((1, Release, id), qualifiers)
+let release id qualifiers : identifier = ((1, Release, id), qualifiers)
 
 let get_object_id
     (((_scheme_version, _object_type, object_id), _qualifiers) : identifier) :
-    string =
+    object_id =
   object_id
 
 let get_object_type
@@ -89,5 +83,5 @@ type directory_entry =
   { typ : string
   ; permissions : int
   ; name : string
-  ; target : string
+  ; target : object_id
   }

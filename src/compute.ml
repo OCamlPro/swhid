@@ -29,7 +29,7 @@ let content_identifier content : Lang.identifier option =
 let directory_identifier entries : Lang.identifier option =
   List.iter
     (fun entry ->
-      if Lang.target_invalid entry.target then
+      if Lang.object_id_invalid entry.target then
         raise @@ Invalid_argument "target must be of length 40" )
     entries;
   let entries =
@@ -61,7 +61,7 @@ let directory_identifier entries : Lang.identifier option =
 (** Compute the software heritage identifier for a given release *)
 let release_identifier ~target target_type ~name ~author ~date ~message :
     Lang.identifier option =
-  if Lang.target_invalid target then
+  if Lang.object_id_invalid target then
     raise @@ Invalid_argument "target must be of length 40";
 
   let buff = Buffer.create 512 in
@@ -97,7 +97,7 @@ let release_identifier ~target target_type ~name ~author ~date ~message :
 (** Compute the software heritage identifier for a given revision *)
 let revision_identifier directory parents ~author ~author_date ~committer
     ~committer_date extra_headers message : Lang.identifier option =
-  if List.exists Lang.target_invalid (directory :: parents) then
+  if List.exists Lang.object_id_invalid (directory :: parents) then
     raise
     @@ Invalid_argument "target (directory and parents) must be of length 40";
 
