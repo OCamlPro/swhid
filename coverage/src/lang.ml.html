@@ -107,6 +107,13 @@
 <a id="L84"></a><span > </span>
 <a id="L85"></a><span > </span>
 <a id="L86"></a><span > </span>
+<a id="L87"></a><span > </span>
+<a id="L88"></a><span > </span>
+<a id="L89"></a><span > </span>
+<a id="L90"></a><span > </span>
+<a id="L91"></a><span > </span>
+<a id="L92"></a><span > </span>
+<a id="L93"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -197,6 +204,13 @@
 <a href="#L84">84</a>
 <a href="#L85">85</a>
 <a href="#L86">86</a>
+<a href="#L87">87</a>
+<a href="#L88">88</a>
+<a href="#L89">89</a>
+<a href="#L90">90</a>
+<a href="#L91">91</a>
+<a href="#L92">92</a>
+<a href="#L93">93</a>
 </pre>
 <pre><code class="ocaml">type url_escaped = string
 
@@ -284,6 +298,13 @@ let get_object_type
 exception Parser_error of string
 
 exception Lexer_error of string
+
+type directory_entry =
+  { typ : string
+  ; permissions : int
+  ; name : string
+  ; target : string
+  }
 </code></pre>
       </div>
     </div>
