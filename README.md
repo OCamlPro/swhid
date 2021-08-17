@@ -17,7 +17,7 @@ For more, have a look at the [example] folder or at the [documentation].
 [example]: ./example/
 [LICENSE]: ./LICENSE.md
 
-[documentation]: https://ocamlpro.github.io/swhid/api/
+[documentation]: https://ocamlpro.github.io/swhid/api/swhid/
 [OCaml]: https://ocaml.org
 [persistent identifiers]: https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html
 [Software Heritage]: https://www.softwareheritage.org
