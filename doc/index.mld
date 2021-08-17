@@ -1,6 +1,6 @@
 {0 swhid}
 
-swhid is an {{:https://ocaml.org} OCaml} library to work with {{:https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html} persistent identifiers} found in {{:https://www.softwareheritage.org} Software Heritage}, also known as swhid.
+{{:https://ocamlpro.github.io/swhid/} swhid} is an {{:https://ocaml.org} OCaml} library to work with {{:https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html} persistent identifiers} found in {{:https://www.softwareheritage.org} Software Heritage}, also known as swhid.
 
 {1:api API}
 
