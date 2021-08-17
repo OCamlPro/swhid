@@ -69,20 +69,20 @@
 <a href="#L18">18</a>
 <a href="#L19">19</a>
 </pre>
-<pre><code class="ocaml">(** [parse buf] parses a swhid from the [buf] [Stdlib.Lexing.lexbuf] *)
+<pre><code class="ocaml">(** [parse buf] parses a swhid from the [buf] [Stdlib.Lexing.lexbuf]. *)
 let parse buf =
   <span data-count="30">t</span>ry Ok (Menhir_parser.identifie<span data-count="8">r</span> Lexer.token buf) with
   | <span data-count="11">L</span>ang.Parser_error s -&gt; Error (Format.sprint<span data-count="11">f</span> "parser error: %s" s)
   | <span data-count="9">M</span>enhir_parser.Error -&gt; Error (Format.sprint<span data-count="9">f</span> "parser error: Syntax error")
   | <span data-count="2">L</span>ang.Lexer_error s -&gt; Error (Format.sprint<span data-count="2">f</span> "lexer error: %s" s)
 
-(** [from_string s] parses a swhid from string [s] *)
+(** [from_string s] parses a swhid from string [s]. *)
 let from_string s = <span data-count="30">p</span>arse (Lexing.from_strin<span data-count="30">g</span> s)
 
 (** [from_channel c] parses a swhid from channel [c] *)
 let from_channel c = <span data-count="0">p</span>arse (Lexing.from_channe<span data-count="0">l</span> c)
 
-(** [from_file f] parses a swhid from the file of name [f] *)
+(** [from_file f] parses a swhid from the file of name [f]. *)
 let from_file f =
   <span data-count="0">l</span>et chan = open_in f in
   <span data-count="0">l</span>et result = parse (Lexing.from_channe<span data-count="0">l</span> chan) in

@@ -17,12 +17,12 @@
       <h2>86.36%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="top:11.94%"></span>
-      <span class="unvisited" style="top:41.79%"></span>
-      <span class="unvisited" style="top:43.28%"></span>
-      <span class="unvisited" style="bottom:49.25%"></span>
-      <span class="unvisited" style="bottom:44.78%"></span>
-      <span class="unvisited" style="bottom:2.99%"></span>
+      <span class="unvisited" style="top:11.76%"></span>
+      <span class="unvisited" style="top:41.18%"></span>
+      <span class="unvisited" style="top:42.65%"></span>
+      <span class="unvisited" style="top:50.00%"></span>
+      <span class="unvisited" style="bottom:45.59%"></span>
+      <span class="unvisited" style="bottom:4.41%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
@@ -94,6 +94,7 @@
 <a id="L65"></a><span class="unvisited"> </span>
 <a id="L66"></a><span class="visited"> </span>
 <a id="L67"></a><span > </span>
+<a id="L68"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -165,6 +166,7 @@
 <a href="#L65">65</a>
 <a href="#L66">66</a>
 <a href="#L67">67</a>
+<a href="#L68">68</a>
 </pre>
 <pre><code class="ocaml">let target_type_to_git =
   let open Lang in
@@ -227,12 +229,13 @@ let format_offset fmt (offset, negative_utc) =
   let minutes = offset mod 60 in
   Format.fprintf fmt "%s%02d%02d" sign hours minutes
 
-let format_author_data fmt (author, date_offset) =
+let format_author_data fmt (author, date) =
   <span data-count="19">F</span>ormat.fprintf fmt "%s" author;
-  <span data-count="19">m</span>atch date_offset with
+  <span data-count="19">m</span>atch date with
   | <span data-count="0">N</span>one -&gt; ()
-  | <span data-count="19">S</span>ome (timestamp, offset, negative_utc) -&gt;
-    Format.fprintf fmt " %d %a" timestamp format_offset (offset, negative_utc)
+  | <span data-count="19">S</span>ome d -&gt;
+    Format.fprintf fmt " %d %a" d.Lang.timestamp format_offset
+      (d.tz_offset, d.negative_utc)
 </code></pre>
       </div>
     </div>
