@@ -27,7 +27,7 @@ jobs:
       - name: api
         run: |
           opam exec -- dune build @doc
-          mv _build/default/_doc/_html doc/api
+          mv _build/default/_doc/_html/swhid doc/api
       - name: coverage
         run: |
           opam exec -- dune runtest --instrument-with bisect_ppx
