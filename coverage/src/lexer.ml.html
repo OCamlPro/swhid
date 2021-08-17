@@ -716,7 +716,7 @@
 </pre>
 <pre><code class="ocaml"># 1 "src/lexer.mll"
   open Menhir_parser
-
+  exception Error of string
 
 # 6 "src/lexer.ml"
 let __ocaml_lex_tables = {
@@ -1049,7 +1049,7 @@ let
 
   | <span data-count="2">8</span> -&gt;
 # 20 "src/lexer.mll"
-            ( raise (Lang.Lexer_error ("Unexpected char: " ^ Lexing.lexem<span data-count="2">e</span> lexbuf)) )
+            ( raise (Error ("Unexpected char: " ^ Lexing.lexem<span data-count="2">e</span> lexbuf)) )
 # 338 "src/lexer.ml"
 
   | <span data-count="0">_</span>_ocaml_lex_state -&gt; lexbuf.Lexing.refill_buff lexbuf;
