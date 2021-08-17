@@ -4,7 +4,9 @@
 
 (license ISC)
 
-(authors "OCamlPro <contact@ocamlpro.com>")
+(authors "Léo Andrès <contact@ndrs.fr>, Dario Pinto <dario.pinto@ocamlpro.com>")
+
+(maintainers "Léo Andrès <contact@ndrs.fr>, Dario Pinto <dario.pinto@ocamlpro.com>")
 
 (source
  (github ocamlpro/swhid))

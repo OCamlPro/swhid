@@ -3,7 +3,12 @@ opam-version: "2.0"
 synopsis: "OCaml library to work with Software Heritage identifiers"
 description:
   "swhid is an OCaml library to work with persistent identifiers found in Software Heritage"
-authors: ["OCamlPro <contact@ocamlpro.com>"]
+maintainer: [
+  "Léo Andrès <contact@ndrs.fr>, Dario Pinto <dario.pinto@ocamlpro.com>"
+]
+authors: [
+  "Léo Andrès <contact@ndrs.fr>, Dario Pinto <dario.pinto@ocamlpro.com>"
+]
 license: "ISC"
 homepage: "https://github.com/ocamlpro/swhid"
 bug-reports: "https://github.com/ocamlpro/swhid/issues"
