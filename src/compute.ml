@@ -2,10 +2,26 @@
     object. Supported objects are [content], [directory], [release], [revision]
     and [snapshot]. The origins and visits objects are not supported. To learn
     more about the different object types and identifiers see the
-    {{:https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html}
+    {{:https://docs.softwareheritage.org/devel/swh-model/data-model.html#software-artifacts}
     software heritage documentation}.*)
 
 open Lang
+
+(** The type for directory entries list, needed to compute directories
+    identifiers. *)
+type directory_entry =
+  { typ : string  (** e.g. "file", "dir" or "rev" *)
+  ; permissions : int
+  ; name : string
+  ; target : object_id
+  }
+
+(** The type for dates, needed to compute releases and revisions identifiers. *)
+type date =
+  { timestamp : int
+  ; tz_offset : int
+  ; negative_utc : bool
+  }
 
 (** [content_identifier s] computes the swhid for the [s] content. [s] is the
     raw content of a file as a [string].
@@ -83,7 +99,9 @@ let release_identifier target target_type name ~author date ~message :
     | None -> ()
     | Some author ->
       Format.fprintf fmt "tagger %a%c" Git.format_author_data
-        (Git.escape_newlines author, date)
+        ( Git.escape_newlines author
+        , Option.map (fun o -> (o.timestamp, o.tz_offset, o.negative_utc)) date
+        )
         '\n'
   end;
 
@@ -120,11 +138,17 @@ let revision_identifier directory parents ~author ~author_date ~committer
   List.iter (fun parent -> Format.fprintf fmt "parent %s%c" parent '\n') parents;
 
   Format.fprintf fmt "author %a%c" Git.format_author_data
-    (Git.escape_newlines author, author_date)
+    ( Git.escape_newlines author
+    , Option.map
+        (fun o -> (o.timestamp, o.tz_offset, o.negative_utc))
+        author_date )
     '\n';
 
   Format.fprintf fmt "committer %a%c" Git.format_author_data
-    (Git.escape_newlines committer, committer_date)
+    ( Git.escape_newlines committer
+    , Option.map
+        (fun o -> (o.timestamp, o.tz_offset, o.negative_utc))
+        committer_date )
     '\n';
 
   Array.iter
@@ -145,7 +169,7 @@ let revision_identifier directory parents ~author ~author_date ~committer
 
   Git.object_to_swhid git_object [] Lang.revision
 
-(** [snapshot_identifier branches] computes the swid of the snapshot made of
+(** [snapshot_identifier branches] computes the swhid of the snapshot made of
     branches [branches] where [branches] is a list of branch elements. Each
     branch is of the form [name, target] where [name] is the name of the branch
     and where [target] is a pair made of the identifier of the branch and its

@@ -1,16 +1,16 @@
 let test_cases =
-  [ ( Swhids.Lang.content ~hash_type:"sha1_git"
+  [ ( Swhid.Lang.content ~hash_type:"sha1_git"
         "7bdf38d4468c114206c9b6ebd9cf1176e085d346" []
     , Ok
         [ Ok
             "https://archive.softwareheritage.org/api/1/content/sha1_git:7bdf38d4468c114206c9b6ebd9cf1176e085d346/raw/"
         ] )
-  ; ( Swhids.Lang.release "208f61cc7a5dbc9879ae6e5c2f95891e270f09ef" []
+  ; ( Swhid.Lang.release "208f61cc7a5dbc9879ae6e5c2f95891e270f09ef" []
     , Ok
         [ Ok
             "https://archive.softwareheritage.org/api/1/vault/directory/4453cfbdab1a996658cd1a815711664ee7742380/raw/"
         ] )
-  ; ( Swhids.Lang.snapshot "6a3a2cf0b2b90ce7ae1cf0a221ed68035b686f5a" []
+  ; ( Swhid.Lang.snapshot "6a3a2cf0b2b90ce7ae1cf0a221ed68035b686f5a" []
     , Ok
         [ Ok
             "https://archive.softwareheritage.org/api/1/vault/directory/eb4f88b555061f611d4d7182a0a36e5e771a73ad/raw/"
@@ -41,10 +41,10 @@ let () =
   else
     List.iter
       (fun (identifier, expected_result) ->
-        let result = Swhids.Download.any identifier in
+        let result = Swhid.Download.any identifier in
         let ok = result = expected_result in
         if not ok then begin
-          Format.eprintf "test failed for identifier %a@." Swhids.Pp.identifier
+          Format.eprintf "test failed for identifier %a@." Swhid.Pp.identifier
             identifier;
           Format.eprintf "expected: %a@." pp_result expected_result;
           Format.eprintf "got: %a@." pp_result result;

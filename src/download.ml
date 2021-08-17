@@ -125,7 +125,7 @@ let snapshot =
           Ok (List.map (fun (f, x) -> f x) requests) )
 
 (** For any object identifier, compute a list of URLs from which the object can
-    be downloaded. For all kind of object, the list should contain a signe URL
+    be downloaded. For all kind of object, the list should contain a single URL
     except for snapshot objects which may lead to a list of many URLs (one URL
     per branch). *)
 let any (identifier : Lang.identifier) :

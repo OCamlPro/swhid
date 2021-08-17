@@ -1,4 +1,4 @@
-open Swhids.Lang
+open Swhid.Lang
 
 (* test content_identifier *)
 let () =
@@ -9,13 +9,13 @@ let () =
   in
   Array.iter
     (fun (content, expected_identifier) ->
-      let result = Swhids.Compute.content_identifier content in
+      let result = Swhid.Compute.content_identifier content in
       let result =
         match result with
         | None -> assert false
         | Some result -> result
       in
-      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         Format.eprintf
@@ -38,7 +38,11 @@ let () =
        , Revision
        , "v2.6.14"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some { timestamp = 1130457753; tz_offset = -420; negative_utc = false }
+       , Some
+           { Swhid.Compute.timestamp = 1130457753
+           ; tz_offset = -420
+           ; negative_utc = false
+           }
        , Some
            "Linux 2.6.14 release\n\
             -----BEGIN PGP SIGNATURE-----\n\
@@ -101,7 +105,7 @@ let () =
   Array.iter
     (fun (target, target_type, name, author, date, message, expected_identifier) ->
       let result =
-        Swhids.Compute.release_identifier target target_type name ~author date
+        Swhid.Compute.release_identifier target target_type name ~author date
           ~message
       in
       let result =
@@ -110,7 +114,7 @@ let () =
         | Some result -> result
       in
       let count = counter () in
-      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         Format.eprintf
@@ -133,9 +137,17 @@ let () =
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
+       , Some
+           { Swhid.Compute.timestamp = 1436739030
+           ; tz_offset = -420
+           ; negative_utc = false
+           }
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
+       , Some
+           { Swhid.Compute.timestamp = 1436739030
+           ; tz_offset = -420
+           ; negative_utc = false
+           }
        , Some "Linux 4.2-rc2\n"
        , [||] )
        (* synthetic rev *)
@@ -241,8 +253,8 @@ let () =
          , message
          , extra_headers ) ->
       let result =
-        Swhids.Compute.revision_identifier directory parents ~author
-          ~author_date ~committer ~committer_date extra_headers message
+        Swhid.Compute.revision_identifier directory parents ~author ~author_date
+          ~committer ~committer_date extra_headers message
       in
       let result =
         match result with
@@ -250,7 +262,7 @@ let () =
         | Some result -> result
       in
       let count = counter () in
-      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         Format.eprintf
@@ -263,12 +275,11 @@ let () =
 (* test directory identifier *)
 let () =
   let test_cases =
-    let open Swhids.Lang in
     [| (* empty directory *)
        ("swh:1:dir:4b825dc642cb6eb9a060e54bf8d69288fbee4904", [])
      ; (* swh example *)
        ( "swh:1:dir:d7ed3d2c31d608823be58b1cbe57605310615231"
-       , [ { typ = "file"
+       , [ { Swhid.Compute.typ = "file"
            ; permissions = 33188
            ; name = "README"
            ; target = "37ec8ea2110c0b7a32fbb0e872f6e7debbf95e21"
@@ -358,13 +369,13 @@ let () =
   in
   Array.iter
     (fun (expected_identifier, entries) ->
-      let result = Swhids.Compute.directory_identifier entries in
+      let result = Swhid.Compute.directory_identifier entries in
       let result =
         match result with
         | None -> assert false
         | Some result -> result
       in
-      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         Format.eprintf
@@ -403,13 +414,13 @@ let () =
   in
   Array.iter
     (fun (expected_identifier, branches) ->
-      let result = Swhids.Compute.snapshot_identifier branches in
+      let result = Swhid.Compute.snapshot_identifier branches in
       let result =
         match result with
         | None -> assert false
         | Some result -> result
       in
-      let result = Format.asprintf "%a" Swhids.Pp.identifier result in
+      let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
       if not ok then
         Format.eprintf
@@ -424,7 +435,7 @@ let () =
   begin
     try
       let _id =
-        Swhids.Compute.directory_identifier
+        Swhid.Compute.directory_identifier
           [ { typ = "rambo"; permissions = 3; name = "rambo"; target = "bine" }
           ]
       in
@@ -436,7 +447,7 @@ let () =
   begin
     try
       let _id =
-        Swhids.Compute.release_identifier "rust" Release "" ~author:None None
+        Swhid.Compute.release_identifier "rust" Release "" ~author:None None
           ~message:None
       in
       assert false
@@ -447,7 +458,7 @@ let () =
   begin
     try
       let _id =
-        Swhids.Compute.revision_identifier "yo" [ "lo" ] ~author:"Bach"
+        Swhid.Compute.revision_identifier "yo" [ "lo" ] ~author:"Bach"
           ~author_date:None ~committer:"Hélène Grimaud" ~committer_date:None
           [||] None
       in
@@ -457,7 +468,7 @@ let () =
   end;
   try
     let _id =
-      Swhids.Compute.snapshot_identifier [ ("do u know", Some ("bar", "àvin")) ]
+      Swhid.Compute.snapshot_identifier [ ("do u know", Some ("bar", "àvin")) ]
     in
     assert false
   with

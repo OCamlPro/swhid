@@ -15,7 +15,8 @@ let id_to_bytes id =
       let c2 = String.get id ((2 * i) + 1) in
       Char.chr @@ int_of_string @@ Format.sprintf "0x%c%c" c1 c2 )
 
-let object_to_swhid obj qualifiers mk_id =
+let object_to_swhid (obj : string) (qualifiers : Lang.qualifier list) mk_id :
+    Lang.identifier option =
   let hexdigest = Digestif.SHA1.to_hex @@ Digestif.SHA1.digest_string obj in
   Option.map
     (fun obj -> mk_id obj qualifiers)
@@ -63,6 +64,5 @@ let format_author_data fmt (author, date) =
   Format.fprintf fmt "%s" author;
   match date with
   | None -> ()
-  | Some d ->
-    Format.fprintf fmt " %d %a" d.Lang.timestamp format_offset
-      (d.tz_offset, d.negative_utc)
+  | Some (timestamp, tz_offset, negative_utc) ->
+    Format.fprintf fmt " %d %a" timestamp format_offset (tz_offset, negative_utc)

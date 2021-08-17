@@ -12,10 +12,10 @@ let () =
   in
   Array.iter
     (fun input ->
-      match Swhids.Parser.from_string input with
+      match Swhid.Parser.from_string input with
       | Error _s -> assert false
       | Ok res ->
-        let result = Format.asprintf "%a" Swhids.Pp.identifier res in
+        let result = Format.asprintf "%a" Swhid.Pp.identifier res in
         let ok = input = result in
         if not ok then
           Format.eprintf
@@ -70,21 +70,21 @@ let () =
         *)
        (* Syntax error, negative line *)
      ; ( "swh:1:cnt:4d99d2d18326621ccdd70f5ea66c2e2ac236ad8b;origin=https://gitorious.org/ocamlp3l/ocamlp3l_cvs.git;visit=swh:1:snp:d7f1b9eb7ccb596c2622c4780febaa02549830f9;anchor=swh:1:rev:2db189928c94d62a3b4757b3eec68f0a4d4113f0;path=/Examples/SimpleFarm/simplefarm.ml;lines=-15"
-       , "parser error: Syntax error" )
-     ; ("", "parser error: Syntax error")
-     ; (":", "parser error: Syntax error")
-     ; (";", "parser error: Syntax error")
-     ; ("=", "parser error: Syntax error")
-     ; ("-", "parser error: Syntax error")
-     ; ("cC666/._", "parser error: Syntax error")
-     ; ("666", "parser error: Syntax error")
+       , "parser error: syntax error" )
+     ; ("", "parser error: syntax error")
+     ; (":", "parser error: syntax error")
+     ; (";", "parser error: syntax error")
+     ; ("=", "parser error: syntax error")
+     ; ("-", "parser error: syntax error")
+     ; ("cC666/._", "parser error: syntax error")
+     ; ("666", "parser error: syntax error")
      ; ( "https://gitorious.org/ocamlp3l/ocamlp3l_cvs.git"
-       , "parser error: Syntax error" )
+       , "parser error: syntax error" )
     |]
   in
   Array.iter
     (fun (input, err_msg) ->
-      match Swhids.Parser.from_string input with
+      match Swhid.Parser.from_string input with
       | Ok _res -> assert false
       | Error error ->
         let ok = error = err_msg in

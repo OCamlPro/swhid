@@ -1,6 +1,5 @@
 %{
 open Lang
-
   %}
 
 %token EOF

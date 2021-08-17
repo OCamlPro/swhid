@@ -1,5 +1,5 @@
 { open Menhir_parser
-
+  exception Error of string
 }
 
 let linebreak = ['\n' '\r']
@@ -17,4 +17,4 @@ rule token = parse
         | str as id {STR id}
         | url as id {URL id}
         | eof { EOF }
-        | _ { raise (Lang.Lexer_error ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
+        | _ { raise (Error ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }

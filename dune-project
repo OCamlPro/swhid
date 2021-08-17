@@ -1,23 +1,23 @@
 (lang dune 2.8)
 
-(name swhids)
+(name swhid)
 
 (license ISC)
 
 (authors "OCamlPro <contact@ocamlpro.com>")
 
 (source
- (github ocamlpro/swhids))
+ (github ocamlpro/swhid))
 
 (generate_opam_files true)
 
 (using menhir 2.1)
 
 (package
- (name swhids)
+ (name swhid)
  (synopsis "OCaml library to work with Software Heritage identifiers")
  (description
-  "swhids is an OCaml library to work with Software Heritage identifiers")
+  "swhid is an OCaml library to work with persistent identifiers found in Software Heritage")
  (depends
   (ocaml
    (>= 4.0.8))
