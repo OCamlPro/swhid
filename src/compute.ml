@@ -1,6 +1,9 @@
 (** This module provides various functions to compute the swhid of a given
     object. Supported objects are [content], [directory], [release], [revision]
-    and [snapshot]. The origins and visits objects are not supported. *)
+    and [snapshot]. The origins and visits objects are not supported. To learn
+    more about the different object types and identifiers see the
+    {{:https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html}
+    software heritage documentation}.*)
 
 open Lang
 
@@ -58,8 +61,12 @@ let directory_identifier entries : Lang.identifier option =
   let git_object = Git.object_from_contents Directory content in
   Git.object_to_swhid git_object [] Lang.directory
 
-(** Compute the software heritage identifier for a given release *)
-let release_identifier ~target target_type ~name ~author ~date ~message :
+(** [release_identifier target target_type name ~author date ~message] computes
+    the swhid for a release object poiting to an object of type [target_type]
+    whose identifier is [target], the release having name [name], author
+    [~author] and has been published on [date] with the release message
+    [~message]. *)
+let release_identifier target target_type name ~author date ~message :
     Lang.identifier option =
   if Lang.object_id_invalid target then
     raise @@ Invalid_argument "target must be of length 40";
@@ -94,7 +101,11 @@ let release_identifier ~target target_type ~name ~author ~date ~message :
 
   Git.object_to_swhid git_object [] Lang.release
 
-(** Compute the software heritage identifier for a given revision *)
+(** [revision dir parents ~author ~author_date ~committer ~committer_date extra_headers message]
+    computes the swhid for a revision object whose directory has id [dir] and
+    whose parents has ids [parents] which was authored by [~author] on
+    [~author_date] and committed by [~committer] on [~committer_date] with extra
+    headers [extra_headers] and message [message]. *)
 let revision_identifier directory parents ~author ~author_date ~committer
     ~committer_date extra_headers message : Lang.identifier option =
   if List.exists Lang.object_id_invalid (directory :: parents) then
@@ -134,8 +145,13 @@ let revision_identifier directory parents ~author ~author_date ~committer
 
   Git.object_to_swhid git_object [] Lang.revision
 
-(** Compute the software heritage identifier for a given snapshot *)
-let snapshot_identifier branches : Lang.identifier option =
+(** [snapshot_identifier branches] computes the swid of the snapshot made of
+    branches [branches] where [branches] is a list of branch elements. Each
+    branch is of the form [name, target] where [name] is the name of the branch
+    and where [target] is a pair made of the identifier of the branch and its
+    type. *)
+let snapshot_identifier (branches : (string * (string * string) option) list) :
+    Lang.identifier option =
   let branches =
     List.sort
       (fun (name1, _target) (name2, _target) -> String.compare name1 name2)

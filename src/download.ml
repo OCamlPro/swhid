@@ -1,5 +1,5 @@
 (** The base URL of the software heritage instance used, defaults to
-    `https://archive.softwareheritage.org` *)
+    [https://archive.softwareheritage.org]. *)
 let instance = ref "https://archive.softwareheritage.org"
 
 (**/**)
@@ -22,7 +22,7 @@ let on_response url f =
 (**/**)
 
 (** For a given content identifier, compute an URL from which the content can be
-    downloaded *)
+    downloaded. *)
 let content ?hash_type (hash : Lang.object_id) =
   let url =
     match hash_type with
@@ -36,7 +36,7 @@ let content ?hash_type (hash : Lang.object_id) =
       | None -> field_not_found field )
 
 (** For a given directory identifier, compute an URL from which the directory
-    can be downloaded *)
+    can be downloaded. *)
 let directory (hash : Lang.object_id) =
   let url = url (Format.sprintf "/vault/directory/%s/" hash) in
   match Ezcurl.post ~params:[] ~url () with
@@ -54,7 +54,7 @@ let directory (hash : Lang.object_id) =
           | None -> field_not_found field ) )
 
 (** For a given revision identifier, compute an URL from which the revision can
-    be downloaded *)
+    be downloaded. *)
 let revision (hash : Lang.object_id) =
   let url = url (Format.sprintf "/revision/%s/" hash) in
   on_response url (fun response ->
@@ -64,7 +64,7 @@ let revision (hash : Lang.object_id) =
       | Some dir -> directory dir )
 
 (** For a given release identifier, compute an URL from which the release can be
-    downloaded *)
+    downloaded. *)
 let rec release (hash : Lang.object_id) =
   let url = url (Format.sprintf "/release/%s/" hash) in
 
@@ -86,6 +86,8 @@ let rec release (hash : Lang.object_id) =
             Error (Format.sprintf "unknown target type: `%s`" target_type)
         end ) )
 
+(** For a given snapshot identifier, compute a list of URL from which the
+    snapshot's branches can be downloaded. *)
 let snapshot =
   let go_through_objs = function
     | Json.Object o ->
@@ -122,8 +124,10 @@ let snapshot =
           in
           Ok (List.map (fun (f, x) -> f x) requests) )
 
-(** For any object identifier, compute an URL from which object can be
-    downloaded *)
+(** For any object identifier, compute a list of URLs from which the object can
+    be downloaded. For all kind of object, the list should contain a signe URL
+    except for snapshot objects which may lead to a list of many URLs (one URL
+    per branch). *)
 let any (identifier : Lang.identifier) :
     ((string, string) result list, string) Result.t =
   let object_id = Lang.get_object_id identifier in

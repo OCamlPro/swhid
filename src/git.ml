@@ -59,9 +59,10 @@ let format_offset fmt (offset, negative_utc) =
   let minutes = offset mod 60 in
   Format.fprintf fmt "%s%02d%02d" sign hours minutes
 
-let format_author_data fmt (author, date_offset) =
+let format_author_data fmt (author, date) =
   Format.fprintf fmt "%s" author;
-  match date_offset with
+  match date with
   | None -> ()
-  | Some (timestamp, offset, negative_utc) ->
-    Format.fprintf fmt " %d %a" timestamp format_offset (offset, negative_utc)
+  | Some d ->
+    Format.fprintf fmt " %d %a" d.Lang.timestamp format_offset
+      (d.tz_offset, d.negative_utc)

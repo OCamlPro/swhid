@@ -85,3 +85,9 @@ type directory_entry =
   ; name : string
   ; target : object_id
   }
+
+type date =
+  { timestamp : int
+  ; tz_offset : int
+  ; negative_utc : bool
+  }

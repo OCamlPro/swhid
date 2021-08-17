@@ -1,3 +1,5 @@
+open Swhids.Lang
+
 (* test content_identifier *)
 let () =
   let test_cases =
@@ -33,10 +35,10 @@ let () =
   in
   let test_cases =
     [| ( "741b2252a5e14d6c60a913c77a6099abe73a854a"
-       , Swhids.Lang.Revision
+       , Revision
        , "v2.6.14"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some (1130457753, -420, false)
+       , Some { timestamp = 1130457753; tz_offset = -420; negative_utc = false }
        , Some
            "Linux 2.6.14 release\n\
             -----BEGIN PGP SIGNATURE-----\n\
@@ -48,10 +50,10 @@ let () =
        , "swh:1:rel:2b10839e32c4c476e9d94492756bb1a3e1ec4aa8" )
        (* No author *)
      ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
-       , Swhids.Lang.Revision
+       , Revision
        , "v2.6.12"
        , None
-       , Some (1130457753, -420, false)
+       , Some { timestamp = 1130457753; tz_offset = -420; negative_utc = false }
        , Some
            "This is the final 2.6.12 release\n\
             -----BEGIN PGP SIGNATURE-----\n\
@@ -63,34 +65,34 @@ let () =
        , "swh:1:rel:26791a8bcf0e6d33f43aef7682bdb555236d56de" )
        (* No message *)
      ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
-       , Swhids.Lang.Revision
+       , Revision
        , "v2.6.12"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some (1130457753, -420, false)
+       , Some { timestamp = 1130457753; tz_offset = -420; negative_utc = false }
        , None
        , "swh:1:rel:b6f4f446715f7d9543ef54e41b62982f0db40045" )
        (* Empty message *)
      ; ( "9ee1c939d1cb936b1f98e8d81aeffab57bae46ab"
-       , Swhids.Lang.Revision
+       , Revision
        , "v2.6.12"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
-       , Some (1130457753, -420, false)
+       , Some { timestamp = 1130457753; tz_offset = -420; negative_utc = false }
        , Some ""
        , "swh:1:rel:71a0aea72444d396575dc25ac37fec87ee3c6492" )
        (* Negative utc *)
      ; ( "54e9abca4c77421e2921f5f156c9fe4a9f7441c7"
-       , Swhids.Lang.Revision
+       , Revision
        , "20081029"
        , Some "Otavio Salvador <otavio@debian.org>"
-       , Some (1225281976, 0, true)
+       , Some { timestamp = 1225281976; tz_offset = 0; negative_utc = true }
        , Some "tagging version 20081029\n\nr56558\n"
        , "swh:1:rel:97c8d2573a001f88e72d75f596cf86b12b82fd01" )
        (* newline in author *)
      ; ( "c06aa3d93b78a2865c4935170030f8c2d7396fd3"
-       , Swhids.Lang.Revision
+       , Revision
        , "0.3.2"
        , Some "Eugene Janusov\n<esycat@gmail.com>"
-       , Some (1377480558, 600, false)
+       , Some { timestamp = 1377480558; tz_offset = 600; negative_utc = false }
        , Some "Release of v0.3.2."
        , "swh:1:rel:5c98f559d034162de22d3ebeb95433e6f8885231" )
     |]
@@ -99,8 +101,8 @@ let () =
   Array.iter
     (fun (target, target_type, name, author, date, message, expected_identifier) ->
       let result =
-        Swhids.Compute.release_identifier ~target target_type ~name ~author
-          ~date ~message
+        Swhids.Compute.release_identifier target target_type name ~author date
+          ~message
       in
       let result =
         match result with
@@ -131,9 +133,9 @@ let () =
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, -420, false)
+       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, -420, false)
+       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
        , Some "Linux 4.2-rc2\n"
        , [||] )
        (* synthetic rev *)
@@ -141,9 +143,9 @@ let () =
        , "d11f00a6a0fea6055341d25584b5a96516c0d2b8"
        , []
        , "Software Heritage <robot@softwareheritage.org>"
-       , Some (1437047495, 0, false)
+       , Some { timestamp = 1437047495; tz_offset = 0; negative_utc = false }
        , "Software Heritage <robot@softwareheritage.org>"
-       , Some (1437047495, 0, false)
+       , Some { timestamp = 1437047495; tz_offset = 0; negative_utc = false }
        , Some "synthetic revision message\n"
        , [||] )
        (* with extra headers *)
@@ -151,9 +153,9 @@ let () =
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, -420, false)
+       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, -420, false)
+       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
        , Some "Linux 4.2-rc2\n"
        , [| ("svn-repo-uuid", "046f1af7-66c2-d61b-5410-ce57b7db7bff")
           ; ("svn-revision", "10")
@@ -165,9 +167,9 @@ let () =
          ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
          ]
        , "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 480, false)
+       , Some { timestamp = 1428538899; tz_offset = 480; negative_utc = false }
        , "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 480, false)
+       , Some { timestamp = 1428538899; tz_offset = 480; negative_utc = false }
        , Some
            "Merge branch 'master' of git://github.com/alexhenrie/git-po\n\n\
             * 'master' of git://github.com/alexhenrie/git-po:\n\
@@ -197,9 +199,9 @@ let () =
          ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
          ]
        , "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 480, false)
+       , Some { timestamp = 1428538899; tz_offset = 480; negative_utc = false }
        , "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 480, false)
+       , Some { timestamp = 1428538899; tz_offset = 480; negative_utc = false }
        , None
        , [||] )
        (* Empty message *)
@@ -209,9 +211,9 @@ let () =
          ; "c888305e1efbaa252d01b4e5e6b778f865a97514"
          ]
        , "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 480, false)
+       , Some { timestamp = 1428538899; tz_offset = 480; negative_utc = false }
        , "Jiang Xin <worldhello.net@gmail.com>"
-       , Some (1428538899, 480, false)
+       , Some { timestamp = 1428538899; tz_offset = 480; negative_utc = false }
        , Some ""
        , [||] )
        (* Only full name *)
@@ -219,9 +221,9 @@ let () =
        , "85a74718d377195e1efd0843ba4f3260bad4fe07"
        , [ "01e2d0627a9a6edb24c37db45db5ecb31e9de808" ]
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, -420, false)
+       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
        , "Linus Torvalds <torvalds@linux-foundation.org>"
-       , Some (1436739030, -420, false)
+       , Some { timestamp = 1436739030; tz_offset = -420; negative_utc = false }
        , Some "Linux 4.2-rc2\n"
        , [| ("svn-repo-uuid", "046f1af7-66c2-d61b-5410-ce57b7db7bff")
           ; ("svn-revision", "10")
@@ -434,8 +436,8 @@ let () =
   begin
     try
       let _id =
-        Swhids.Compute.release_identifier ~target:"rust" Swhids.Lang.Release
-          ~name:"" ~author:None ~date:None ~message:None
+        Swhids.Compute.release_identifier "rust" Release "" ~author:None None
+          ~message:None
       in
       assert false
     with
