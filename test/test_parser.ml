@@ -12,7 +12,7 @@ let () =
   in
   Array.iter
     (fun input ->
-      match Swhid.Parser.from_string input with
+      match Swhid.Parse.from_string input with
       | Error _s -> assert false
       | Ok res ->
         let result = Format.asprintf "%a" Swhid.Pp.identifier res in
@@ -84,7 +84,7 @@ let () =
   in
   Array.iter
     (fun (input, err_msg) ->
-      match Swhid.Parser.from_string input with
+      match Swhid.Parse.from_string input with
       | Ok _res -> assert false
       | Error error ->
         let ok = error = err_msg in
