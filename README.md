@@ -20,5 +20,5 @@ For more, have a look at the [example] folder or at the [documentation].
 [documentation]: https://ocamlpro.github.io/swhid/api/
 [OCaml]: https://ocaml.org
 [persistent identifiers]: https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html
-[Software Heritage]: https://www.softwareheritage.org/
+[Software Heritage]: https://www.softwareheritage.org
 [swhid]: https://ocamlpro.github.io/swhid/
