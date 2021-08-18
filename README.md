@@ -16,25 +16,23 @@ opam install swhid
 
 If you don't have `opam`, you can install it following the [how to install opam] guide.
 
-If you don't use `opam`, consult the [opam file] for build instructions.
+If you can't or don't want to use `opam`, consult the [opam file] for build instructions.
 
 ## Quickstart
 
 ```ocaml
 let id = "swh:1:rev:db21f0afdb54c16b265754ca599869fda0ca4bfc"
-let id = Swhid.Parse.from_string id
+
 let url =
-  match id with
-  | Error _e -> None
-  | Ok id ->
-    match Swhid.Download.revision (Swhid.Lang.get_object_id id) with
-    | Ok url -> Some url
-    | Error _e -> None
+  match Swhid.Parse.from_string id with
+  | Error e -> Error e
+  | Ok id -> Swhid.Download.revision id
 
 let () =
   match url with
-  | None -> Format.eprintf "can't get download URL@."
-  | Some url -> Format.printf "you can download the revision at the URL: `%s`@." url
+  | Error e -> Format.eprintf "can't get download URL: `%s`@." e
+  | Ok url ->
+    Format.printf "you can download the revision at the URL: `%s`@." url
 ```
 
 For more, have a look at the [example] folder, at the [documentation] or at the [test suite].

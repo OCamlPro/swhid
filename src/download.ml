@@ -21,23 +21,28 @@ let on_response url f =
 
 (**/**)
 
-(** For a given content identifier, compute an URL from which the content can be
-    downloaded. *)
-let content ?hash_type (hash : Lang.object_id) =
-  let url =
-    match hash_type with
-    | None -> url (Format.sprintf "/content/%s/" hash)
-    | Some hash_type -> url (Format.sprintf "/content/%s:%s/" hash_type hash)
-  in
+(** Same as [content] but expects an object identifier hash directly. *)
+let content_unsafe ~hash_type (hash : Lang.object_id) =
+  let url = url (Format.sprintf "/content/%s:%s/" hash_type hash) in
   on_response url (fun response ->
       let field = "data_url" in
       match Json.find_string field response with
       | Some data_url -> Ok data_url
       | None -> field_not_found field )
 
-(** For a given directory identifier, compute an URL from which the directory
-    can be downloaded. *)
-let directory (hash : Lang.object_id) =
+(** For a given content identifier, compute an URL from which the content can be
+    downloaded. *)
+let content id =
+  match Lang.get_object_type id with
+  | Content hash_type -> content_unsafe ~hash_type @@ Lang.get_object_id id
+  | Directory
+  | Release
+  | Revision
+  | Snapshot ->
+    Error "invalid object type (expected Content)"
+
+(** Same as [directory] but expects an object identifier hash directly. *)
+let directory_unsafe (hash : Lang.object_id) =
   let url = url (Format.sprintf "/vault/directory/%s/" hash) in
   match Ezcurl.post ~params:[] ~url () with
   | Error (code, msg) ->
@@ -53,19 +58,39 @@ let directory (hash : Lang.object_id) =
           | Some data_url -> Ok data_url
           | None -> field_not_found field ) )
 
-(** For a given revision identifier, compute an URL from which the revision can
-    be downloaded. *)
-let revision (hash : Lang.object_id) =
+(** For a given directory identifier, compute an URL from which the directory
+    can be downloaded. *)
+let directory id =
+  match Lang.get_object_type id with
+  | Directory -> directory_unsafe @@ Lang.get_object_id id
+  | Content _
+  | Release
+  | Revision
+  | Snapshot ->
+    Error "invalid object type (expected Directory)"
+
+(** Same as [revision] but expects an object identifier hash directly. *)
+let revision_unsafe (hash : Lang.object_id) =
   let url = url (Format.sprintf "/revision/%s/" hash) in
   on_response url (fun response ->
       let field = "directory" in
       match Json.find_string field response with
       | None -> field_not_found field
-      | Some dir -> directory dir )
+      | Some dir -> directory_unsafe dir )
 
-(** For a given release identifier, compute an URL from which the release can be
-    downloaded. *)
-let rec release (hash : Lang.object_id) =
+(** For a given revision identifier, compute an URL from which the revision can
+    be downloaded. *)
+let revision id =
+  match Lang.get_object_type id with
+  | Revision -> revision_unsafe @@ Lang.get_object_id id
+  | Content _
+  | Release
+  | Directory
+  | Snapshot ->
+    Error "invalid object type (expected Revision)"
+
+(** Same as [release] but expects an object identifier hash directly. *)
+let rec release_unsafe (hash : Lang.object_id) =
   let url = url (Format.sprintf "/release/%s/" hash) in
 
   on_response url (fun response ->
@@ -78,27 +103,41 @@ let rec release (hash : Lang.object_id) =
         | None -> field_not_found field
         | Some target -> begin
           match target_type with
-          | "release" -> release target
-          | "revision" -> revision target
-          | "content" -> content target
-          | "directory" -> directory target
+          | "release" -> release_unsafe target
+          | "revision" -> revision_unsafe target
+          | "content" ->
+            (* TODO: get the correct hash type *)
+            content_unsafe target ~hash_type:"sha1_git"
+          | "directory" -> directory_unsafe target
           | target_type ->
             Error (Format.sprintf "unknown target type: `%s`" target_type)
         end ) )
 
-(** For a given snapshot identifier, compute a list of URL from which the
-    snapshot's branches can be downloaded. *)
-let snapshot =
+(** For a given release identifier, compute an URL from which the release can be
+    downloaded. *)
+let release id =
+  match Lang.get_object_type id with
+  | Release -> release_unsafe @@ Lang.get_object_id id
+  | Content _
+  | Revision
+  | Directory
+  | Snapshot ->
+    Error "invalid object type (expected Release)"
+
+(** Same as [snapshot] but expects an object identifier hash directly. *)
+let snapshot_unsafe =
   let go_through_objs = function
     | Json.Object o ->
       let rec aux target_type target jsonl =
         match (target_type, target) with
         | Some target_type, Some target -> begin
           match target_type with
-          | "revision" -> Some (revision, target)
-          | "release" -> Some (release, target)
-          | "content" -> Some (content ~hash_type:"sha1", target)
-          | "directory" -> Some (directory, target)
+          | "revision" -> Some (revision_unsafe, target)
+          | "release" -> Some (release_unsafe, target)
+          | "content" ->
+            (* TODO: fetch the correct hash_type *)
+            Some (content_unsafe ~hash_type:"sha1", target)
+          | "directory" -> Some (directory_unsafe, target)
           | _ -> None
         end
         | _ -> (
@@ -124,16 +163,51 @@ let snapshot =
           in
           Ok (List.map (fun (f, x) -> f x) requests) )
 
+(** For a given snapshot identifier, compute a list of URL from which the
+    snapshot's branches can be downloaded. *)
+let snapshot id =
+  match Lang.get_object_type id with
+  | Snapshot -> snapshot_unsafe @@ Lang.get_object_id id
+  | Content _
+  | Revision
+  | Directory
+  | Release ->
+    Error "invalid object type (expected Snapshot)"
+
 (** For any object identifier, compute a list of URLs from which the object can
     be downloaded. For all kind of object, the list should contain a single URL
     except for snapshot objects which may lead to a list of many URLs (one URL
-    per branch). *)
-let any (identifier : Lang.identifier) :
-    ((string, string) result list, string) Result.t =
-  let object_id = Lang.get_object_id identifier in
-  match Lang.get_object_type identifier with
-  | Lang.Content hash_type -> Ok [ content ~hash_type object_id ]
-  | Directory -> Ok [ directory object_id ]
-  | Release -> Ok [ release object_id ]
-  | Revision -> Ok [ revision object_id ]
-  | Snapshot -> snapshot object_id
+    per branch). In the snapshot branch, if a single error is encountered, then
+    the result will be an [Error] type with the list of all errors, and no URL
+    is returned (even if we succeeded to compute some of them).*)
+let any =
+  let extract_url = function
+    | Error e -> Error [ e ]
+    | Ok url -> Ok [ url ]
+  in
+  fun (identifier : Lang.identifier) : (string list, string list) Result.t ->
+    let object_id = Lang.get_object_id identifier in
+    match Lang.get_object_type identifier with
+    | Lang.Content hash_type ->
+      extract_url (content_unsafe ~hash_type object_id)
+    | Directory -> extract_url (directory_unsafe object_id)
+    | Release -> extract_url (release_unsafe object_id)
+    | Revision -> extract_url (revision_unsafe object_id)
+    | Snapshot -> (
+      match snapshot_unsafe object_id with
+      | Error e -> Error [ e ]
+      | Ok res ->
+        List.fold_left
+          (fun acc r ->
+            match acc with
+            | Ok url_list -> begin
+              match r with
+              | Ok url -> Ok (url :: url_list)
+              | Error e -> Error [ e ]
+            end
+            | Error error_list -> begin
+              match r with
+              | Ok _url -> Error error_list
+              | Error e -> Error (e :: error_list)
+            end )
+          (Ok []) res )

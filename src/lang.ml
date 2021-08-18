@@ -4,8 +4,8 @@
 type object_type =
   | Content of string
       (** The string parameter is the hash function name used for the
-          computation, defaults to "sha1" (in most cases, you don't care about
-          it) *)
+          computation, defaults to "sha1_git" (in most cases, you don't care
+          about it) *)
   | Directory
   | Release
   | Revision
@@ -55,7 +55,7 @@ let object_type_of_string = function
   | "rel" -> Some Release
   | "rev" -> Some Revision
   | "dir" -> Some Directory
-  | "cnt" -> Some (Content "sha1")
+  | "cnt" -> Some (Content "sha1_git")
   | _s -> None
 
 (** Checks if an [object_id] is invalid, i.e. if it's not of length 40 or if it
@@ -84,9 +84,9 @@ let object_id_from_string (s : string) : object_id option =
     Some s
 
 (** Builds a swhid of kind [content] from it's core id and a list of qualifiers.
-    The given hash defaults to [sha1] and you shouldn't care about it in most
-    cases. *)
-let content ?(hash_type = "sha1") id qualifiers : identifier =
+    The given hash defaults to ["sha1_git"] and you shouldn't care about it in
+    most cases. *)
+let content ?(hash_type = "sha1_git") id qualifiers : identifier =
   ((1, Content hash_type, id), qualifiers)
 
 (** Builds a swhid of kind [directory] from it's core id and a list of
