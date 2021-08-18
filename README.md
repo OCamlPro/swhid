@@ -1,6 +1,22 @@
 # swhid [![Actions Status](https://github.com/ocamlpro/swhid/workflows/build/badge.svg)](https://github.com/ocamlpro/swhid/actions) [![coverage percentage](https://raw.githubusercontent.com/ocamlpro/swhids/gh-pages/coverage/badge.svg)](https://ocamlpro.github.io/swhid/coverage/)
 
-[swhid] is an [OCaml] library to work with [persistent identifiers] found in [Software Heritage], also known as swhid.
+[swhid] is an [OCaml] library to work with [persistent identifiers] found in [Software Heritage], also known as swhid. It provides:
+
+* a parser and a printer for swhid
+* functions to compute a swhid for a given object (content, directory, revision, release, snapshot)
+* functions to query the swh API in order to get an URL from which you can download a given object 
+
+## Installation
+
+`swhid` can be installed with [opam]:
+
+```sh
+opam install swhid
+```
+
+If you don't have `opam`, you can install it following the [how to install opam] guide.
+
+If you don't use `opam`, consult the [opam file] for build instructions.
 
 ## Quickstart
 
@@ -21,7 +37,7 @@ let () =
   | Some url -> Format.printf "you can download the revision at the URL: `%s`@." url
 ```
 
-For more, have a look at the [example] folder or at the [documentation].
+For more, have a look at the [example] folder, at the [documentation] or at the [test suite].
 
 ## About
 
@@ -31,9 +47,13 @@ For more, have a look at the [example] folder or at the [documentation].
 [CHANGELOG]: ./CHANGES.md
 [example]: ./example/
 [LICENSE]: ./LICENSE.md
+[opam file]: ./swhid.opam
+[test suite]: ./test/
 
 [documentation]: https://ocamlpro.github.io/swhid/api/swhid/
+[how to install opam]: https://opam.ocaml.org/doc/Install.html
 [OCaml]: https://ocaml.org
+[opam]: https://opam.ocaml.org/
 [persistent identifiers]: https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html
 [Software Heritage]: https://www.softwareheritage.org
 [swhid]: https://ocamlpro.github.io/swhid/
