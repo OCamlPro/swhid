@@ -196,18 +196,22 @@ let any =
     | Snapshot -> (
       match snapshot_unsafe object_id with
       | Error e -> Error [ e ]
-      | Ok res ->
-        List.fold_left
-          (fun acc r ->
-            match acc with
-            | Ok url_list -> begin
-              match r with
-              | Ok url -> Ok (url :: url_list)
-              | Error e -> Error [ e ]
-            end
-            | Error error_list -> begin
-              match r with
-              | Ok _url -> Error error_list
-              | Error e -> Error (e :: error_list)
-            end )
-          (Ok []) res )
+      | Ok res -> (
+        match
+          List.fold_left
+            (fun acc r ->
+              match acc with
+              | Ok url_list -> begin
+                match r with
+                | Ok url -> Ok (url :: url_list)
+                | Error e -> Error [ e ]
+              end
+              | Error error_list -> begin
+                match r with
+                | Ok _url -> Error error_list
+                | Error e -> Error (e :: error_list)
+              end )
+            (Ok []) res
+        with
+        | Ok urls -> Ok (List.rev urls)
+        | Error errors -> Ok (List.rev errors) ) )
