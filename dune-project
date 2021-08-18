@@ -20,11 +20,11 @@
  (synopsis "OCaml library to work with Software Heritage identifiers")
  (description
   "swhid is an OCaml library to work with persistent identifiers found in Software Heritage")
+ (tags
+  (swh software heritage archive shwid persistent identifier))
  (depends
   (ocaml
-   (>= 4.0.8))
-  (dune
-   (>= 2.8))
+   (>= 4.08))
   (digestif
    (>= 1.0.0))
   (jsonm
