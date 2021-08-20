@@ -32,7 +32,7 @@
   (ezcurl
    (>= 0.1))
   (menhir
-   (>= 2.1))
+   (>= 20181113))
   (bisect_ppx
    (and
     :with-test
