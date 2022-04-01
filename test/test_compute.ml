@@ -1,4 +1,4 @@
-open Swhid.Lang
+open Swhid_common.Lang
 
 (* test content_identifier *)
 let () =

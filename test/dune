@@ -1,7 +1,7 @@
 (test
  (name test_compute)
  (modules test_compute)
- (libraries swhid))
+ (libraries swhid swhid_common))
 
 (test
  (name test_parser)
@@ -11,4 +11,4 @@
 (test
  (name test_download)
  (modules test_download)
- (libraries swhid))
+ (libraries swhid swhid_common))

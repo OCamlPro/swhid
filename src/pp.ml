@@ -1,4 +1,4 @@
-open Lang
+open Swhid_common.Lang
 
 let object_type =
   let string_of_object_type = function
@@ -33,5 +33,5 @@ let qualifier fmt = function
 let qualifiers fmt q =
   List.iter (fun q -> Format.fprintf fmt ";%a" qualifier q) q
 
-let identifier fmt ((i, q) : Lang.identifier) =
+let identifier fmt ((i, q) : identifier) =
   Format.fprintf fmt "%a%a" identifier_core i qualifiers q

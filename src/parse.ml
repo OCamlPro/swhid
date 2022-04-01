@@ -1,3 +1,5 @@
+open Swhid_common
+
 (** [parse buf] parses a swhid from the [buf] [Stdlib.Lexing.lexbuf]. *)
 let parse buf =
   try Ok (Menhir_parser.identifier Lexer.token buf) with

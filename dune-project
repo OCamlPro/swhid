@@ -16,6 +16,17 @@
 (using menhir 2.1)
 
 (package
+ (name swhid_common)
+ (synopsis "OCaml library to work with Software Heritage identifiers")
+ (description
+  "swhid is an OCaml library to work with persistent identifiers found in Software Heritage")
+ (tags
+  (swh software heritage archive shwid persistent identifier))
+ (depends
+  (ocaml
+   (>= 4.08))))
+
+(package
  (name swhid)
  (synopsis "OCaml library to work with Software Heritage identifiers")
  (description
@@ -25,6 +36,7 @@
  (depends
   (ocaml
    (>= 4.08))
+  swhid_common
   (digestif
    (>= 1.0.0))
   (jsonm
@@ -32,7 +44,7 @@
   (ezcurl
    (>= 0.1))
   (menhir
-   (>= 20181113))
+   (>= 2.1))
   (bisect_ppx
    (and
     :with-test

@@ -1,3 +1,5 @@
+open Swhid_common
+
 (** The base URL of the software heritage instance used, defaults to
     [https://archive.softwareheritage.org]. *)
 let instance = ref "https://archive.softwareheritage.org"

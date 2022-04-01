@@ -1,4 +1,5 @@
 %{
+open Swhid_common
 open Lang
   %}
 
@@ -11,7 +12,7 @@ open Lang
 %token<string> URL
 %token<int> INT
 
-%start <Lang.identifier> identifier
+%start <Swhid_common.Lang.identifier> identifier
 
 %%
 let identifier_core :=
