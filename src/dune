@@ -4,10 +4,16 @@
  (modules swhid_types))
 
 (library
+ (public_name swhid_git)
+ (wrapped false)
+ (modules swhid_git)
+ (libraries swhid_types))
+
+(library
  (public_name swhid)
  (modules compute download git json lexer menhir_parser parse pp types)
  (private_modules git json lexer menhir_parser)
- (libraries digestif ezcurl jsonm swhid_types)
+ (libraries digestif ezcurl jsonm swhid_git swhid_types)
  (instrumentation
   (backend bisect_ppx)))
 

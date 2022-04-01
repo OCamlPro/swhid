@@ -1,14 +1,14 @@
 let test_cases =
-  [ ( Swhid.Lang.content ~hash_type:"sha1_git"
+  [ ( Swhid.Types.content ~hash_type:"sha1_git"
         "7bdf38d4468c114206c9b6ebd9cf1176e085d346" []
     , Ok
         [ "https://archive.softwareheritage.org/api/1/content/sha1_git:7bdf38d4468c114206c9b6ebd9cf1176e085d346/raw/"
         ] )
-  ; ( Swhid.Lang.release "208f61cc7a5dbc9879ae6e5c2f95891e270f09ef" []
+  ; ( Swhid.Types.release "208f61cc7a5dbc9879ae6e5c2f95891e270f09ef" []
     , Ok
         [ "https://archive.softwareheritage.org/api/1/vault/directory/4453cfbdab1a996658cd1a815711664ee7742380/raw/"
         ] )
-  ; ( Swhid.Lang.snapshot "6a3a2cf0b2b90ce7ae1cf0a221ed68035b686f5a" []
+  ; ( Swhid.Types.snapshot "6a3a2cf0b2b90ce7ae1cf0a221ed68035b686f5a" []
     , Ok
         [ "https://archive.softwareheritage.org/api/1/vault/directory/eb4f88b555061f611d4d7182a0a36e5e771a73ad/raw/"
         ; "https://archive.softwareheritage.org/api/1/vault/directory/b53b0637f5ced64109d78c7bc32ea3bccbb6106c/raw/"
