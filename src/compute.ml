@@ -5,15 +5,13 @@
     {{:https://docs.softwareheritage.org/devel/swh-model/data-model.html#software-artifacts}
     software heritage documentation}.*)
 
-open Lang
-
 (** The type for directory entries list, needed to compute directories
     identifiers. *)
 type directory_entry =
   { typ : string  (** e.g. "file", "dir" or "rev" *)
   ; permissions : int
   ; name : string
-  ; target : object_id
+  ; target : Types.object_id
   }
 
 (** The type for dates, needed to compute releases and revisions identifiers. *)
@@ -28,12 +26,12 @@ type date =
 
     E.g. [content_identifier "_build\n"] is the swhid of this library's
     [.gitignore] file. *)
-let content_identifier content : Lang.identifier option =
+let content_identifier content : Types.identifier option =
   let git_object = Git.object_from_contents (Content "sha1_git") content in
-  Git.object_to_swhid git_object [] Lang.content
+  Git.object_to_swhid git_object [] Types.content
 
 (** [directory_identifier entries] compute the swhid for the [entries]
-    directory. [entries] is a list of [Lang.directory_entry] where each element
+    directory. [entries] is a list of [Types.directory_entry] where each element
     points to another object (usually a file content or a sub-directory).
 
     E.g.
@@ -45,10 +43,10 @@ let content_identifier content : Lang.identifier option =
     is the swhid of a directory which has a single file [README] with
     permissions 33188 and whose core identifier from [content_identifier] is
     [37ec8ea2110c0b7a32fbb0e872f6e7debbf95e21]. *)
-let directory_identifier entries : Lang.identifier option =
+let directory_identifier entries : Types.identifier option =
   List.iter
     (fun entry ->
-      if Lang.object_id_invalid entry.target then
+      if Types.object_id_invalid entry.target then
         raise @@ Invalid_argument "target must be of length 40" )
     entries;
   let entries =
@@ -69,7 +67,7 @@ let directory_identifier entries : Lang.identifier option =
       entries
   in
   let git_object = Git.object_from_contents Directory content in
-  Git.object_to_swhid git_object [] Lang.directory
+  Git.object_to_swhid git_object [] Types.directory
 
 (** [release_identifier target target_type name ~author date ~message] computes
     the swhid for a release object poiting to an object of type [target_type]
@@ -77,8 +75,8 @@ let directory_identifier entries : Lang.identifier option =
     [~author] and has been published on [date] with the release message
     [~message]. *)
 let release_identifier target target_type name ~author date ~message :
-    Lang.identifier option =
-  if Lang.object_id_invalid target then
+    Types.identifier option =
+  if Types.object_id_invalid target then
     raise @@ Invalid_argument "target must be of length 40";
 
   let buff = Buffer.create 512 in
@@ -111,7 +109,7 @@ let release_identifier target target_type name ~author date ~message :
 
   let git_object = Git.object_from_contents Release content in
 
-  Git.object_to_swhid git_object [] Lang.release
+  Git.object_to_swhid git_object [] Types.release
 
 (** [revision dir parents ~author ~author_date ~committer ~committer_date extra_headers message]
     computes the swhid for a revision object whose directory has id [dir] and
@@ -119,8 +117,8 @@ let release_identifier target target_type name ~author date ~message :
     [~author_date] and committed by [~committer] on [~committer_date] with extra
     headers [extra_headers] and message [message]. *)
 let revision_identifier directory parents ~author ~author_date ~committer
-    ~committer_date extra_headers message : Lang.identifier option =
-  if List.exists Lang.object_id_invalid (directory :: parents) then
+    ~committer_date extra_headers message : Types.identifier option =
+  if List.exists Types.object_id_invalid (directory :: parents) then
     raise
     @@ Invalid_argument "target (directory and parents) must be of length 40";
 
@@ -161,7 +159,7 @@ let revision_identifier directory parents ~author ~author_date ~committer
 
   let git_object = Git.object_from_contents Revision content in
 
-  Git.object_to_swhid git_object [] Lang.revision
+  Git.object_to_swhid git_object [] Types.revision
 
 (** [snapshot_identifier branches] computes the swhid of the snapshot made of
     branches [branches] where [branches] is a list of branch elements. Each
@@ -169,7 +167,7 @@ let revision_identifier directory parents ~author ~author_date ~committer
     and where [target] is a pair made of the identifier of the branch and its
     type. *)
 let snapshot_identifier (branches : (string * (string * string) option) list) :
-    Lang.identifier option =
+    Types.identifier option =
   let branches =
     List.sort
       (fun (name1, _target) (name2, _target) -> String.compare name1 name2)
@@ -200,4 +198,4 @@ let snapshot_identifier (branches : (string * (string * string) option) list) :
   Format.pp_print_flush fmt ();
   let content = Buffer.contents buff in
   let git_object = Git.object_from_contents_strtarget "snapshot" content in
-  Git.object_to_swhid git_object [] Lang.snapshot
+  Git.object_to_swhid git_object [] Types.snapshot

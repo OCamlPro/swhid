@@ -1,7 +1,7 @@
 (** [parse buf] parses a swhid from the [buf] [Stdlib.Lexing.lexbuf]. *)
 let parse buf =
   try Ok (Menhir_parser.identifier Lexer.token buf) with
-  | Lang.Parser_error s -> Error (Format.sprintf "parser error: %s" s)
+  | Types.Parser_error s -> Error (Format.sprintf "parser error: %s" s)
   | Menhir_parser.Error -> Error (Format.sprintf "parser error: syntax error")
   | Lexer.Error s -> Error (Format.sprintf "lexer error: %s" s)
 

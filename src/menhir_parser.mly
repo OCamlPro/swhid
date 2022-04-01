@@ -1,5 +1,5 @@
 %{
-open Lang
+open Types
   %}
 
 %token EOF
@@ -11,7 +11,7 @@ open Lang
 %token<string> URL
 %token<int> INT
 
-%start <Lang.identifier> identifier
+%start <Types.identifier> identifier
 
 %%
 let identifier_core :=
@@ -25,12 +25,12 @@ let identifier_core :=
               let obj_id = String.lowercase_ascii hash in
 
               let obj_id =
-                match Lang.object_id_from_string obj_id with
+                match Types.object_id_from_string obj_id with
                 | Some obj_id -> obj_id
                 | None -> raise (Parser_error "Invalid object id")
               in
 
-            match Lang.object_type_of_string obj_t with
+            match Types.object_type_of_string obj_t with
             | Some obj -> (scheme_v, obj, obj_id)
             | None -> raise (Parser_error "Object_type invalid")
         }

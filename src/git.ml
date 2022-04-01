@@ -1,7 +1,5 @@
-let target_type_to_git =
-  let open Lang in
-  function
-  | Content _hash_type -> "blob"
+let target_type_to_git = function
+  | Types.Content _hash_type -> "blob"
   | Directory -> "tree"
   | Release -> "tag"
   | Revision -> "commit"
@@ -11,16 +9,15 @@ let id_to_bytes id =
   String.init
     (String.length id / 2)
     (fun i ->
-      let c1 = String.get id (2 * i) in
-      let c2 = String.get id ((2 * i) + 1) in
-      Char.chr @@ int_of_string @@ Format.sprintf "0x%c%c" c1 c2 )
+      let s = String.sub id (2 * i) 2 in
+      Char.chr @@ int_of_string @@ "0x" ^ s )
 
-let object_to_swhid (obj : string) (qualifiers : Lang.qualifier list) mk_id :
-    Lang.identifier option =
+let object_to_swhid (obj : string) (qualifiers : Types.qualifier list) mk_id :
+    Types.identifier option =
   let hexdigest = Digestif.SHA1.to_hex @@ Digestif.SHA1.digest_string obj in
   Option.map
     (fun obj -> mk_id obj qualifiers)
-    (Lang.object_id_from_string hexdigest)
+    (Types.object_id_from_string hexdigest)
 
 let object_header fmt (git_type, len) =
   match git_type with
