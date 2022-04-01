@@ -6,14 +6,14 @@ let test_cases =
         ] )
   ; ( Swhid.Types.release "208f61cc7a5dbc9879ae6e5c2f95891e270f09ef" []
     , Ok
-        [ "https://archive.softwareheritage.org/api/1/vault/directory/4453cfbdab1a996658cd1a815711664ee7742380/raw/"
+        [ "https://archive.softwareheritage.org/api/1/vault/flat/swh:1:dir:4453cfbdab1a996658cd1a815711664ee7742380/raw/"
         ] )
   ; ( Swhid.Types.snapshot "6a3a2cf0b2b90ce7ae1cf0a221ed68035b686f5a" []
     , Ok
-        [ "https://archive.softwareheritage.org/api/1/vault/directory/eb4f88b555061f611d4d7182a0a36e5e771a73ad/raw/"
-        ; "https://archive.softwareheritage.org/api/1/vault/directory/b53b0637f5ced64109d78c7bc32ea3bccbb6106c/raw/"
-        ; "https://archive.softwareheritage.org/api/1/vault/directory/fcbc6c0ea6d27a85d6fcb3cbf9d9168e3dafd096/raw/"
-        ; "https://archive.softwareheritage.org/api/1/vault/directory/3eb35765545dcca55cb5a7f30ab31d794cc36c95/raw/"
+        [ "https://archive.softwareheritage.org/api/1/vault/flat/swh:1:dir:eb4f88b555061f611d4d7182a0a36e5e771a73ad/raw/"
+        ; "https://archive.softwareheritage.org/api/1/vault/flat/swh:1:dir:b53b0637f5ced64109d78c7bc32ea3bccbb6106c/raw/"
+        ; "https://archive.softwareheritage.org/api/1/vault/flat/swh:1:dir:fcbc6c0ea6d27a85d6fcb3cbf9d9168e3dafd096/raw/"
+        ; "https://archive.softwareheritage.org/api/1/vault/flat/swh:1:dir:3eb35765545dcca55cb5a7f30ab31d794cc36c95/raw/"
         ] )
   ]
 
