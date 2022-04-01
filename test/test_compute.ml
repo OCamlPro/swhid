@@ -11,9 +11,7 @@ let () =
     (fun (content, expected_identifier) ->
       let result = Swhid.Compute.content_identifier content in
       let result =
-        match result with
-        | None -> assert false
-        | Some result -> result
+        match result with None -> assert false | Some result -> result
       in
       let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
@@ -109,9 +107,7 @@ let () =
           ~message
       in
       let result =
-        match result with
-        | None -> assert false
-        | Some result -> result
+        match result with None -> assert false | Some result -> result
       in
       let count = counter () in
       let result = Format.asprintf "%a" Swhid.Pp.identifier result in
@@ -257,9 +253,7 @@ let () =
           ~committer ~committer_date extra_headers message
       in
       let result =
-        match result with
-        | None -> assert false
-        | Some result -> result
+        match result with None -> assert false | Some result -> result
       in
       let count = counter () in
       let result = Format.asprintf "%a" Swhid.Pp.identifier result in
@@ -371,9 +365,7 @@ let () =
     (fun (expected_identifier, entries) ->
       let result = Swhid.Compute.directory_identifier entries in
       let result =
-        match result with
-        | None -> assert false
-        | Some result -> result
+        match result with None -> assert false | Some result -> result
       in
       let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
@@ -416,9 +408,7 @@ let () =
     (fun (expected_identifier, branches) ->
       let result = Swhid.Compute.snapshot_identifier branches in
       let result =
-        match result with
-        | None -> assert false
-        | Some result -> result
+        match result with None -> assert false | Some result -> result
       in
       let result = Format.asprintf "%a" Swhid.Pp.identifier result in
       let ok = result = expected_identifier in
@@ -440,8 +430,7 @@ let () =
           ]
       in
       assert false
-    with
-    | Invalid_argument _ -> ()
+    with Invalid_argument _ -> ()
   end;
 
   begin
@@ -451,8 +440,7 @@ let () =
           ~message:None
       in
       assert false
-    with
-    | Invalid_argument _ -> ()
+    with Invalid_argument _ -> ()
   end;
 
   begin
@@ -463,13 +451,11 @@ let () =
           [||] None
       in
       assert false
-    with
-    | Invalid_argument _ -> ()
+    with Invalid_argument _ -> ()
   end;
   try
     let _id =
       Swhid.Compute.snapshot_identifier [ ("do u know", Some ("bar", "àvin")) ]
     in
     assert false
-  with
-  | Invalid_argument _ -> ()
+  with Invalid_argument _ -> ()

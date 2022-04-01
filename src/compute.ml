@@ -55,14 +55,8 @@ let directory_identifier entries : Lang.identifier option =
     List.sort
       (fun entry1 entry2 ->
         String.compare
-          ( if entry1.typ = "dir" then
-            entry1.name ^ "/"
-          else
-            entry1.name )
-          ( if entry2.typ = "dir" then
-            entry2.name ^ "/"
-          else
-            entry2.name ) )
+          (if entry1.typ = "dir" then entry1.name ^ "/" else entry1.name)
+          (if entry2.typ = "dir" then entry2.name ^ "/" else entry2.name) )
       entries
   in
   let content =
@@ -190,11 +184,7 @@ let snapshot_identifier (branches : (string * (string * string) option) list) :
         | None -> ("", "dangling", 0)
         | Some (target, target_type) -> (
           match target_type with
-          | "content"
-          | "directory"
-          | "revision"
-          | "release"
-          | "snapshot" ->
+          | "content" | "directory" | "revision" | "release" | "snapshot" ->
             (Git.id_to_bytes target, target_type, 20)
           | "alias" -> (target, "alias", String.length target)
           | target_type ->

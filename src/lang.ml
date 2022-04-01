@@ -65,23 +65,15 @@ let object_id_invalid (target : object_id) =
   ||
   try
     String.iter
-      (function
-        | 'a' .. 'f'
-        | '0' .. '9' ->
-          ()
-        | _invalid_char -> raise Exit )
+      (function 'a' .. 'f' | '0' .. '9' -> () | _invalid_char -> raise Exit)
       target;
     false
-  with
-  | Exit -> true
+  with Exit -> true
 
 (** Helper function to build an [object_id] from a [string] that will return
     [None] if the string isn't valid according to [object_type_is_invalid] *)
 let object_id_from_string (s : string) : object_id option =
-  if object_id_invalid s then
-    None
-  else
-    Some s
+  if object_id_invalid s then None else Some s
 
 (** Builds a swhid of kind [content] from it's core id and a list of qualifiers.
     The given hash defaults to ["sha1_git"] and you shouldn't care about it in

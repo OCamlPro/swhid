@@ -8,9 +8,7 @@ let url =
   | Error _e -> None
   | Ok id -> (
     (* We ask software heritage for an URL from which the object can be downloaded *)
-    match Swhid.Download.content id with
-    | Ok url -> Some url
-    | Error _e -> None )
+    match Swhid.Download.content id with Ok url -> Some url | Error _e -> None )
 
 let () =
   match url with

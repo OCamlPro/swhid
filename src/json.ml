@@ -14,9 +14,7 @@ let json_of_src ?encoding (src : [ `Channel of in_channel | `String of string ])
     match Jsonm.decode d with
     | `Lexeme l -> l
     | `Error e -> raise (Escape (Jsonm.decoded_range d, e))
-    | `End
-    | `Await ->
-      assert false
+    | `End | `Await -> assert false
   in
   let rec value v k d =
     match v with
@@ -38,42 +36,28 @@ let json_of_src ?encoding (src : [ `Channel of in_channel | `String of string ])
     | _ -> assert false
   in
   let d = Jsonm.decoder ?encoding src in
-  try Ok (value (dec d) (fun v _ -> v) d) with
-  | Escape (r, e) -> Error (r, e)
+  try Ok (value (dec d) (fun v _ -> v) d) with Escape (r, e) -> Error (r, e)
 
 exception Found of json
 
 let rec find key = function
-  | Unit
-  | Bool _
-  | Float _
-  | String _ ->
-    None
+  | Unit | Bool _ | Float _ | String _ -> None
   | Array l -> begin
     try
       List.iter
-        (fun v ->
-          match find key v with
-          | None -> ()
-          | Some v -> raise (Found v) )
+        (fun v -> match find key v with None -> () | Some v -> raise (Found v))
         l;
       None
-    with
-    | Found v -> Some v
+    with Found v -> Some v
   end
   | Object l -> (
     try
       List.iter (fun (k, v) -> if k = key then raise (Found v)) l;
       None
-    with
-    | Found v -> Some v )
+    with Found v -> Some v )
 
 let find_string key v =
-  match find key v with
-  | Some (String f) -> Some f
-  | _ -> None
+  match find key v with Some (String f) -> Some f | _ -> None
 
 let find_obj key v =
-  match find key v with
-  | Some (Object o) -> Some o
-  | _ -> None
+  match find key v with Some (Object o) -> Some o | _ -> None

@@ -24,12 +24,7 @@ let object_to_swhid (obj : string) (qualifiers : Lang.qualifier list) mk_id :
 
 let object_header fmt (git_type, len) =
   match git_type with
-  | "blob"
-  | "commit"
-  | "extid"
-  | "raw_extrinsic_metadata"
-  | "snapshot"
-  | "tag"
+  | "blob" | "commit" | "extid" | "raw_extrinsic_metadata" | "snapshot" | "tag"
   | "tree" ->
     Format.fprintf fmt "%s %d\x00" git_type len
   | git_type ->
@@ -49,12 +44,7 @@ let escape_newlines snippet =
   String.concat "\n " (String.split_on_char '\n' snippet)
 
 let format_offset fmt (offset, negative_utc) =
-  let sign =
-    if offset < 0 || (offset = 0 && negative_utc) then
-      "-"
-    else
-      "+"
-  in
+  let sign = if offset < 0 || (offset = 0 && negative_utc) then "-" else "+" in
   let offset = Int.abs offset in
   let hours = offset / 60 in
   let minutes = offset mod 60 in

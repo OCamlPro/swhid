@@ -35,10 +35,7 @@ let content_unsafe ~hash_type (hash : Lang.object_id) =
 let content id =
   match Lang.get_object_type id with
   | Content hash_type -> content_unsafe ~hash_type @@ Lang.get_object_id id
-  | Directory
-  | Release
-  | Revision
-  | Snapshot ->
+  | Directory | Release | Revision | Snapshot ->
     Error "invalid object type (expected Content)"
 
 (** Same as [directory] but expects an object identifier hash directly. *)
@@ -63,10 +60,7 @@ let directory_unsafe (hash : Lang.object_id) =
 let directory id =
   match Lang.get_object_type id with
   | Directory -> directory_unsafe @@ Lang.get_object_id id
-  | Content _
-  | Release
-  | Revision
-  | Snapshot ->
+  | Content _ | Release | Revision | Snapshot ->
     Error "invalid object type (expected Directory)"
 
 (** Same as [revision] but expects an object identifier hash directly. *)
@@ -83,10 +77,7 @@ let revision_unsafe (hash : Lang.object_id) =
 let revision id =
   match Lang.get_object_type id with
   | Revision -> revision_unsafe @@ Lang.get_object_id id
-  | Content _
-  | Release
-  | Directory
-  | Snapshot ->
+  | Content _ | Release | Directory | Snapshot ->
     Error "invalid object type (expected Revision)"
 
 (** Same as [release] but expects an object identifier hash directly. *)
@@ -118,10 +109,7 @@ let rec release_unsafe (hash : Lang.object_id) =
 let release id =
   match Lang.get_object_type id with
   | Release -> release_unsafe @@ Lang.get_object_id id
-  | Content _
-  | Revision
-  | Directory
-  | Snapshot ->
+  | Content _ | Revision | Directory | Snapshot ->
     Error "invalid object type (expected Release)"
 
 (** Same as [snapshot] but expects an object identifier hash directly. *)
@@ -168,10 +156,7 @@ let snapshot_unsafe =
 let snapshot id =
   match Lang.get_object_type id with
   | Snapshot -> snapshot_unsafe @@ Lang.get_object_id id
-  | Content _
-  | Revision
-  | Directory
-  | Release ->
+  | Content _ | Revision | Directory | Release ->
     Error "invalid object type (expected Snapshot)"
 
 (** For any object identifier, compute a list of URLs from which the object can
@@ -181,10 +166,7 @@ let snapshot id =
     the result will be an [Error] type with the list of all errors, and no URL
     is returned (even if we succeeded to compute some of them).*)
 let any =
-  let extract_url = function
-    | Error e -> Error [ e ]
-    | Ok url -> Ok [ url ]
-  in
+  let extract_url = function Error e -> Error [ e ] | Ok url -> Ok [ url ] in
   fun (identifier : Lang.identifier) : (string list, string list) Result.t ->
     let object_id = Lang.get_object_id identifier in
     match Lang.get_object_type identifier with

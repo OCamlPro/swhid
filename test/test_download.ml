@@ -29,8 +29,7 @@ let pp_result fmt = function
 
 let () =
   (* TODO: we disable tests on windows because SSL certs are wrong on windows CI, see https://github.com/ocaml/setup-ocaml/issues/205 *)
-  if Sys.os_type = "Win32" || Sys.os_type = "Cygwin" then
-    ()
+  if Sys.os_type = "Win32" || Sys.os_type = "Cygwin" then ()
   else
     List.iter
       (fun (identifier, expected_result) ->
