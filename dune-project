@@ -32,7 +32,7 @@
     :dev))))
 
 (package
- (name swhid_git)
+ (name swhid_compute)
  (synopsis "OCaml library to work with Software Heritage identifiers")
  (description
   "swhid is an OCaml library to work with persistent identifiers found in Software Heritage")
@@ -41,6 +41,7 @@
  (depends
   (ocaml
    (>= 4.08))
+  swhid_types
   (bisect_ppx
    (and
     :with-test
@@ -65,6 +66,8 @@
    (>= 0.1))
   (menhir
    (>= 20181113))
+  swhid_types
+  swhid_compute
   (bisect_ppx
    (and
     :with-test
