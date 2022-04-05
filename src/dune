@@ -2,7 +2,7 @@
  (public_name swhid)
  (modules compute download json lexer menhir_parser parse pp types)
  (private_modules json lexer menhir_parser)
- (libraries digestif ezcurl jsonm swhid_compute swhid_types)
+ (libraries bos digestif ezcurl fpath jsonm swhid_compute swhid_types)
  (instrumentation
   (backend bisect_ppx)))
 

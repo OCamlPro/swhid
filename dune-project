@@ -33,6 +33,8 @@
    (>= 0.1))
   (menhir
    (>= 20181113))
+  bos
+  fpath
   swhid_types
   swhid_compute
   (bisect_ppx
