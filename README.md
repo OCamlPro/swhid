@@ -1,4 +1,4 @@
-# swhid [![Actions Status](https://github.com/ocamlpro/swhid/workflows/build/badge.svg)](https://github.com/ocamlpro/swhid/actions) [![coverage percentage](https://raw.githubusercontent.com/ocamlpro/swhids/gh-pages/coverage/badge.svg)](https://ocamlpro.github.io/swhid/coverage/)
+# swhid [![Actions Status](https://github.com/ocamlpro/swhid/workflows/build/badge.svg)](https://github.com/ocamlpro/swhid/actions) [![coverage percentage](https://raw.githubusercontent.com/ocamlpro/swhid/gh-pages/coverage/badge.svg)](https://ocamlpro.github.io/swhid/coverage/)
 
 [swhid] is an [OCaml] library to work with [persistent identifiers] found in [Software Heritage], also known as swhid. It provides:
 

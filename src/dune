@@ -1,15 +1,4 @@
 (library
- (public_name swhid_types)
- (wrapped false)
- (modules swhid_types))
-
-(library
- (public_name swhid_compute)
- (wrapped false)
- (modules swhid_compute)
- (libraries swhid_types))
-
-(library
  (public_name swhid)
  (modules compute download json lexer menhir_parser parse pp types)
  (private_modules json lexer menhir_parser)
