@@ -4,7 +4,7 @@ let id = "swh:1:cnt:80131a360f0ae3d4d643f9e222591db8d4aa744c"
 
 let url =
   (* We parse the string identifier to get a Swhid.Lang.identifier *)
-  match Swhid.Parse.from_string id with
+  match Swhid.Object.of_string id with
   | Error _e -> None
   | Ok id -> (
     (* We ask software heritage for an URL from which the object can be downloaded *)

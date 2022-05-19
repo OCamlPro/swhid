@@ -1,7 +1,7 @@
 let id = "swh:1:rev:db21f0afdb54c16b265754ca599869fda0ca4bfc"
 
 let url =
-  match Swhid.Parse.from_string id with
+  match Swhid.Object.of_string id with
   | Error e -> Error e
   | Ok id -> Swhid.Download.revision id
 

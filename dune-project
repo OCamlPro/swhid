@@ -13,8 +13,6 @@
 
 (generate_opam_files true)
 
-(using menhir 2.1)
-
 (package
  (name swhid)
  (synopsis "OCaml library to work with Software Heritage identifiers")
@@ -31,12 +29,9 @@
    (>= 1.0.1))
   (ezcurl
    (>= 0.1))
-  (menhir
-   (>= 20181113))
   bos
   fpath
-  swhid_types
-  swhid_compute
+  swhid_core
   (bisect_ppx
    (and
     :with-test

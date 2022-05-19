@@ -1,13 +1,7 @@
 (library
  (public_name swhid)
- (modules compute download json lexer menhir_parser parse pp types)
- (private_modules json lexer menhir_parser)
- (libraries bos digestif ezcurl fpath jsonm swhid_compute swhid_types)
+ (modules compute download json object)
+ (private_modules json)
+ (libraries bos digestif ezcurl fpath jsonm swhid_core)
  (instrumentation
   (backend bisect_ppx)))
-
-(ocamllex
- (modules lexer))
-
-(menhir
- (modules menhir_parser))

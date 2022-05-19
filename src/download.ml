@@ -22,8 +22,12 @@ let on_response url f =
 (**/**)
 
 (** Same as [content] but expects an object identifier hash directly. *)
-let content_unsafe ~hash_type (hash : Types.object_id) =
-  let url = url (Format.sprintf "/content/%s:%s/" hash_type hash) in
+let content_unsafe ~hash_type hash =
+  let url =
+    url
+      (Format.asprintf "/content/%s:%a/" hash_type Swhid_core.Object.Hash.pp
+         hash )
+  in
   on_response url (fun response ->
       let field = "data_url" in
       match Json.find_string field response with
@@ -33,14 +37,17 @@ let content_unsafe ~hash_type (hash : Types.object_id) =
 (** For a given content identifier, compute an URL from which the content can be
     downloaded. *)
 let content id =
-  match Types.get_object_type id with
-  | Content hash_type -> content_unsafe ~hash_type @@ Types.get_object_id id
+  match Swhid_core.Object.get_type id with
+  | Content hash_type ->
+    content_unsafe ~hash_type @@ Swhid_core.Object.get_hash id
   | Directory | Release | Revision | Snapshot ->
     Error "invalid object type (expected Content)"
 
 (** Same as [directory] but expects an object identifier hash directly. *)
-let directory_unsafe (hash : Types.object_id) =
-  let url = url (Format.sprintf "/vault/directory/%s/" hash) in
+let directory_unsafe hash =
+  let url =
+    url (Format.asprintf "/vault/directory/%a/" Swhid_core.Object.Hash.pp hash)
+  in
   match Ezcurl.post ~params:[] ~url () with
   | Error (code, msg) ->
     Error (Format.sprintf "curl error: code `%s` (%s)" (Curl.strerror code) msg)
@@ -58,31 +65,36 @@ let directory_unsafe (hash : Types.object_id) =
 (** For a given directory identifier, compute an URL from which the directory
     can be downloaded. *)
 let directory id =
-  match Types.get_object_type id with
-  | Directory -> directory_unsafe @@ Types.get_object_id id
+  match Swhid_core.Object.get_type id with
+  | Directory -> directory_unsafe @@ Swhid_core.Object.get_hash id
   | Content _ | Release | Revision | Snapshot ->
     Error "invalid object type (expected Directory)"
 
 (** Same as [revision] but expects an object identifier hash directly. *)
-let revision_unsafe (hash : Types.object_id) =
-  let url = url (Format.sprintf "/revision/%s/" hash) in
+let revision_unsafe hash =
+  let url =
+    url (Format.asprintf "/revision/%a/" Swhid_core.Object.Hash.pp hash)
+  in
   on_response url (fun response ->
       let field = "directory" in
       match Json.find_string field response with
       | None -> field_not_found field
-      | Some dir -> directory_unsafe dir )
+      | Some dir ->
+        Result.bind (Swhid_core.Object.Hash.of_string dir) directory_unsafe )
 
 (** For a given revision identifier, compute an URL from which the revision can
     be downloaded. *)
 let revision id =
-  match Types.get_object_type id with
-  | Revision -> revision_unsafe @@ Types.get_object_id id
+  match Swhid_core.Object.get_type id with
+  | Revision -> revision_unsafe @@ Swhid_core.Object.get_hash id
   | Content _ | Release | Directory | Snapshot ->
     Error "invalid object type (expected Revision)"
 
 (** Same as [release] but expects an object identifier hash directly. *)
-let rec release_unsafe (hash : Types.object_id) =
-  let url = url (Format.sprintf "/release/%s/" hash) in
+let rec release_unsafe hash =
+  let url =
+    url (Format.asprintf "/release/%a/" Swhid_core.Object.Hash.pp hash)
+  in
 
   on_response url (fun response ->
       let field = "target_type" in
@@ -93,13 +105,15 @@ let rec release_unsafe (hash : Types.object_id) =
         match Json.find_string field response with
         | None -> field_not_found field
         | Some target -> begin
+          let target = Swhid_core.Object.Hash.of_string target in
           match target_type with
-          | "release" -> release_unsafe target
-          | "revision" -> revision_unsafe target
+          | "release" -> Result.bind target release_unsafe
+          | "revision" -> Result.bind target revision_unsafe
           | "content" ->
             (* TODO: get the correct hash type *)
-            content_unsafe target ~hash_type:"sha1_git"
-          | "directory" -> directory_unsafe target
+            Result.bind target (fun target ->
+                content_unsafe target ~hash_type:"sha1_git" )
+          | "directory" -> Result.bind target directory_unsafe
           | target_type ->
             Error (Format.sprintf "unknown target type: `%s`" target_type)
         end ) )
@@ -107,8 +121,8 @@ let rec release_unsafe (hash : Types.object_id) =
 (** For a given release identifier, compute an URL from which the release can be
     downloaded. *)
 let release id =
-  match Types.get_object_type id with
-  | Release -> release_unsafe @@ Types.get_object_id id
+  match Swhid_core.Object.get_type id with
+  | Release -> release_unsafe @@ Swhid_core.Object.get_hash id
   | Content _ | Revision | Directory | Snapshot ->
     Error "invalid object type (expected Release)"
 
@@ -138,8 +152,10 @@ let snapshot_unsafe =
       aux None None o
     | _ -> None
   in
-  fun (hash : Types.object_id) ->
-    let url = url (Format.sprintf "/snapshot/%s/" hash) in
+  fun hash ->
+    let url =
+      url (Format.asprintf "/snapshot/%a/" Swhid_core.Object.Hash.pp hash)
+    in
 
     on_response url (fun response ->
         let field = "branches" in
@@ -149,13 +165,18 @@ let snapshot_unsafe =
           let requests =
             List.filter_map (fun f -> go_through_objs @@ snd f) branch
           in
-          Ok (List.map (fun (f, x) -> f x) requests) )
+          Ok
+            (List.map
+               (fun (f, x) ->
+                 let x = Swhid_core.Object.Hash.of_string x in
+                 Result.bind x f )
+               requests ) )
 
 (** For a given snapshot identifier, compute a list of URL from which the
     snapshot's branches can be downloaded. *)
 let snapshot id =
-  match Types.get_object_type id with
-  | Snapshot -> snapshot_unsafe @@ Types.get_object_id id
+  match Swhid_core.Object.get_type id with
+  | Snapshot -> snapshot_unsafe @@ Swhid_core.Object.get_hash id
   | Content _ | Revision | Directory | Release ->
     Error "invalid object type (expected Snapshot)"
 
@@ -167,11 +188,10 @@ let snapshot id =
     is returned (even if we succeeded to compute some of them).*)
 let any =
   let extract_url = function Error e -> Error [ e ] | Ok url -> Ok [ url ] in
-  fun (identifier : Types.identifier) : (string list, string list) Result.t ->
-    let object_id = Types.get_object_id identifier in
-    match Types.get_object_type identifier with
-    | Types.Content hash_type ->
-      extract_url (content_unsafe ~hash_type object_id)
+  fun identifier : (string list, string list) Result.t ->
+    let object_id = Swhid_core.Object.get_hash identifier in
+    match Swhid_core.Object.get_type identifier with
+    | Content hash_type -> extract_url (content_unsafe ~hash_type object_id)
     | Directory -> extract_url (directory_unsafe object_id)
     | Release -> extract_url (release_unsafe object_id)
     | Revision -> extract_url (revision_unsafe object_id)
