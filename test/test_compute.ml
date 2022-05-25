@@ -33,7 +33,7 @@ let () =
   in
   let test_cases =
     [| ( "741b2252a5e14d6c60a913c77a6099abe73a854a"
-       , Type.Revision
+       , Kind.Revision
        , "v2.6.14"
        , Some "Linus Torvalds <torvalds@g5.osdl.org>"
        , Some
@@ -109,7 +109,7 @@ let () =
       | Error _e -> assert false
       | Ok target ->
         let result =
-          Swhid.Compute.release_identifier target target_type name ~author date
+          Swhid.Compute.release_identifier target target_type ~name ~author date
             ~message
         in
         let result =
@@ -258,9 +258,15 @@ let () =
          , committer_date
          , message
          , extra_headers ) ->
+      let directory = Result.get_ok (Swhid.Object.Hash.of_string directory) in
+      let parents =
+        List.map
+          (fun p -> Result.get_ok (Swhid.Object.Hash.of_string p))
+          parents
+      in
       let result =
         Swhid.Compute.revision_identifier directory parents ~author ~author_date
-          ~committer ~committer_date extra_headers message
+          ~committer ~committer_date extra_headers ~message
       in
       let result =
         match result with Error _e -> assert false | Ok result -> result
