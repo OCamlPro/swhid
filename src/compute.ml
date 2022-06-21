@@ -1,4 +1,3 @@
-(** @inline *)
 include
   Swhid_core.Compute.Make
     (struct

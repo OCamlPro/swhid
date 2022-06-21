@@ -216,4 +216,4 @@ let any =
             (Ok []) res
         with
         | Ok urls -> Ok (List.rev urls)
-        | Error errors -> Ok (List.rev errors) ) )
+        | Error errors -> Error (List.rev errors) ) )

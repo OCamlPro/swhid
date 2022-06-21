@@ -37,4 +37,4 @@ let swhid = Swhid.Compute.content_identifier content
 let () =
   match swhid with
   | Error e -> Format.eprintf "error: %s" e
-  | Ok swhid -> Format.printf "ID is: `%a`@." Swhid.Object.pp swhid
+  | Ok swhid -> Format.printf "ID is: `%a`@." Swhid_core.Object.pp swhid

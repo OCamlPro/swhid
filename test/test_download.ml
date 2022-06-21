@@ -1,4 +1,4 @@
-open Swhid.Object
+open Swhid_core.Object
 
 let test_cases =
   [ ( Kind.Content "sha1_git"

@@ -12,10 +12,10 @@ let () =
   in
   Array.iter
     (fun input ->
-      match Swhid.Object.of_string input with
+      match Swhid_core.Object.of_string input with
       | Error _s -> assert false
       | Ok res ->
-        let result = Format.asprintf "%a" Swhid.Object.pp res in
+        let result = Format.asprintf "%a" Swhid_core.Object.pp res in
         let ok = input = result in
         if not ok then
           Format.eprintf
@@ -84,7 +84,7 @@ let () =
   in
   Array.iter
     (fun (input, _err_msg) ->
-      match Swhid.Object.of_string input with
+      match Swhid_core.Object.of_string input with
       | Ok _res -> assert false
       | Error _error -> () )
     error_test_cases

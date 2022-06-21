@@ -1,6 +1,6 @@
 (library
  (public_name swhid)
- (modules compute download json object)
+ (modules compute download json)
  (private_modules json)
  (libraries bos digestif ezcurl fpath jsonm swhid_core)
  (instrumentation

@@ -1,4 +1,4 @@
-open Swhid.Object
+open Swhid_core.Object
 
 (* test content_identifier *)
 let () =
@@ -258,11 +258,9 @@ let () =
          , committer_date
          , message
          , extra_headers ) ->
-      let directory = Result.get_ok (Swhid.Object.Hash.of_string directory) in
+      let directory = Result.get_ok (Hash.of_string directory) in
       let parents =
-        List.map
-          (fun p -> Result.get_ok (Swhid.Object.Hash.of_string p))
-          parents
+        List.map (fun p -> Result.get_ok (Hash.of_string p)) parents
       in
       let result =
         Swhid.Compute.revision_identifier directory parents ~author ~author_date
