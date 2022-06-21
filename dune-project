@@ -29,7 +29,8 @@
    (>= 1.0.1))
   (ezcurl
    (>= 0.1))
-  bos
+  (bos
+   (>= 0.2.0))
   fpath
   swhid_core
   (bisect_ppx
