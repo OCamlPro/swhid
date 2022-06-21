@@ -8,18 +8,17 @@
 {!modules:
 Swhid.Compute
 Swhid.Download
-Swhid.Lang
+Swhid.Types
 Swhid.Parse
 Swhid.Pp
 }
 
 
-{1:api Private API}
+{1:private_api Private API}
 
 You shouldn't have to use any of these modules, they're used internally only.
 
 {!modules:
-Swhid.Git
 Swhid.Json
 Swhid.Lexer
 Swhid.Menhir_parser
