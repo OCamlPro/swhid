@@ -2,9 +2,9 @@
 
 [swhid] is an [OCaml] library to work with [persistent identifiers] found in [Software Heritage], also known as swhid. It provides:
 
-* a parser and a printer for swhid
-* functions to compute a swhid for a given object (content, directory, revision, release, snapshot)
-* functions to query the swh API in order to get an URL from which you can download a given object 
+* a parser and a printer for swhid (`Swhid_core.Object` module)
+* functions to compute a swhid for a given object of any kind : content, directory, revision, release or snapshot (`Swhid.Compute`)
+* functions to query the swh API in order to get an URL from which you can download a given object (`Swhid.Download`)
 
 ## Installation
 
