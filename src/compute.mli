@@ -9,6 +9,10 @@
     [.gitignore] file. *)
 val content_identifier : string -> (Swhid_core.Object.t, string) result
 
+(** Same as [content_identifier] but reads the content from a file. *)
+val content_identifier_from_file :
+  string -> (Swhid_core.Object.t, string) result
+
 (** [directory_identifier_deep] compute the swhid for a given directory name, it
     uses the various functions provided in the [OS] module parameter to list
     directory contents, get file permissions and read file contents.*)

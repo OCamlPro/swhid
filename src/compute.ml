@@ -1,3 +1,7 @@
+let read_file name =
+  let name = Fpath.v name in
+  match Bos.OS.File.read name with Ok content -> Some content | _ -> None
+
 include
   Swhid_core.Compute.Make
     (struct
@@ -20,11 +24,7 @@ include
           | Ok true -> Some Dir
           | Ok false | Error _ -> None )
 
-      let read_file name =
-        let name = Fpath.v name in
-        match Bos.OS.File.read name with
-        | Ok content -> Some content
-        | _ -> None
+      let read_file = read_file
 
       let permissions name =
         let name = Fpath.v name in
@@ -47,3 +47,8 @@ include
         let name = Fpath.base name in
         Fpath.to_string name
     end)
+
+let content_identifier_from_file filename =
+  match read_file filename with
+  | None -> Error (Format.sprintf "can't read file %s" filename)
+  | Some cnt -> content_identifier cnt
