@@ -1,3 +1,8 @@
+(executable
+ (public_name swhid)
+ (modules swhid)
+ (libraries cmdliner swhid))
+
 (library
  (public_name swhid)
  (modules compute download json)

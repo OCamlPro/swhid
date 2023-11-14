@@ -15,9 +15,9 @@
 
 (package
  (name swhid)
- (synopsis "OCaml library to work with Software Heritage identifiers")
+ (synopsis "OCaml toolkit to work with Software Heritage identifiers")
  (description
-  "swhid is an OCaml library to work with persistent identifiers found in Software Heritage")
+  "swhid is an OCaml executable and library to work with persistent identifiers found in Software Heritage")
  (tags
   (swh software heritage archive shwid persistent identifier))
  (depends
